@@ -1,9 +1,47 @@
+# iOS / Apple
+# ===========
 .DS_Store
+ehthumbs.db
+Thumbs.db
+
+# Node & Related
+# ================
 .nodemonignore
-.sass-cache/
 npm-debug.log
+.sass-cache/
+db/
 node_modules/
-public/lib
+public/lib/
 app/tests/coverage/
 .bower-*/
 .idea/
+
+# Eclipse Project Files
+# =====================
+.project
+.*.md.html
+.metadata
+*~.nib
+local.properties
+.settings/
+
+# IntelliJ Idea
+# =============
+*.iml
+
+# Cloud9 IDE
+# ==========
+mongod
+.c9/
+data/
+
+# Others
+# ======
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.tmp
+*.bak
+*.swp
