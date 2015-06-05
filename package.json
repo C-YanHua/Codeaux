@@ -1,7 +1,7 @@
 {
     "name": "Codeaux",
     "version": "0.0.1",
-	"description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js",
+    "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js",
     "license": "MIT",
     "author": {
       "name": "Chen YanHua <a0125362@u.nus.edu> and Wong Kin Fei <a0076509@u.nus.edu>",
@@ -14,16 +14,16 @@
     "bugs": {
       "url": "https://github.com/C-YanHua/Codeaux/issues"
     },
-	"engines": {
+    "engines": {
       "node": "0.10.x",
       "npm": "1.4.x"
-	},
-	"scripts": {
+    },
+    "scripts": {
       "start": "grunt",
       "test": "grunt test",
       "postinstall": "bower install --config.interactive=false"
-	},
-	"dependencies": {
+    },
+    "dependencies": {
       "async": "~1.2.0",
       "body-parser": "~1.12.4",
       "bower": "~1.4.1",
@@ -52,8 +52,8 @@
       "passport-local": "~1.0.0",
       "passport-twitter": "~1.0.3",
       "swig": "~1.4.2"
-	},
-	"devDependencies": {
+    },
+    "devDependencies": {
       "grunt-concurrent": "~1.0.0",
       "grunt-contrib-csslint": "^0.4.0",
       "grunt-contrib-cssmin": "~0.12.3",
@@ -76,5 +76,5 @@
       "load-grunt-tasks": "~3.2.0",
       "should": "~6.0.3",
       "supertest": "~1.0.1"
-	}
+    }
 }
