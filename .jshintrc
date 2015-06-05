@@ -9,7 +9,7 @@
       "jasmine": true,
       "angular": true,
       "ApplicationConfiguration": true
-	},
+    },
 
     "latedef": true,           // Prohibit variable use before definition.
     "nonbsp": true,            // Warns about "non-breaking whitespace" characters.
@@ -27,7 +27,7 @@
       "it",
       "inject",
       "expect"
-	],
+    ],
 
     "strict": true,            // Require `use strict` pragma in every file.
     "undef": true,             // Require all non-global variables be declared before they are used.
@@ -35,14 +35,13 @@
 
     // Relaxing options.
 
-	"esnext": true,            // Allow ES.next specific features such as `const` and `let`.
+    "esnext": true,            // Allow ES.next specific features such as `const` and `let`.
     "evil": false,             // Discourage use of `eval` as it can cause code vulnerability.
     "loopfunc": false,         // Warn functions inside loops.
 
     // Environments.
-
-	"browser": true,           // Standard browser globals e.g. `window`, `document`.
-	"devel": true,             // Allow development statements e.g. `console.log();`.
+    "browser": true,           // Standard browser globals e.g. `window`, `document`.
+    "devel": true,             // Allow development statements e.g. `console.log();`.
     "jasmine": true,           // Enable globals exposed by the Jasmine Unit Testing Framework.
     "mocha": true,             // Enable globals exposed by the Mocha Unit Testing Framework.
     "node": true               // Enable globals available when code is running inside of the NodeJS runtime environment.
