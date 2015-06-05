@@ -41,7 +41,8 @@ After installing all the prerequisities, follow the steps below to complete the 
    $ npm install
    ```
    
-   This command will install all the modules needed for the application to run, install any development modules needed for testing and running the application and, lastly, utilize Bower to install all the front-end modules needed for the application.
+   This command will install all the dependencies needed for the application to run. It will also install any development dependencies needed for testing and running the application. 
+   When the dependencies installation process is over, the command will initiate a Bower install command to install all the front-end modules needed for the application.
 
 ### Running the Application
 
@@ -53,4 +54,14 @@ After finishing the application setup, simply use grunt to run the application. 
 
 The application should be running on port 3000, on [http://localhost:3000](http://localhost:3000).
 
-## Orbital Information
+## NUS Orbital Docs
+
+Following are the documentations and presentation videos created for NUS Orbital.
+
+| Scope             | Links
+| :---------------: | -------------------------
+| Ignition          | [Presentation Video](https://www.youtube.com/watch?v=osQjStOAci0&t=3240) <br>[Presentation Slides](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/CODEAUX%20IGNITION%20SLIDES.pdf)</br>
+| Milestone #1      |
+| Milestone #2      |
+| Milestone #3      |
+| Splashdown        |
