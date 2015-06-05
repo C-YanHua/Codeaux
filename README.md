@@ -60,8 +60,8 @@ Following are the documentations and presentation videos created for NUS Orbital
 
  Scope             | Presentation             | Documentation      
  :---------------: | -------------------------| -------------------
- Ignition          | [Presentation Video](https://www.youtube.com/watch?v=osQjStOAci0&t=3240) <br>[Presentation Slides](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/CODEAUX%20IGNITION%20SLIDES.pdf)</br>                                                       | -
+ Ignition          | [Presentation Video](https://www.youtube.com/watch?v=osQjStOAci0&t=3240) <br>[Presentation Slides](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/CODEAUX%20IGNITION%20SLIDES.pdf)</br>                                                       | 
  Milestone #1      | [Presentation Video](https://www.youtube.com/watch?v=gPGL7t-Ka-0) <br>[Presentation Slides](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/MILESTONE%20%231/MILESTONE%20%231%20PRESENTATION%20SLIDES.pdf)</br>                        | [Project LOG #1](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/MILESTONE%20%231/PROJECT%20LOG%20%231.pdf) <br>[Project README #1](https://dl.dropboxusercontent.com/u/8448840/orbital/MILESTONES%20PDF%20VERSION/MILESTONE%20%231/PROJECT%20README%20%231.pdf)</br>
- Milestone #2      |
+ Milestone #2      |    
  Milestone #3      |
  Splashdown        |
