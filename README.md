@@ -11,8 +11,8 @@ Codeaux aims to provide people with a community-driven and interactive web appli
 
 Ensure that you have installed the following prerequisities on your machine.
 
-1. Download & install [Node.js](http://www.nodejs.org/download/) together with the npm package manager. 
-...If you encounter any problem, you can refer to this [GitHub Gist](https://gist.github.com/isaacs/579814) on how to install node and npm.
+1. Download & install [Node.js](http://www.nodejs.org/download/) together with the npm package manager...
+If you encounter any problem, you can refer to this [GitHub Gist](https://gist.github.com/isaacs/579814) on how to install node and npm.
 2. Download & install [MongoDB](http://www.mongodb.org/downloads), it should be running on the default port: 27017. (In the future, we might be considering to use [mongolab](https://mongolab.com/) as our main database host)
 3. We are using [Bower Package Manager](http://bower.io/) to manage our front-end packages. Install Bower globally in your machine using npm:
 
