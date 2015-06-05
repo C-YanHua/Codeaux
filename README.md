@@ -7,7 +7,7 @@
 
 Codeaux aims to provide people with a community-driven and interactive web application to receive assistance for any coding issues they faced and also allows the community to host code discussion to promote best practices and approaches to certain coding aspects.
 
-## Installation
+## Installation & Development
 
 Ensure that you have installed the following prerequisities on your machine.
 
@@ -18,10 +18,39 @@ Ensure that you have installed the following prerequisities on your machine.
    (In the future, we might be considering to use [mongolab](https://mongolab.com/) as our main database host)
 
 3. We are using [Bower Package Manager](http://bower.io/) to manage our front-end packages.  
-   Install Bower globally in your machine using npm:
+   Install Bower globally into your machine using npm:
 
    ```
    $ npm install -g bower
    ```
+
+4. We are using [Grunt JavaScript Task Runner](http://gruntjs.com/) to automate development.
+   Install Grunt globally into your machine using npm:
+   
+   ```
+   $ npm install -g grunt-cli
+   ```
+   
+### Application Setup
+
+After installing all the prerequisities, follow the steps below to complete the application setup.
+
+1. To install the modules (dependencies) required for the application, run the following command in the application root:
+   
+   ```
+   $ npm install
+   ```
+   
+   This command will install all the modules needed for the application to run, install any development modules needed for testing and running the application and, lastly, utilize Bower to install all the front-end modules needed for the application.
+
+### Running the Application
+
+After finishing the application setup, simply use grunt to run the application. run the following command in the application root:
+   
+   ```
+   $ grunt
+   ```
+
+The application should be running on port 3000, on [http://localhost:3000](http://localhost:3000).
 
 ## Orbital Information
