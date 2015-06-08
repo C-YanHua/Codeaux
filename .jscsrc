@@ -1,24 +1,25 @@
 {
-    "fileExtensions": [".js", "jscs"],
-    "plugins": ["jscs-jsdoc"],
+  "fileExtensions": [".js", "jscs"],
     
-    // `https://github.com/jscs-dev/node-jscs/blob/master/presets/google.json` for full code style.
-    "preset": "google",                 
-    
-    "disallowSpacesInsideObjectBrackets": null,
-    
-    "validateLineBreaks": "LF",
-    
-    "jsDoc": {
-      "checkAnnotations": "closurecompiler",
-      "checkParamNames": true,
-      "requireParamTypes": true,
-      "checkRedundantParams": true,
-      "checkReturnTypes": true,
-      "checkRedundantReturns": true,
-      "requireReturnTypes": true,
-      "checkTypes": "capitalizedNativeCase",
-      "checkRedundantAccess": true,
-      "requireNewlineAfterDescription": true
-    }
+  // `https://github.com/jscs-dev/node-jscs/blob/master/presets/google.json` for full code style.
+  "preset": "google",                 
+  
+  "excludeFiles": ["**/node_modules/**"],
+
+  "disallowSpacesInsideObjectBrackets": null,
+  
+  "validateLineBreaks": "LF",
+
+  "jsDoc": {
+    "checkAnnotations": "closurecompiler",
+    "checkParamNames": true,
+    "requireParamTypes": true,
+    "checkRedundantParams": true,
+    "checkReturnTypes": true,
+    "checkRedundantReturns": true,
+    "requireReturnTypes": true,
+    "checkTypes": "capitalizedNativeCase",
+    "checkRedundantAccess": true,
+    "requireNewlineAfterDescription": true
+  }
 }
