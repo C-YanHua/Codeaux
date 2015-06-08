@@ -1,14 +1,16 @@
 'use strict';
 
-module.exports = function(grunt) {
-	// Unified Watch Object
+module.exports = function (grunt) {
+	// Unified Watch Object. Automated restart if any changes are made to the files in this directories.
 	var watchFiles = {
-		serverViews: ['app/views/**/*.*'],
-		serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
-		clientViews: ['public/modules/**/views/**/*.html'],
-		clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
-		clientCSS: ['public/modules/**/*.css'],
-		mochaTests: ['app/tests/**/*.js']
+      serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
+      serverViews: ['app/views/**/*.*'],
+
+      clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
+      clientViews: ['public/modules/**/views/**/*.html'],
+      clientCSS: ['public/modules/**/*.css'],
+
+      mochaTests: ['app/tests/**/*.js']
 	};
 
 	// Project Configuration
@@ -23,7 +25,7 @@ module.exports = function(grunt) {
 			},
 			serverJS: {
 				files: watchFiles.serverJS,
-				tasks: ['jshint'],
+				tasks: ['jshint', 'jscs'],
 				options: {
 					livereload: true
 				}
@@ -36,7 +38,7 @@ module.exports = function(grunt) {
 			},
 			clientJS: {
 				files: watchFiles.clientJS,
-				tasks: ['jshint'],
+				tasks: ['jshint', 'jscs'],
 				options: {
 					livereload: true
 				}
@@ -57,6 +59,15 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+        jscs: {
+            all: {
+                src: [watchFiles.clientJS, watchFiles.serverJS],
+                options: {
+                    config: '.jscsrc',
+                    verbose: true
+                }
+            }
+        },
 		csslint: {
 			options: {
 				csslintrc: '.csslintrc',
@@ -144,7 +155,6 @@ module.exports = function(grunt) {
 
 	// Load NPM tasks
 	require('load-grunt-tasks')(grunt);
-
 	// Making grunt default to force in order not to break the project.
 	grunt.option('force', true);
 
@@ -167,7 +177,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('secure', ['env:secure', 'lint', 'concurrent:default']);
 
 	// Lint task(s).
-	grunt.registerTask('lint', ['jshint', 'csslint']);
+	grunt.registerTask('lint', ['jshint', 'csslint', 'jscs']);
 
 	// Build task(s).
 	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
