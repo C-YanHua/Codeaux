@@ -35,6 +35,10 @@ mongod
 .c9/
 data/
 
+# Brackets.io
+# ===========
+.brackets.json
+
 # Others
 # ======
 *.log
