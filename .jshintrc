@@ -8,26 +8,23 @@
     "globals": {               // Globals variables.
       "jasmine": true,
       "angular": true,
-      "ApplicationConfiguration": true
+      "ApplicationConfiguration": true,
+      "define": true,
+      "require": true,
+      "exports": true,
+      "module": true,
+      "describe": true,
+      "before": true,
+      "beforeEach": true,
+      "after": true,
+      "afterEach": true,
+      "it": true,
+      "inject": true,
+      "expect": true
     },
 
     "latedef": true,           // Prohibit variable use before definition.
     "nonbsp": true,            // Warns about "non-breaking whitespace" characters.
-
-    "predef": [                // Extra globals.
-      "define",
-      "require",
-      "exports",
-      "module",
-      "describe",
-      "before",
-      "beforeEach",
-      "after",
-      "afterEach",
-      "it",
-      "inject",
-      "expect"
-    ],
 
     "strict": true,            // Require `use strict` pragma in every file.
     "undef": true,             // Require all non-global variables be declared before they are used.
@@ -44,5 +41,14 @@
     "devel": true,             // Allow development statements e.g. `console.log();`.
     "jasmine": true,           // Enable globals exposed by the Jasmine Unit Testing Framework.
     "mocha": true,             // Enable globals exposed by the Mocha Unit Testing Framework.
-    "node": true               // Enable globals available when code is running inside of the NodeJS runtime environment.
+    "node": true,              // Enable globals available when code is running inside of the NodeJS runtime environment.
+
+    // Deprecated Options. Remove on next major release of JSHint and rely solely on JSCS.
+    "camelcase": true,
+    "immed": true,
+    "indent": 2,
+    "maxlen": 120,
+    "newcap": true,
+    "noempty": true,
+    "quotmark": "single"
 }
