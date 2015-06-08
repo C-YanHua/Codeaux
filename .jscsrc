@@ -1,13 +1,18 @@
 {
   "fileExtensions": [".js", "jscs"],
-    
+
   // `https://github.com/jscs-dev/node-jscs/blob/master/presets/google.json` for full code style.
-  "preset": "google",                 
-  
+  "preset": "google",
+
   "excludeFiles": ["**/node_modules/**"],
 
   "disallowSpacesInsideObjectBrackets": null,
-  "maximumLineLength": 120,
+  "maximumLineLength": {
+    "value": 120,
+      "allowComments": true,
+    "allowRegex": true
+  },
+  "requirePaddingNewLinesAfterUseStrict": true,
   "validateLineBreaks": "LF",
 
   "jsDoc": {
