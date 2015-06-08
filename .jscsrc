@@ -7,7 +7,7 @@
   "excludeFiles": ["**/node_modules/**"],
 
   "disallowSpacesInsideObjectBrackets": null,
-  
+  "maximumLineLength": 120,
   "validateLineBreaks": "LF",
 
   "jsDoc": {
