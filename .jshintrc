@@ -1,59 +1,58 @@
 {
-    // Enforcing options.
-    // ==========================
+  // Enforcing options.
+  // ==========================
 
-    "bitwise": true,           // Bitwise operators (&, |, ^, etc.).
-    "curly": true,             // Require {} for every new block or scope.
-    "eqeqeq": true,            // Require triple equals i.e. `===`.
+  "bitwise": true,           // Bitwise operators (&, |, ^, etc.).
+  "curly": true,             // Require {} for every new block or scope.
+  "eqeqeq": true,            // Require triple equals i.e. `===`.
 
-    "globals": {               // Globals variables.
-      "jasmine": true,
-      "angular": true,
-      "ApplicationConfiguration": true,
-      "define": true,
-      "require": true,
-      "exports": true,
-      "module": true,
-      "describe": true,
-      "before": true,
-      "beforeEach": true,
-      "after": true,
-      "afterEach": true,
-      "it": true,
-      "inject": true,
-      "expect": true
-    },
+  "globals": {               // Globals variables.
+    "jasmine": true,
+    "angular": true,
+    "ApplicationConfiguration": true,
+    "define": true,
+    "require": true,
+    "exports": true,
+    "module": true,
+    "describe": true,
+    "before": true,
+    "beforeEach": true,
+    "after": true,
+    "afterEach": true,
+    "it": true,
+    "inject": true,
+    "expect": true
+  },
 
-    "latedef": true,           // Prohibit variable use before definition.
-    "nonbsp": true,            // Warns about "non-breaking whitespace" characters.
+  "latedef": true,           // Prohibit variable use before definition.
+  "nonbsp": true,            // Warns about "non-breaking whitespace" characters.
+  "strict": true,            // Require `use strict` pragma in every file.
+  "undef": true,             // Require all non-global variables be declared before they are used.
+  "unused": true,            // Warn unused variables.
 
-    "strict": true,            // Require `use strict` pragma in every file.
-    "undef": true,             // Require all non-global variables be declared before they are used.
-    "unused": true,            // Warn unused variables.
+  // Relaxing options.
+  // ==========================
 
-    // Relaxing options.
-    // ==========================
+  "esnext": true,            // Allow ES.next specific features such as `const` and `let`.
+  "evil": false,             // Discourage use of `eval` as it can cause code vulnerability.
+  "loopfunc": false,         // Warn functions inside loops.
 
-    "esnext": true,            // Allow ES.next specific features such as `const` and `let`.
-    "evil": false,             // Discourage use of `eval` as it can cause code vulnerability.
-    "loopfunc": false,         // Warn functions inside loops.
+  // Environments.
+  // ==========================
 
-    // Environments.
-    // ==========================
+  "browser": true,           // Standard browser globals e.g. `window`, `document`.
+  "devel": true,             // Allow development statements e.g. `console.log();`.
+  "jasmine": true,           // Enable globals exposed by the Jasmine Unit Testing Framework.
+  "mocha": true,             // Enable globals exposed by the Mocha Unit Testing Framework.
+  "node": true,              // Enable globals available when code is running inside of the NodeJS runtime environment.
 
-    "browser": true,           // Standard browser globals e.g. `window`, `document`.
-    "devel": true,             // Allow development statements e.g. `console.log();`.
-    "jasmine": true,           // Enable globals exposed by the Jasmine Unit Testing Framework.
-    "mocha": true,             // Enable globals exposed by the Mocha Unit Testing Framework.
-    "node": true,              // Enable globals available when code is running inside of the NodeJS runtime environment.
+  // Deprecated Options. Remove on next major release of JSHint and rely solely on JSCS.
 
-    // Deprecated Options. Remove on next major release of JSHint and rely solely on JSCS.
-
-    "camelcase": true,
-    "immed": true,
-    "indent": 2,
-    "maxlen": 120,
-    "newcap": true,
-    "noempty": true,
-    "quotmark": "single"
+  "camelcase": true,
+  "immed": true,
+  "indent": 2,
+  "maxlen": 120,
+  "newcap": true,
+  "noempty": true,
+  "quotmark": "single"
 }
