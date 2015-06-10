@@ -2,13 +2,13 @@
 
 // Default configurations unless specify in another environment JS file.
 module.exports = {
+  // Default app configurations for production and secure.
   app: {
     title: 'Codeaux',
     description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
     keywords: 'Codeaux, Orbital'
   },
 
-  port: process.env.PORT || 3000,
   templateEngine: 'swig',
   sessionSecret: 'MEAN',
   sessionCollection: 'sessions',
