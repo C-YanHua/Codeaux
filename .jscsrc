@@ -9,7 +9,7 @@
   "disallowSpacesInsideObjectBrackets": null,
   "maximumLineLength": {
     "value": 120,
-      "allowComments": true,
+    "allowComments": true,
     "allowRegex": true
   },
   "requirePaddingNewLinesAfterUseStrict": true,
