@@ -27,4 +27,12 @@
     "checkRedundantAccess": true,
     "requireNewlineAfterDescription": true
   }
+
+  /* Code Style Explained
+     =====================================
+     1) Files end with a new line is a convention expected by all Unix tools.
+        http://stackoverflow.com/questions/729692/why-should-files-end-with-a-newline
+     2) Why opt for disallow of multiple var declaration.
+        http://benalman.com/news/2012/05/multiple-var-statements-javascript/
+  */
 }
