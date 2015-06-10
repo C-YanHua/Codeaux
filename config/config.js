@@ -5,6 +5,7 @@ var _ = require('lodash');
 var glob = require('glob');
 
 // Load app configurations.
+// Merges configurations in `all.js` with the current ENV JS file.
 module.exports = _.merge(
     require('./env/all'),
     require('./env/' + process.env.NODE_ENV) || {}
