@@ -12,21 +12,7 @@
     "allowComments": true,
     "allowRegex": true
   },
-  "requirePaddingNewLinesAfterUseStrict": true,
-  "validateLineBreaks": "LF",
-
-  "jsDoc": {
-    "checkAnnotations": "closurecompiler",
-    "checkParamNames": true,
-    "requireParamTypes": true,
-    "checkRedundantParams": true,
-    "checkReturnTypes": true,
-    "checkRedundantReturns": true,
-    "requireReturnTypes": true,
-    "checkTypes": "capitalizedNativeCase",
-    "checkRedundantAccess": true,
-    "requireNewlineAfterDescription": true
-  }
+  "requirePaddingNewLinesAfterUseStrict": true
 
   /* Code Style Explained
      =====================================
