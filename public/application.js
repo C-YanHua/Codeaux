@@ -8,7 +8,7 @@ angular.module(ApplicationConfiguration.applicationModuleName,
 angular.module(ApplicationConfiguration.applicationModuleName).config(['$locationProvider',
   function($locationProvider) {
     // Enable app to use HTML5 History API.
-    $locationProvider.html5Mode(true);//.hashPrefix('!');
+    $locationProvider.hashPrefix('!');//.html5Mode(true);
   }
 ]);
 
