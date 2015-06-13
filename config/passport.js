@@ -1,8 +1,6 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
+// Module dependencies.
 var passport = require('passport');
 var User = require('mongoose').model('User');
 var path = require('path');
@@ -17,7 +15,7 @@ module.exports = function() {
     done(null, user.id);
   });
 
-  // Deserialize sessions
+  // Deserialize sessions.
   passport.deserializeUser(function(id, done) {
     User.findOne({
       _id: id
@@ -26,12 +24,8 @@ module.exports = function() {
     });
   });
 
-  // Initialize strategies
+  // Initialize strategies.
   config.getGlobbedFiles('./config/strategies/**/*.js').forEach(function(strategy) {
-    // Hack to ignore Twitter and Linkedin passport request.
-    // Remove this when both of their strategies JS file is remove from system.
-    if (~strategy.indexOf('linkedin.js') && ~strategy.indexOf('twitter.js')) {
-      require(path.resolve(strategy))();
-    }
+    require(path.resolve(strategy))();
   });
 };

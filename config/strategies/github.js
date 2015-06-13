@@ -3,9 +3,9 @@
 // Module dependencies.
 require('url');
 
+var passport = require('passport');
 var GithubStrategy = require('passport-github').Strategy;
 var config = require('../config');
-var passport = require('passport');
 var users = require('../../app/controllers/users.server.controller');
 
 module.exports = function() {
