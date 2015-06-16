@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus',
+angular.module('core').controller('NavigationBarController', ['$scope', 'Authentication', 'Menus',
   function($scope, Authentication, Menus) {
     $scope.authentication = Authentication;
     $scope.isCollapsed = false;
