@@ -4,7 +4,7 @@ angular.module('core').controller('NavigationBarController', ['$scope', 'Authent
   function($scope, Authentication, Menus) {
     $scope.authentication = Authentication;
     $scope.isCollapsed = false;
-    $scope.menu = Menus.getMenu('navigationBar');
+    $scope.menu = Menus.getMenuById('navigationBar');
 
     $scope.toggleCollapsibleMenu = function() {
       $scope.isCollapsed = !$scope.isCollapsed;

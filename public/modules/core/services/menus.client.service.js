@@ -1,151 +1,151 @@
 'use strict';
 
-//Menu service used for managing  menus
+//Menu service used for managing menus.
 angular.module('core').service('Menus', [
 
   function() {
-    // Define a set of default roles
+    // Define a set of default roles.
     this.defaultRoles = ['*'];
 
-    // Define the menus object
+    // Define the menus object.
     this.menus = {};
 
-    // A private function for rendering decision
-    var shouldRender = function(user) {
+    // A private function to check if user or the menu itself is accessible.
+    var hasAccess = function(user) {
       if (user) {
-        if (!!~this.roles.indexOf('*')) {
+        if (~this.roles.indexOf('*')) {
           return true;
+
         } else {
-          for (var userRoleIndex in user.roles) {
-            for (var roleIndex in this.roles) {
-              if (this.roles[roleIndex] === user.roles[userRoleIndex]) {
-                return true;
-              }
+          for (var index in user.roles) {
+            if (this.roles.indexOf(user.roles[index]) !== -1) {
+              return true;
             }
           }
+
+          // If no roles matches the current user role.
+          return false;
         }
-      } else {
-        return this.isPublic;
       }
 
-      return false;
+      // If user object is null.
+      return this.isPublic;
     };
 
-    // Validate menu existance
-    this.validateMenuExistance = function(menuId) {
+    this.isNullOrUndefined = function(item) {
+      return (item === null || typeof item === 'undefined');
+    };
+
+    // Validate whether menu exists.
+    this.validateMenuExists = function(menuId) {
       if (menuId && menuId.length) {
         if (this.menus[menuId]) {
           return true;
+
         } else {
-          throw new Error('Menu does not exists');
+          throw new Error('Menu does not exists.');
         }
+
       } else {
-        throw new Error('MenuId was not provided');
+        throw new Error('MenuId was not provided.');
       }
 
       return false;
     };
 
-    // Get the menu object by menu id
-    this.getMenu = function(menuId) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
+    // Get the menu object by menuId.
+    this.getMenuById = function(menuId) {
+      this.validateMenuExists(menuId);
 
-      // Return the menu object
       return this.menus[menuId];
     };
 
-    // Add new menu object by menu id
+    // Add new menu object by menuId.
     this.addMenu = function(menuId, isPublic, roles) {
-      // Create the new menu
+      // Create the new menu.
       this.menus[menuId] = {
         isPublic: isPublic || false,
         roles: roles || this.defaultRoles,
         items: [],
-        shouldRender: shouldRender
+        modalItems: [],
+        hasAccess: hasAccess
       };
 
-      // Return the menu object
       return this.menus[menuId];
     };
 
-    // Remove existing menu object by menu id
-    this.removeMenu = function(menuId) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
+    // Remove existing menu object by menuId.
+    this.removeMenuById = function(menuId) {
+      this.validateMenuExists(menuId);
 
-      // Return the menu object
       delete this.menus[menuId];
     };
 
-    // Add menu item object
-    this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
+    // Add a child menu item object to root menu.
+    this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemClass,
+                                menuItemState, menuItemUIRoute, isPublic, roles, position) {
+      this.validateMenuExists(menuId);
 
-      // Push new menu item
+      // Push new menu item to menu.
       this.menus[menuId].items.push({
         title: menuItemTitle,
-        link: menuItemURL,
-        menuItemType: menuItemType || 'item',
-        menuItemClass: menuItemType,
-        uiRoute: menuItemUIRoute || ('/' + menuItemURL),
-        isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].isPublic : isPublic),
-        roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].roles : roles),
+        reference: menuItemURL,
+        type: menuItemType || 'item',
+        class: menuItemClass || menuItemType,
+        state: menuItemState || menuItemTitle,
+        uiRoute: menuItemUIRoute || menuItemURL,
+        isPublic: (this.isNullOrUndefined(isPublic) ? this.menus[menuId].isPublic : isPublic),
+        roles: (this.isNullOrUndefined(roles) ? this.menus[menuId].roles : roles),
         position: position || 0,
         items: [],
-        shouldRender: shouldRender
+        hasAccess: hasAccess
       });
 
-      // Return the menu object
-      return this.menus[menuId];
-    };
-
-    // Add submenu item object
-    this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
-
-      // Search for menu item
-      for (var itemIndex in this.menus[menuId].items) {
-        if (this.menus[menuId].items[itemIndex].link === rootMenuItemURL) {
-          // Push new submenu item
-          this.menus[menuId].items[itemIndex].items.push({
-            title: menuItemTitle,
-            link: menuItemURL,
-            uiRoute: menuItemUIRoute || ('/' + menuItemURL),
-            isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].items[itemIndex].isPublic : isPublic),
-            roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].items[itemIndex].roles : roles),
-            position: position || 0,
-            shouldRender: shouldRender
-          });
-        }
-      }
-
-      // Return the menu object
       return this.menus[menuId];
     };
 
     // Remove existing menu object by menu id
-    this.removeMenuItem = function(menuId, menuItemURL) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
+    this.removeMenuItemById = function(menuId, menuItemURL) {
+      this.validateMenuExists(menuId);
 
-      // Search for menu item to remove
+      // Search for menu item to remove.
       for (var itemIndex in this.menus[menuId].items) {
         if (this.menus[menuId].items[itemIndex].link === menuItemURL) {
           this.menus[menuId].items.splice(itemIndex, 1);
         }
       }
 
-      // Return the menu object
       return this.menus[menuId];
     };
 
-    // Remove existing menu object by menu id
-    this.removeSubMenuItem = function(menuId, submenuItemURL) {
-      // Validate that the menu exists
-      this.validateMenuExistance(menuId);
+    // Add a child sub menu item object to menu item object.
+    this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemState,
+                                   menuItemUIRoute, isPublic, roles, position) {
+      this.validateMenuExists(menuId);
+
+      // Search for menu item.
+      for (var itemIndex in this.menus[menuId].items) {
+        // Push new sub menu item if menu item exists.
+        if (this.menus[menuId].items[itemIndex].reference === rootMenuItemURL) {
+          this.menus[menuId].items[itemIndex].items.push({
+            title: menuItemTitle,
+            reference: menuItemURL,
+            state: menuItemState || menuItemTitle,
+            uiRoute: menuItemUIRoute || menuItemURL,
+            isPublic: (this.isNullOrUndefined(isPublic) ? this.menus[menuId].items[itemIndex].isPublic : isPublic),
+            roles: (this.isNullOrUndefined(isPublic) ? this.menus[menuId].items[itemIndex].roles : roles),
+            position: position || 0,
+            hasAccess: hasAccess
+          });
+        }
+      }
+
+      return this.menus[menuId];
+    };
+
+    // Remove existing sub menu object by sub menu URL.
+    this.removeSubMenuItemByURL = function(menuId, submenuItemURL) {
+      this.validateMenuExists(menuId);
 
       // Search for menu item to remove
       for (var itemIndex in this.menus[menuId].items) {
@@ -156,7 +156,6 @@ angular.module('core').service('Menus', [
         }
       }
 
-      // Return the menu object
       return this.menus[menuId];
     };
   }
