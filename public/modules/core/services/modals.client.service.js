@@ -9,6 +9,20 @@ angular.module('core').service('Modals', ['$modal',
     // Define the modals object.
     this.modals = {};
 
+    // A private controller to provide the modal instances with basic modal event functions.
+    var controllerInstance = ['$scope', '$modalInstance',
+      function($scope, $modalInstance) {
+        $scope.closeModal = function() {
+          $modalInstance.close();
+        };
+
+        $scope.dismissModal = function() {
+          $modalInstance.dismiss();
+        };
+      }
+    ];
+
+    // A private function to check if user or the modal itself is accessible.
     var hasAccess = function(user) {
       if (user) {
         if (~this.roles.indexOf('*')) {
@@ -30,6 +44,7 @@ angular.module('core').service('Modals', ['$modal',
       return this.isPublic;
     };
 
+    // Validate whether modal exists.
     this.validateModalExists = function(modalId) {
       if (modalId && modalId.length) {
         if (this.modals[modalId]) {
@@ -46,31 +61,33 @@ angular.module('core').service('Modals', ['$modal',
       return false;
     };
 
+    // Get the modal object by modalId.
     this.getModalById = function(modalId) {
       this.validateModalExists(modalId);
 
       return this.modals[modalId];
     };
 
-    this.addModal = function(modalId, modalTemplateURL, modalController, modalSize,
-                             isPublic, roles) {
+    // Add a new modal object by modalId.
+    this.addModal = function(modalId, modalTemplateURL, modalSize, modalController, isPublic, roles) {
       this.modals[modalId] = {
-        isPublic: isPublic || false,
-        roles: roles || this.defaultRoles,
-        hasAccess: hasAccess,
-
         openModal: function() {
           $modal.open({
             templateUrl: modalTemplateURL,
-            controller: modalController,
-            size: modalSize
+            size: modalSize,
+            controller: modalController || controllerInstance
           });
-        }
+        },
+
+        isPublic: isPublic || false,
+        roles: roles || this.defaultRoles,
+        hasAccess: hasAccess
       };
 
       return this.modals[modalId];
     };
 
+    // Remove an existing modal object by modalId.
     this.removeModalById = function(modalId) {
       this.validateModalExists(modalId);
 
