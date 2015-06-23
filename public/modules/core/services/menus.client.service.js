@@ -1,6 +1,6 @@
 'use strict';
 
-//Menu service used for managing menus.
+// Menu service used for managing menus.
 angular.module('core').service('Menus', [
 
   function() {
@@ -60,28 +60,27 @@ angular.module('core').service('Menus', [
       return this.menus[menuId];
     };
 
-    // Add new menu object by menuId.
+    // Add a new menu object by menuId.
     this.addMenu = function(menuId, isPublic, roles) {
       // Create the new menu.
       this.menus[menuId] = {
         isPublic: isPublic || false,
         roles: roles || this.defaultRoles,
         items: [],
-        modalItems: [],
         hasAccess: hasAccess
       };
 
       return this.menus[menuId];
     };
 
-    // Remove existing menu object by menuId.
+    // Remove an existing menu object by menuId.
     this.removeMenuById = function(menuId) {
       this.validateMenuExists(menuId);
 
       delete this.menus[menuId];
     };
 
-    // Add a child menu item object to root menu.
+    // Add a new child menu item object to root menu.
     this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemClass,
                                 menuItemState, menuItemUIRoute, isPublic, roles, position) {
       this.validateMenuExists(menuId);
@@ -104,7 +103,7 @@ angular.module('core').service('Menus', [
       return this.menus[menuId];
     };
 
-    // Remove existing menu object by menu id
+    // Remove an existing menu object by menuId.
     this.removeMenuItemById = function(menuId, menuItemURL) {
       this.validateMenuExists(menuId);
 
@@ -118,14 +117,14 @@ angular.module('core').service('Menus', [
       return this.menus[menuId];
     };
 
-    // Add a child sub menu item object to menu item object.
+    // Add a child sub-menu item object to menu item object.
     this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemState,
                                    menuItemUIRoute, isPublic, roles, position) {
       this.validateMenuExists(menuId);
 
       // Search for menu item.
       for (var itemIndex in this.menus[menuId].items) {
-        // Push new sub menu item if menu item exists.
+        // Push new sub-menu item if menu item exists.
         if (this.menus[menuId].items[itemIndex].reference === rootMenuItemURL) {
           this.menus[menuId].items[itemIndex].items.push({
             title: menuItemTitle,
@@ -143,7 +142,7 @@ angular.module('core').service('Menus', [
       return this.menus[menuId];
     };
 
-    // Remove existing sub menu object by sub menu URL.
+    // Remove existing sub-menu object by sub-menu URL.
     this.removeSubMenuItemByURL = function(menuId, submenuItemURL) {
       this.validateMenuExists(menuId);
 
