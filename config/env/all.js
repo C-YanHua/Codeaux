@@ -67,6 +67,11 @@ module.exports = {
     callbackURL: '/auth/github/callback'
   },
 
+  nusOpenId: {
+    returnURL: 'http://localhost:3000/auth/nus_openid/return',
+    realm: 'http://localhost:3000/'
+  },
+
   mailer: {
     from: process.env.MAILER_FROM || 'MAILER_FROM',
     options: {
