@@ -1,6 +1,7 @@
 'use strict';
 
 // Initialize environment variables and environment files.
+require('dotenv').load();
 require('./config/init')();
 
 // Module dependencies.
