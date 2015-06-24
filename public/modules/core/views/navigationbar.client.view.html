@@ -17,11 +17,11 @@
     <ul class="nav navbar-nav" data-ng-show="navBarMenu.hasAccess(authentication.user);">
       <li data-ng-repeat="item in navBarMenu.items | orderBy: 'position'"
           data-ng-if="item.hasAccess(authentication.user);" dropdown="item.type === 'dropdown'">
-        <a class="dropdown-toggle">
+        <a class="dropdown-toggle" dropdown-toggle>
           <span data-ng-bind="item.title"></span>
           <span class="caret"></span>
         </a>
-        <ul  class="dropdown-menu">
+        <ul  class="dropdown-menu" role="menu">
           <li data-ng-repeat="subitem in item.items | orderBy: 'position'"
               data-ng-if="subitem.hasAccess(authentication.user);"
               ui-route="{{subitem.uiRoute}}" ng-class="{active: $uiRoute}">

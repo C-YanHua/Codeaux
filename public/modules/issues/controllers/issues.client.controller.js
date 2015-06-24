@@ -1,8 +1,8 @@
 'use strict';
 
 // Issues controller
-angular.module('issues').controller('IssuesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Issues',
-	function($scope, $stateParams, $location, Authentication, Issues) {
+angular.module('issues').controller('IssuesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Issues', '$sce',
+	function($scope, $stateParams, $location, Authentication, Issues, $sce) {
 		$scope.authentication = Authentication;
 
 		// Create new Issue
@@ -59,8 +59,8 @@ angular.module('issues').controller('IssuesController', ['$scope', '$stateParams
 
 		// Find existing Issue
 		$scope.findOne = function() {
-			$scope.issue = Issues.get({
-				issueId: $stateParams.issueId
+			$scope.issue = Issues.get({issueId: $stateParams.issueId}, function() {
+				$scope.etherpadSrc = $sce.trustAsResourceUrl("http://127.0.0.1:9001/p/"+$scope.issue.padId);
 			});
 		};
 	}

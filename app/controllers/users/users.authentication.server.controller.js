@@ -6,6 +6,17 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var User = mongoose.model('User');
 
+var async = require('async');
+var etherpadApi = require('etherpad-lite-client');
+
+// the apikey is found when installing etherpad locally
+var etherpad = etherpadApi.connect({
+  apikey: '96a331ca0a3f728fe38308ac25c75d7bbef29d22f611b365f861d947f0869140',
+  host: 'localhost',
+  port: 9001
+});
+
+
 // Private function for sign up new OAuth or OpenID user.
 var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
   User.findOne(searchQuery, function(err, user) {
@@ -66,34 +77,63 @@ var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
 
 // New user sign up.
 exports.signup = function(req, res) {
-  // For security measurement, remove the roles from the req.body object.
-  delete req.body.roles;
+  async.waterfall([
+    function(callback) {
+      // For security measurement we remove the roles from the req.body object.
+      delete req.body.roles;
 
-  // Init Variables.
-  var user = new User(req.body);
+      // Init Variables.
+      var user = new User(req.body);
+      var message = null;
 
-  // Add missing user fields.
-  user.provider = 'local';
-  user.displayName = user.firstName + ' ' + user.lastName;
+      // Add missing user fields
+      user.provider = 'local';
+      user.displayName = user.firstName + ' ' + user.lastName;
 
-  // Save user into database.
-  user.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: err
-      });
-    } else {
-      // Remove sensitive data before login.
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function(err) {
-        if (err) {
-          res.status(400).send(err);
+      // Generate etherpad authorID
+      var args = {};
+      args["name"] = user.username;
+      etherpad.createAuthor(args, function(error, data) {
+        if (error) {
+          var err = error.message;
         } else {
-          res.json(user);
+          user.authorId = data.authorID;
         }
+        callback(err, user);
       });
+    },
+    function(user, callback) {
+      etherpad.createGroup(function(error, data) {
+        if (error) {
+          var err = error.message;
+        } else {
+          user.groupId = data.groupID;
+        }
+        callback(err, user);
+      });
+    },
+    function(user, callback) {
+      // Then save the user
+      user.save(function(error) {
+        if (error) {
+          var err = {message: errorHandler.getErrorMessage(error)};
+        } else {
+          // Remove sensitive data before login
+          user.password = undefined;
+          user.salt = undefined;
+
+          req.login(user, function(err) {
+            if (!err) {
+              res.json(user);
+            }
+          });
+        }
+        callback(err);
+      });
+    }
+  ], function(err) {
+    if (err) {
+      return res.status(400).send(err);
     }
   });
 };

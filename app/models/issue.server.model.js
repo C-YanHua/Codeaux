@@ -29,6 +29,10 @@ var IssueSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	padId: {
+		type: String,
+		default: ''
 	}
 });
 

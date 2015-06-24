@@ -86,7 +86,16 @@ var UserSchema = new Schema({
   },
   resetPasswordExpires: {
     type: Date
-  }
+  },
+  // For etherpad
+	authorId: {
+		type: String,
+		default: ''
+	},
+	groupId: {
+		type: String,
+		default: ''
+	}
 });
 
 /**
