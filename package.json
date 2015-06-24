@@ -54,6 +54,7 @@
     "swig": "~1.4.2"
   },
   "devDependencies": {
+    "dotenv":  "1.2.0",
     "grunt-concurrent": "~2.0.0",
     "grunt-contrib-csslint": "^0.4.0",
     "grunt-contrib-cssmin": "~0.12.3",
