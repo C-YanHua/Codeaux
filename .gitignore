@@ -6,6 +6,7 @@ Thumbs.db
 
 # Node & Related
 # ================
+.env
 .nodemonignore
 npm-debug.log
 .sass-cache/
