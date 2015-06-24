@@ -1,10 +1,12 @@
 'use strict';
 
-angular.module('core').controller('NavigationBarController', ['$scope', 'Authentication', 'Menus',
-  function($scope, Authentication, Menus) {
+angular.module('core').controller('NavigationBarController', ['$scope', 'Authentication', 'Menus', 'Modals',
+  function($scope, Authentication, Menus, Modals) {
     $scope.authentication = Authentication;
     $scope.isCollapsed = false;
-    $scope.menu = Menus.getMenuById('navigationBar');
+    $scope.navBarMenu = Menus.getMenuById('navigationBar');
+    $scope.signUpModal = Modals.getModalById('signup');
+    $scope.signInModal = Modals.getModalById('signin');
 
     $scope.toggleCollapsibleMenu = function() {
       $scope.isCollapsed = !$scope.isCollapsed;
