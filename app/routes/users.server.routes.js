@@ -42,6 +42,10 @@ module.exports = function(app) {
   app.route('/auth/github').get(passport.authenticate('github'));
   app.route('/auth/github/callback').get(users.oauthCallback('github'));
 
+  // Setting the nus_openid oauth routes.
+  app.route('/auth/nus_openid').get(passport.authenticate('nus-openid'));
+  app.route('/auth/nus_openid/return').get(users.openIdReturn('nus-openid'));
+
   // Finish by binding the user middleware.
   app.param('userId', users.userByID);
 
