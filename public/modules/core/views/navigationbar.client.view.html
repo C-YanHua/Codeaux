@@ -1,7 +1,7 @@
 <div class="container" data-ng-controller="NavigationBarController">
   <div class="navbar-header">
     <a class="navbar-brand" href="/">
-      <img src="" alt="Codeaux">
+      <img class="navbar-logo" src="modules/core/img/brand/codeaux_logo_wordmark.png" alt="Codeaux">
     </a>
 
     <!-- For screen readers -->
@@ -34,12 +34,13 @@
     <!-- For guests -->
     <ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
       <li>
-        <a ng-click="signUpModal.openModal()">Sign up</a>
+        <button class="btn btn-success navbar-btn" ng-click="signUpModal.openModal()">Sign up</button>
       </li>
-      <li class="divider-vertical"></li>
+      <li class="divider-vertical">&nbsp;&nbsp;&nbsp;</li>
       <li>
-        <a ng-click="signInModal.openModal()">Sign in</a>
+        <button class="btn btn-block btn-default navbar-btn" ng-click="signInModal.openModal()">Sign in</button>
       <li>
+      <li class="divider-vertical">&nbsp;&nbsp;&nbsp;&nbsp;</li>
     </ul>
 
     <!-- For members -->
