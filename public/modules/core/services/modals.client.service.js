@@ -16,8 +16,8 @@ angular.module('core').service('Modals', ['$modal',
           $modalInstance.close();
         };
 
-        $scope.dismissModal = function() {
-          $modalInstance.dismiss();
+        $scope.dismissModal = function(message) {
+          $modalInstance.dismiss(message);
         };
       }
     ];
