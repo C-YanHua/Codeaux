@@ -11,7 +11,7 @@ var etherpadApi = require('etherpad-lite-client');
 
 // the apikey is found when installing etherpad locally
 var etherpad = etherpadApi.connect({
-  apikey: '96a331ca0a3f728fe38308ac25c75d7bbef29d22f611b365f861d947f0869140',
+  apikey: process.env.ETHERPAD_APIKEY,
   host: 'localhost',
   port: 9001
 });
