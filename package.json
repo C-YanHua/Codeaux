@@ -5,14 +5,14 @@
   "license": "MIT",
   "author": {
     "name": "Chen YanHua <a0125362@u.nus.edu> and Wong Kin Fei <a0076509@u.nus.edu>",
-    "url": "https://github.com/C-YanHua/Codeaux/graphs/contributors"
+    "url": "https://github.com/Codeaux/Codeaux/graphs/contributors"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/C-YanHua/Codeaux"
+    "url": "https://github.com/Codeaux/Codeaux"
   },
   "bugs": {
-    "url": "https://github.com/C-YanHua/Codeaux/issues"
+    "url": "https://github.com/Codeaux/Codeaux/issues"
   },
   "engines": {
     "node": "0.10.x",
