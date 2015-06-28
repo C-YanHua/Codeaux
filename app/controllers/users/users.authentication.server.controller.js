@@ -161,6 +161,14 @@ exports.signin = function(req, res, next) {
 
 // User sign out.
 exports.signout = function(req, res) {
+  if (req.cookies.sessionID) {
+    var args = {
+      sessionID: req.cookies.sessionID
+    };
+
+    etherpad.deleteSession(args);
+  }
+  
   req.logout();
   res.redirect('/');
 };

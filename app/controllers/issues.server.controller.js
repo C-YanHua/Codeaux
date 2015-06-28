@@ -36,18 +36,30 @@ exports.create = function(req, res) {
     },
     function(issue, callback) {
       var args = {
-        groupID: '',
-        padName: '',
+        groupID: req.user.groupId,
+        padName: issue._id.toString(),
         text: 'Helloworld'
       };
-      args["groupID"] = req.user.groupId;
-      args["padName"] = issue._id.toString();
 
       etherpad.createGroupPad(args, function(error, data) {
         if (error) {
           var err = error.message;
         } else {
           issue.padId = data.padID;
+        }
+        callback(err, issue);
+      });
+    },
+    function(issue, callback) {
+      var args = {
+        padID: issue.padId
+      };
+
+      etherpad.getReadOnlyID(args, function(error, data) {
+        if (error) {
+          var err = error.message;
+        } else {
+          issue.readOnlyPadId = data.readOnlyID;
         }
         callback(err, issue);
       });
@@ -73,7 +85,31 @@ exports.create = function(req, res) {
  * Show the current Issue
  */
 exports.read = function(req, res) {
-  res.jsonp(req.issue);
+
+  if (req.user && req.issue) {
+    var issue = req.issue;
+    var user = req.user;
+    // one hour before session expires
+    var sessionTime = (Math.floor(Date.now() / 1000) + 216000);
+
+    var args = {
+      groupID: issue.padId.substr(0, issue.padId.indexOf('$')),
+      authorID: user.authorId,
+      validUntil: sessionTime
+    };
+
+    etherpad.createSession(args, function(error, data) {
+      if (error) {
+        return res.status(400).send(error.message);
+      } else {
+        var sessionId = data.sessionID;
+
+        res.cookie('sessionID', sessionId, {maxAge: 900000, httpOnly: false, secure: false});
+
+        res.jsonp(req.issue);
+      }
+    });
+  }
 };
 
 /**

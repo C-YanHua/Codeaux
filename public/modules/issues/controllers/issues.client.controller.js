@@ -61,6 +61,7 @@ angular.module('issues').controller('IssuesController', ['$scope', '$stateParams
 		$scope.findOne = function() {
 			$scope.issue = Issues.get({issueId: $stateParams.issueId}, function() {
 				$scope.etherpadSrc = $sce.trustAsResourceUrl("http://127.0.0.1:9001/p/"+$scope.issue.padId);
+				//$scope.etherpadSrc = $sce.trustAsResourceUrl("http://127.0.0.1:9001/p/"+$scope.issue.readOnlyPadId);
 			});
 		};
 	}

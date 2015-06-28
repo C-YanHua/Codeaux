@@ -33,6 +33,10 @@ var IssueSchema = new Schema({
 	padId: {
 		type: String,
 		default: ''
+	},
+	readOnlyPadId: {
+		type: String,
+		default: ''
 	}
 });
 
