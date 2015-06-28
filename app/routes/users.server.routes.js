@@ -7,6 +7,15 @@ module.exports = function(app) {
   // User Routes.
   var users = require('../../app/controllers/users.server.controller');
 
+  app.route('/auth/signup_validate/username').post(users.signupValidation);
+  app.route('/auth/signup_validate/email').post(users.signupValidation);
+  app.route('/auth/signup_validate/password').post(users.signupValidation);
+
+  // Setting up the Users Authentication API.
+  app.route('/auth/signup').post(users.signup);
+  app.route('/auth/signin').post(users.signin);
+  app.route('/auth/signout').get(users.signout);
+
   // Setting up the Users Profile API.
   app.route('/api/users/me').get(users.me);
   app.route('/api/users').put(users.update);
@@ -17,11 +26,6 @@ module.exports = function(app) {
   app.route('/auth/forgot').post(users.forgot);
   app.route('/auth/reset/:token').get(users.validateResetToken);
   app.route('/auth/reset/:token').post(users.reset);
-
-  // Setting up the Users Authentication API.
-  app.route('/auth/signup').post(users.signup);
-  app.route('/auth/signin').post(users.signin);
-  app.route('/auth/signout').get(users.signout);
 
   // Setting the facebook oauth routes.
   app.route('/auth/facebook').get(passport.authenticate('facebook', {
@@ -48,11 +52,4 @@ module.exports = function(app) {
 
   // Finish by binding the user middleware.
   app.param('userId', users.userByID);
-
-  // Setting the twitter oauth routes
-  //app.route('/auth/twitter').get(passport.authenticate('twitter'));
-  //app.route('/auth/twitter/callback').get(users.oauthCallback('twitter'));
-  // Setting the linkedin oauth routes
-  //app.route('/auth/linkedin').get(passport.authenticate('linkedin'));
-  //app.route('/auth/linkedin/callback').get(users.oauthCallback('linkedin'));
 };
