@@ -98,6 +98,14 @@ exports.read = function(req, res) {
       validUntil: sessionTime
     };
 
+    if (req.cookies.sessionID) {
+      var oldSession = {
+        sessionID: req.cookies.sessionID
+      };
+
+      etherpad.deleteSession(oldSession);
+    }
+
     etherpad.createSession(args, function(error, data) {
       if (error) {
         return res.status(400).send(error.message);
