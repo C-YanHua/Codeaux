@@ -16,7 +16,65 @@ var etherpad = etherpadApi.connect({
   port: 9001
 });
 
-
+var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
+  async.waterfall([
+    function(callback) {
+      User.findOne(searchQuery, function(err, user) {
+        if (err) {
+          callback(err, user);
+        } else if (user) {
+          callback(null, user);
+        } else {
+          User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+            user = new User({
+              firstName: providerUserProfile.firstName,
+              lastName: providerUserProfile.lastName,
+              username: availableUsername,
+              displayName: providerUserProfile.displayName,
+              email: providerUserProfile.email,
+              provider: providerUserProfile.provider,
+              providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
+              authorId: '',
+              groupId: ''
+            });
+            callback(null, user);
+          });
+        }
+      });
+    },
+    function(user, callback) {
+      // Generate etherpad authorID
+      console.log(user);
+      var args = {};
+      args["name"] = user.username;
+      etherpad.createAuthor(args, function(err, data) {
+        if (!err) {
+          user.authorId = data.authorID;
+        }
+        callback(err, user);
+      });
+    },
+    function(user, callback) {
+      etherpad.createGroup(function(err, data) {
+        if (!err) {
+          user.groupId = data.groupID;
+        }
+        callback(err, user);
+      });
+    },
+    function(user, callback) {
+      user.save(function(err) {
+        return done(err, user);
+        callback(null);
+      });
+    }
+  ], function(err) {
+    if (err) {
+      return done(err);
+    }
+  });
+}
+/*
 // Private function for sign up new OAuth or OpenID user.
 var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
   User.findOne(searchQuery, function(err, user) {
@@ -46,6 +104,7 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
     }
   });
 };
+*/
 
 // Private function to merge provider data with existing logged in user.
 var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
@@ -84,7 +143,6 @@ exports.signup = function(req, res) {
 
       // Init Variables.
       var user = new User(req.body);
-      var message = null;
 
       // Add missing user fields
       user.provider = 'local';
@@ -161,6 +219,7 @@ exports.signin = function(req, res, next) {
 
 // User sign out.
 exports.signout = function(req, res) {
+  // Close etherpad session if found
   if (req.cookies.sessionID) {
     var args = {
       sessionID: req.cookies.sessionID
@@ -168,7 +227,7 @@ exports.signout = function(req, res) {
 
     etherpad.deleteSession(args);
   }
-  
+
   req.logout();
   res.redirect('/');
 };
@@ -201,7 +260,7 @@ exports.saveOpenIdUserProfile = function(req, providerUserProfile, done) {
   if (!req.user) {
     // Define a search query to find existing user with current provider profile.
     var searchQuery = {
-      provider: providerUserProfile.providerIdentifierField
+      providerData: providerUserProfile.providerIdentifierField
     };
 
     var possibleUsername = providerUserProfile.username || providerUserProfile.email;
