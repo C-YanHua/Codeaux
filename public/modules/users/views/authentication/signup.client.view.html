@@ -12,15 +12,25 @@
     <div class="modal-body">
       <form name="signUpForm" data-ng-submit="signup()" novalidate autocomplete="off">
         <fieldset>
+
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" aria-label="Pick a username">
                 <span class="glyphicon glyphicon-user"></span>
               </span>
               <input type="text" id="username" name="username" class="form-control"
-                     data-ng-model="credentials.username" placeholder="Pick a username" autofocus>
+                     data-ng-model="credentials.username" placeholder="Pick a username" autofocus validate-username>
             </div>
           </div>
+
+          <span ng-messages="signUpForm.username.$error">
+            <div ng-hide="usernameErrorMessage == null" class="form-group">
+              <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span ng-message="usernameValidation">{{ usernameErrorMessage }}</span>
+              </div>
+            </div>
+          </span>
 
           <div class="form-group">
             <div class="input-group">
@@ -28,13 +38,18 @@
                 <span class="glyphicon glyphicon-envelope"></span>
               </span>
               <input type="email" id="email" name="email" class="form-control"
-                     data-ng-model="credentials.email" placeholder="Your email" required>
-              <!--<span ng-messages="signUpForm.email.$error">
-                <span ng-message="required">require.</span>
-                <span ng-message="emailValidator">Invalid email.</span>
-              </span>-->
+                     data-ng-model="credentials.email" placeholder="Your email" validate-email>
             </div>
           </div>
+
+          <span ng-messages="signUpForm.email.$error">
+            <div ng-hide="emailErrorMessage == null" class="form-group">
+              <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span ng-message="emailValidation">{{ emailErrorMessage }}</span>
+              </div>
+            </div>
+          </span>
 
           <div class="form-group">
             <div class="input-group">
@@ -42,9 +57,18 @@
                 <span class="glyphicon glyphicon-lock"></span>
               </span>
               <input type="password" id="password" name="password" class="form-control"
-                     data-ng-model="credentials.password" placeholder="Create a password">
+                     data-ng-model="credentials.password" placeholder="Create a password" validate-password>
             </div>
           </div>
+
+          <span ng-messages="signUpForm.password.$error">
+            <div ng-hide="passwordErrorMessage == null" class="form-group">
+              <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span ng-message="passwordValidation">{{ passwordErrorMessage }}</span>
+              </div>
+            </div>
+          </span>
 
           <div class="form-group">
             <div class="text-center">

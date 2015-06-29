@@ -22,7 +22,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         $location.path('/');
       }).error(function(response) {
         $scope.error = response.message;
-        console.log($scope.error);
       });
     };
 
@@ -38,28 +37,102 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         $scope.error = response.message;
       });
     };
+
+    $scope.usernameErrorMessage = null;
+    $scope.validateUsername = function() {
+      return $http.post('auth/signup_validate/username', $scope.credentials);
+    };
+
+    $scope.emailErrorMessage = null;
+    $scope.validateEmail = function() {
+      return $http.post('auth/signup_validate/email', $scope.credentials);
+    };
+
+    $scope.passwordErrorMessage = null;
+    $scope.validatePassword = function() {
+      return $http.post('auth/signup_validate/password', $scope.credentials);
+    };
   }
 ]);
 
-/*
-angular.module('users').directive('validateEmail', function() {
-  var EMAIL_REGEXP = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+angular.module('users').directive('validateUsername', function() {
   return {
     require: 'ngModel',
     restrict: '',
-    link: function(scope, elm, attrs, ctrl) {
+    link: function(scope, element, attributes, ngModel) {
 
       function customValidator(value) {
-        if (EMAIL_REGEXP.test(value)) {
-          ctrl.$setValidity('emailValidator', true);
-        } else {
-          ctrl.$setValidity('emailValidator', false);
-        }
+        scope.validateUsername().success(function() {
+          scope.usernameErrorMessage = null;
+          ngModel.$setValidity('usernameValidation', true);
+
+        }).error(function(response) {
+          scope.usernameErrorMessage = response.message;
+          ngModel.$setValidity('usernameValidation', false);
+        });
 
         return value;
       }
 
-      ctrl.$parsers.push(customValidator);
+      ngModel.$parsers.push(customValidator);
     }
-  }
-});*/
+  };
+});
+
+angular.module('users').directive('validateEmail', function() {
+  return {
+    require: 'ngModel',
+    restrict: '',
+    link: function(scope, element, attributes, ngModel) {
+
+      function customValidator(value) {
+        scope.validateEmail().success(function() {
+          scope.emailErrorMessage = null;
+          ngModel.$setValidity('emailValidation', true);
+
+        }).error(function(response) {
+          scope.emailErrorMessage = response.message;
+          ngModel.$setValidity('emailValidation', false);
+        });
+
+        return value;
+      }
+
+      function disableBuiltInValidator() {
+        return true;
+      }
+
+      ngModel.$parsers.push(customValidator);
+      ngModel.$validators.email = disableBuiltInValidator;
+    }
+  };
+});
+
+angular.module('users').directive('validatePassword', function() {
+  return {
+    require: 'ngModel',
+    restrict: '',
+    link: function(scope, element, attributes, ngModel) {
+
+      function customValidator(value) {
+        scope.validatePassword().success(function() {
+          scope.passwordErrorMessage = null;
+          ngModel.$setValidity('passwordValidation', true);
+
+        }).error(function(response) {
+          scope.passwordErrorMessage = response.message;
+          ngModel.$setValidity('passwordValidation', false);
+        });
+
+        return value;
+      }
+
+      function disableBuiltInValidator() {
+        return true;
+      }
+
+      ngModel.$parsers.push(customValidator);
+      ngModel.$validators.password = disableBuiltInValidator;
+    }
+  };
+});
