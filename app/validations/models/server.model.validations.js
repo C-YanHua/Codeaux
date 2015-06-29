@@ -80,7 +80,7 @@ exports.isUpperCaseAlpha = function(str) {
 };
 
 exports.isAlpha = function(str) {
-  return (exports.isLowerCaseAlpha(str) && exports.isUpperCaseAlpha(str));
+  return (exports.isLowerCaseAlpha(str) || exports.isUpperCaseAlpha(str));
 };
 
 exports.isAlphaNumeric = function(str) {
