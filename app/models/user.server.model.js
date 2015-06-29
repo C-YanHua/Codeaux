@@ -1,30 +1,96 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
+// Module dependencies.
+var ModelValidation = require('../validations/models/server.model.validations');
+var ModelValidator = require('../validations/models/server.model.validator');
+var crypto = require('crypto');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var crypto = require('crypto');
 
-/**
- * A Validation function for local strategy properties
- */
-var validateLocalStrategyProperty = function(property) {
-  return ((this.provider !== 'local' && !this.updated) || property.length);
+var validators = {
+  username: [
+    {
+      userPreCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isUsernameMaxLength,
+      message: ' is too long (maximum ' + ModelValidation.getUsernameMaxLength().toString() + ' characters)'
+    },
+    {
+      userPreCondition: ModelValidation.isLocal,
+      validate: ModelValidation.hasNoIllegalUsernameChar,
+      message: ' can only contain alphanumeric characters, hyphens and underscore'
+    }
+  ],
+  email: [
+    {
+      preCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isEmail,
+      message: ' is invalid'
+    }
+  ],
+  password: [
+    {
+      preCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isPasswordMinLength,
+      message: ' is too short (minimum ' + ModelValidation.getPasswordMinLength().toString() + ' characters)'
+    },
+    {
+      preCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isPasswordMaxLength,
+      message: ' is too long (maximum ' + ModelValidation.getPasswordMaxLength().toString() + ' characters)'
+    },
+    {
+      preCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isAlpha,
+      message: ' needs at least one alphabet letter'
+    },
+    {
+      preCondition: ModelValidation.isLocal,
+      validate: ModelValidation.isNumeric,
+      message: ' needs at least one number'
+    }
+  ]
 };
 
-/**
- * A Validation function for local strategy password
- */
-var validateLocalStrategyPassword = function(password) {
-  return (this.provider !== 'local' || (password && password.length > 6));
+var validateUsername = function(username) {
+  ModelValidator.setValidationErrorHeader('Username');
+
+  return ModelValidator.validateValidatorsArray(username, validators.username, this);
 };
 
-/**
- * User Schema
- */
+var validateEmail = function(email) {
+  ModelValidator.setValidationErrorHeader('Email');
+
+  return ModelValidator.validateValidatorsArray(email, validators.email, this);
+};
+
+var validatePassword = function(password) {
+  ModelValidator.setValidationErrorHeader('Password');
+
+  return ModelValidator.validateValidatorsArray(password, validators.password, this);
+};
+
+// User Schema.
 var UserSchema = new Schema({
+  username: {
+    type: String,
+    trim: true,
+    validate: [validateUsername, ModelValidator.validationErrorMessage()]
+  },
+  email: {
+    type: String,
+    trim: true,
+    default: '',
+    validate: [validateEmail, ModelValidator.validationErrorMessage()]
+  },
+  password: {
+    type: String,
+    default: '',
+    validate: [validatePassword, ModelValidator.validationErrorMessage()]
+  },
+  salt: {
+    type: String
+  },
+
   firstName: {
     type: String,
     trim: true,
@@ -38,27 +104,6 @@ var UserSchema = new Schema({
   displayName: {
     type: String,
     trim: true
-  },
-  email: {
-    type: String,
-    trim: true,
-    default: '',
-    validate: [validateLocalStrategyProperty, 'Please fill in your email'],
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/, 'Invalid email. Please try again.']
-  },
-  username: {
-    type: String,
-    unique: 'testing error message',
-    required: 'Please fill in a username',
-    trim: true
-  },
-  password: {
-    type: String,
-    default: '',
-    validate: [validateLocalStrategyPassword, 'Password should be longer']
-  },
-  salt: {
-    type: String
   },
   provider: {
     type: String,
@@ -88,19 +133,17 @@ var UserSchema = new Schema({
     type: Date
   },
   // For etherpad
-	authorId: {
-		type: String,
-		default: ''
-	},
-	groupId: {
-		type: String,
-		default: ''
-	}
+  authorId: {
+    type: String,
+    default: ''
+  },
+  groupId: {
+    type: String,
+    default: ''
+  }
 });
 
-/**
- * Hook a pre save method to hash the password
- */
+// Hook a pre-save method to hash the password.
 UserSchema.pre('save', function(next) {
   if (this.password && this.password.length > 6) {
     this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
@@ -110,9 +153,7 @@ UserSchema.pre('save', function(next) {
   next();
 });
 
-/**
- * Create instance method for hashing a password
- */
+// Method for hashing password.
 UserSchema.methods.hashPassword = function(password) {
   if (this.salt && password) {
     return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
@@ -121,16 +162,12 @@ UserSchema.methods.hashPassword = function(password) {
   }
 };
 
-/**
- * Create instance method for authenticating user
- */
+// Method for authenticating user.
 UserSchema.methods.authenticate = function(password) {
   return this.password === this.hashPassword(password);
 };
 
-/**
- * Find possible not used username
- */
+// Generate unique username if username already exists. (mainly used for OAuth, will change in the future)
 UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
   var _this = this;
   var possibleUsername = username + (suffix || '');
@@ -149,5 +186,8 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
     }
   });
 };
+
+// Static variables.
+UserSchema.statics.localStrategyProvider = 'local';
 
 mongoose.model('User', UserSchema);
