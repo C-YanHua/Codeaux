@@ -138,19 +138,31 @@ exports.signupValidation = function(req, res) {
         if (error) {
           switch (propertyToValidate) {
             case 'username':
-              errorMessage = error.errors.username.message;
+              if (error.errors.username) {
+                errorMessage = error.errors.username.message;
+              }
               break;
             case 'email':
-              errorMessage = error.errors.email.message;
+              if (error.errors.email) {
+                errorMessage = error.errors.email.message;
+              }
               break;
             case 'password':
-              errorMessage = error.errors.password.message;
+              if (error.errors.password) {
+                errorMessage = error.errors.password.message;
+              }
               break;
           }
 
-          return res.status(400).send({
-            message: errorMessage
-          });
+          if (errorMessage) {
+            return res.status(400).send({
+              message: errorMessage
+            });
+          } else {
+            return res.status(200).send();
+          }
+        } else {
+          return res.status(200).send();
         }
       });
     });
