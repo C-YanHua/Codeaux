@@ -16,6 +16,7 @@ var etherpad = etherpadApi.connect({
   port: 9001
 });
 
+// Private function for sign up new OAuth or OpenID user.
 var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
   async.waterfall([
     function(callback) {
@@ -23,7 +24,7 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
         if (err) {
           callback(err, user);
         } else if (user) {
-          callback(null, user);
+          return done(err, user);
         } else {
           User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
             user = new User({
@@ -44,9 +45,8 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
     },
     function(user, callback) {
       // Generate etherpad authorID
-      console.log(user);
       var args = {};
-      args["name"] = user.username;
+      args.name = user.username;
       etherpad.createAuthor(args, function(err, data) {
         if (!err) {
           user.authorId = data.authorID;
@@ -64,8 +64,8 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
     },
     function(user, callback) {
       user.save(function(err) {
-        return done(err, user);
         callback(null);
+        return done(err, user);
       });
     }
   ], function(err) {
@@ -73,38 +73,7 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
       return done(err);
     }
   });
-}
-/*
-// Private function for sign up new OAuth or OpenID user.
-var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
-  User.findOne(searchQuery, function(err, user) {
-    if (err) {
-      return done(err);
-    } else {
-      if (!user) {
-        User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
-          user = new User({
-            firstName: providerUserProfile.firstName,
-            lastName: providerUserProfile.lastName,
-            username: availableUsername,
-            displayName: providerUserProfile.displayName,
-            email: providerUserProfile.email,
-            provider: providerUserProfile.provider,
-            providerData: providerUserProfile.providerData
-          });
-
-          // And save the user
-          user.save(function(err) {
-            return done(err, user);
-          });
-        });
-      } else {
-        return done(err, user);
-      }
-    }
-  });
 };
-*/
 
 // Private function to merge provider data with existing logged in user.
 var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
@@ -134,26 +103,81 @@ var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
   }
 };
 
+// For use in real-time validation for user sign up.
+exports.signupValidation = function(req, res) {
+  var errorMessage = null;
+  var property = null;
+
+  if (Object.keys(req.body).length) {
+    var userToValidate = new User(req.body);
+    userToValidate.provider = User.localStrategyProvider;
+
+    var propertyToValidate = req.originalUrl.substring(req.originalUrl.lastIndexOf('/') + 1);
+    switch (propertyToValidate) {
+      case 'username':
+        property = {username: userToValidate.username};
+        break;
+      case 'email':
+        property = {email: userToValidate.email};
+        break;
+    }
+
+    User.findOne(property, function(error, user) {
+      if (property) {
+        if (error || user) {
+          errorMessage = propertyToValidate.charAt(0).toUpperCase() + propertyToValidate.slice(1);
+          errorMessage += ' is already taken';
+
+          return res.status(400).send({
+            message: errorMessage
+          });
+        }
+      }
+
+      userToValidate.validate(function(error) {
+        if (error) {
+          switch (propertyToValidate) {
+            case 'username':
+              errorMessage = error.errors.username.message;
+              break;
+            case 'email':
+              errorMessage = error.errors.email.message;
+              break;
+            case 'password':
+              errorMessage = error.errors.password.message;
+              break;
+          }
+
+          return res.status(400).send({
+            message: errorMessage
+          });
+        }
+      });
+    });
+  }
+};
+
 // New user sign up.
 exports.signup = function(req, res) {
+  // For security measurement we remove the roles from the req.body object.
+  delete req.body.roles;
+
+  // Init Variables.
+  var user = new User(req.body);
+
+  // Add missing user fields
+  user.provider = 'local';
+  user.displayName = user.firstName + ' ' + user.lastName;
+
   async.waterfall([
     function(callback) {
-      // For security measurement we remove the roles from the req.body object.
-      delete req.body.roles;
-
-      // Init Variables.
-      var user = new User(req.body);
-
-      // Add missing user fields
-      user.provider = 'local';
-      user.displayName = user.firstName + ' ' + user.lastName;
-
       // Generate etherpad authorID
       var args = {};
-      args["name"] = user.username;
+      args.name = user.username;
       etherpad.createAuthor(args, function(error, data) {
+        var err = null;
         if (error) {
-          var err = error.message;
+          err = error.message;
         } else {
           user.authorId = data.authorID;
         }
@@ -162,8 +186,9 @@ exports.signup = function(req, res) {
     },
     function(user, callback) {
       etherpad.createGroup(function(error, data) {
+        var err = null;
         if (error) {
-          var err = error.message;
+          err = error.message;
         } else {
           user.groupId = data.groupID;
         }
@@ -173,8 +198,9 @@ exports.signup = function(req, res) {
     function(user, callback) {
       // Then save the user
       user.save(function(error) {
+        var err = null;
         if (error) {
-          var err = {message: errorHandler.getErrorMessage(error)};
+          err = {message: errorHandler.getErrorMessage(error)};
         } else {
           // Remove sensitive data before login
           user.password = undefined;
@@ -305,9 +331,7 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
   }
 };
 
-/**
- * Remove OAuth provider
- */
+// Remove OAuth provider.
 exports.removeOAuthProvider = function(req, res, next) {
   var user = req.user;
   var provider = req.param('provider');
