@@ -85,39 +85,60 @@ exports.create = function(req, res) {
  * Show the current Issue
  */
 exports.read = function(req, res) {
-
-  if (req.user && req.issue) {
-    var issue = req.issue;
-    var user = req.user;
-    // one hour before session expires
-    var sessionTime = (Math.floor(Date.now() / 1000) + 216000);
-
-    var args = {
-      groupID: issue.padId.substr(0, issue.padId.indexOf('$')),
-      authorID: user.authorId,
-      validUntil: sessionTime
-    };
-
-    if (req.cookies.sessionID) {
-      var oldSession = {
-        sessionID: req.cookies.sessionID
+  async.waterfall([
+    function(callback) {
+      var issue = req.issue;
+      var sessionTime = (Math.floor(Date.now() / 1000) + 216000);
+      var args = {
+        groupID: issue.padId.substr(0, issue.padId.indexOf('$')),
+        authorID: '',
+        validUntil: sessionTime
       };
 
-      etherpad.deleteSession(oldSession);
-    }
+      // Close the previous etherpad session before starting a new one
+      if (req.cookies.sessionID) {
+        var oldSession = {
+          sessionID: req.cookies.sessionID
+        };
 
-    etherpad.createSession(args, function(error, data) {
-      if (error) {
-        return res.status(400).send(error.message);
-      } else {
-        var sessionId = data.sessionID;
-
-        res.cookie('sessionID', sessionId, {maxAge: 900000, httpOnly: false, secure: false});
-
-        res.jsonp(req.issue);
+        etherpad.deleteSession(oldSession);
       }
-    });
-  }
+
+      if (req.user) {
+        args["authorID"] = req.user.authorId;
+        callback(null, args);
+      } else {
+        var guestArgs = {
+          name: ''
+        };
+        etherpad.createAuthor(guestArgs, function(error, data) {
+          if (error) {
+            var err = error.message;
+          } else {
+            args["authorID"] = data.authorID;
+          }
+          callback(err, args);
+        });
+      }
+    },
+    function(args, callback) {
+      etherpad.createSession(args, function(error, data) {
+        if (error) {
+          var err = error.message;
+        } else {
+          var sessionId = data.sessionID;
+
+          res.cookie('sessionID', sessionId, {maxAge: 900000, httpOnly: false, secure: false});
+          res.jsonp(req.issue);
+        }
+        callback(err);
+      });
+    }
+  ], function(err) {
+    if (err) {
+      return res.status(400).send(err);
+    }
+  });
 };
 
 /**

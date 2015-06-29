@@ -60,8 +60,11 @@ angular.module('issues').controller('IssuesController', ['$scope', '$stateParams
 		// Find existing Issue
 		$scope.findOne = function() {
 			$scope.issue = Issues.get({issueId: $stateParams.issueId}, function() {
-				$scope.etherpadSrc = $sce.trustAsResourceUrl("http://127.0.0.1:9001/p/"+$scope.issue.padId);
-				//$scope.etherpadSrc = $sce.trustAsResourceUrl("http://127.0.0.1:9001/p/"+$scope.issue.readOnlyPadId);
+				if ($scope.authentication.user) {
+					$scope.etherpadSrc = $sce.trustAsResourceUrl("http://localhost:9001/p/"+$scope.issue.padId);
+				} else {
+					$scope.etherpadSrc = $sce.trustAsResourceUrl("http://localhost:9001/p/"+$scope.issue.readOnlyPadId);
+				}
 			});
 		};
 	}
