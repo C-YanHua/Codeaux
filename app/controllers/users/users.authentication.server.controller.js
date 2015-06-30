@@ -21,27 +21,32 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
   async.waterfall([
     function(callback) {
       User.findOne(searchQuery, function(err, user) {
-        if (err) {
-          callback(err, user);
-        } else if (user) {
-          return done(err, user);
-        } else {
-          User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
-            user = new User({
-              firstName: providerUserProfile.firstName,
-              lastName: providerUserProfile.lastName,
-              username: availableUsername,
-              displayName: providerUserProfile.displayName,
-              email: providerUserProfile.email,
-              provider: providerUserProfile.provider,
-              providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
-              authorId: '',
-              groupId: ''
-            });
-            callback(null, user);
-          });
-        }
+        console.log("First: "+user);
+        console.log("First: "+err);
+        callback(err, user);
       });
+    },
+    function(user, callback) {
+      if (user) {
+        console.log("Second 1: "+user);
+        callback(null, user);
+      } else {
+        User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+          var user = new User({
+            firstName: providerUserProfile.firstName,
+            lastName: providerUserProfile.lastName,
+            username: availableUsername,
+            displayName: providerUserProfile.displayName,
+            email: providerUserProfile.email,
+            provider: providerUserProfile.provider,
+            providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
+            authorId: '',
+            groupId: ''
+          });
+          console.log("Second 2: "+user);
+          callback(null, user);
+        });
+      }
     },
     function(user, callback) {
       // Generate etherpad authorID
@@ -51,6 +56,8 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
         if (!err) {
           user.authorId = data.authorID;
         }
+        console.log("Third: "+user);
+        console.log("Third: "+err);
         callback(err, user);
       });
     },
@@ -59,12 +66,15 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
         if (!err) {
           user.groupId = data.groupID;
         }
+        console.log("Fourth: "+user);
+        console.log("Fourth: "+err);
         callback(err, user);
       });
     },
     function(user, callback) {
       user.save(function(err) {
-        callback(null);
+        console.log("Fifth: "+user);
+        console.log("Fifth: "+err);
         return done(err, user);
       });
     }
