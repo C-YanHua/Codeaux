@@ -5,9 +5,9 @@ require('dotenv').load();
 require('./config/init')();
 
 // Module dependencies.
+var chalk = require('chalk');
 var config = require('./config/config');
 var mongoose = require('mongoose');
-var chalk = require('chalk');
 
 /**
  * Main application entry file.
