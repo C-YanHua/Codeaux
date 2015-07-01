@@ -1,99 +1,71 @@
 'use strict';
 
 // Module dependencies.
+var async = require('async');
 var errorHandler = require('../errors.server.controller');
+var etherpad = require('../etherpad/etherpad.server.controller');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var User = mongoose.model('User');
-
-var async = require('async');
-var etherpadApi = require('etherpad-lite-client');
-
-// the apikey is found when installing etherpad locally
-var etherpad = etherpadApi.connect({
-  apikey: process.env.ETHERPAD_APIKEY,
-  host: 'localhost',
-  port: 9001
-});
 
 // Private function for sign up new OAuth or OpenID user.
 var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
   async.waterfall([
     function(callback) {
-      User.findOne(searchQuery, function(err, user) {
-        console.log("First: "+user);
-        console.log("First: "+err);
-        callback(err, user);
+      User.findOne(searchQuery, function(error, user) {
+        // If user already exists.
+        if (user) {
+          return done(error, user);
+        }
+
+        callback(error, user);
       });
     },
     function(user, callback) {
-      if (user) {
-        console.log("Second 1: "+user);
-        callback(null, user);
-      } else {
-        User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
-          var user = new User({
-            firstName: providerUserProfile.firstName,
-            lastName: providerUserProfile.lastName,
-            username: availableUsername,
-            displayName: providerUserProfile.displayName,
-            email: providerUserProfile.email,
-            provider: providerUserProfile.provider,
-            providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
-            authorId: '',
-            groupId: ''
-          });
-          console.log("Second 2: "+user);
-          callback(null, user);
+      User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
+        user = new User({
+          firstName: providerUserProfile.firstName,
+          lastName: providerUserProfile.lastName,
+          username: availableUsername,
+          displayName: providerUserProfile.displayName,
+          email: providerUserProfile.email,
+          provider: providerUserProfile.provider,
+          providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
+          authorId: '',
+          groupId: ''
         });
-      }
-    },
-    function(user, callback) {
-      // Generate etherpad authorID
-      var args = {};
-      args.name = user.username;
-      etherpad.createAuthor(args, function(err, data) {
-        if (!err) {
-          user.authorId = data.authorID;
-        }
-        console.log("Third: "+user);
-        console.log("Third: "+err);
-        callback(err, user);
+
+        callback(null, user);
       });
     },
     function(user, callback) {
-      etherpad.createGroup(function(err, data) {
-        if (!err) {
-          user.groupId = data.groupID;
-        }
-        console.log("Fourth: "+user);
-        console.log("Fourth: "+err);
-        callback(err, user);
-      });
+      // Generate etherpad authorID for user.
+      etherpad.createAuthor({name: user.username}, user, callback);
     },
     function(user, callback) {
-      user.save(function(err) {
-        console.log("Fifth: "+user);
-        console.log("Fifth: "+err);
-        return done(err, user);
+      // Generate etherpad Group for user.
+      etherpad.createGroup(user, callback);
+    },
+    function(user, callback) {
+      user.save(function(error) {
+        return done(error, user);
       });
+
+      callback(null);
     }
-  ], function(err) {
-    if (err) {
-      return done(err);
+  ], function(error) {
+    if (error) {
+      return done(error);
     }
   });
 };
 
 // Private function to merge provider data with existing logged in user.
-var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
-  // User is already logged in, join the provider data to the existing user
-  var user = req.user;
-
+var mergeOAuthOrOpenIDProvider = function(user, providerUserProfile, done) {
   // Check if user exists, is not signed in using this provider,
   // and doesn't have that provider data already configured.
   if (user.provider !== providerUserProfile.provider &&
-      (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {
+     (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {
     // Add the provider data to the additional provider data field
     if (!user.additionalProvidersData) {
       user.additionalProvidersData = {};
@@ -105,12 +77,26 @@ var mergeOAuthOrOpenIDProvider = function(req, providerUserProfile, done) {
     user.markModified('additionalProvidersData');
 
     // And save the user
-    user.save(function(err) {
-      return done(err, user, 'settings/accounts');
+    user.save(function(error) {
+      return done(error, user, 'settings/accounts');
     });
   } else {
     return done(new Error('User is already connected using this provider'), user);
   }
+};
+
+var requestSignIn = function(req, res, user) {
+  // Remove sensitive data before login.
+  user.password = undefined;
+  user.salt = undefined;
+
+  req.login(user, function(error) {
+    if (error) {
+      res.status(400).send(error);
+    } else {
+      res.json(user);
+    }
+  });
 };
 
 // For use in real-time validation for user sign up.
@@ -188,58 +174,30 @@ exports.signup = function(req, res) {
   var user = new User(req.body);
 
   // Add missing user fields
-  user.provider = 'local';
+  user.provider = User.localStrategyProvider;
   user.displayName = user.firstName + ' ' + user.lastName;
 
   async.waterfall([
-    function(callback) {
-      // Generate etherpad authorID
-      var args = {};
-      args.name = user.username;
-      etherpad.createAuthor(args, function(error, data) {
-        var err = null;
-        if (error) {
-          err = error.message;
-        } else {
-          user.authorId = data.authorID;
-        }
-        callback(err, user);
-      });
+    function(user, callback) {
+      // Generate etherpad authorID for user.
+      etherpad.createAuthor({name: user.username}, user, callback);
     },
     function(user, callback) {
-      etherpad.createGroup(function(error, data) {
-        var err = null;
-        if (error) {
-          err = error.message;
-        } else {
-          user.groupId = data.groupID;
-        }
-        callback(err, user);
-      });
+      // Generate etherpad Group for user.
+      etherpad.createGroup(user, callback);
     },
     function(user, callback) {
-      // Then save the user
       user.save(function(error) {
-        var err = null;
-        if (error) {
-          err = {message: errorHandler.getErrorMessage(error)};
-        } else {
-          // Remove sensitive data before login
-          user.password = undefined;
-          user.salt = undefined;
-
-          req.login(user, function(err) {
-            if (!err) {
-              res.json(user);
-            }
-          });
+        if (!error) {
+          requestSignIn(req, res, user);
         }
-        callback(err);
+
+        callback(error);
       });
     }
-  ], function(err) {
-    if (err) {
-      return res.status(400).send(err);
+  ], function(error) {
+    if (error) {
+      return res.status(400).send(error);
     }
   });
 };
@@ -250,30 +208,16 @@ exports.signin = function(req, res, next) {
     if (err || !user) {
       res.status(400).send(info);
     } else {
-      // Remove sensitive data before login.
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function(err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.json(user);
-        }
-      });
+      requestSignIn(req, res, user);
     }
   })(req, res, next);
 };
 
 // User sign out.
 exports.signout = function(req, res) {
-  // Close etherpad session if found
+  // Delete etherpad session if found.
   if (req.cookies.sessionID) {
-    var args = {
-      sessionID: req.cookies.sessionID
-    };
-
-    etherpad.deleteSession(args);
+    etherpad.deleteSession({sessionID: req.cookies.sessionID});
   }
 
   req.logout();
@@ -310,13 +254,13 @@ exports.saveOpenIdUserProfile = function(req, providerUserProfile, done) {
     var searchQuery = {
       providerData: providerUserProfile.providerIdentifierField
     };
-
     var possibleUsername = providerUserProfile.username || providerUserProfile.email;
 
     return signupOAuthOrOpenId(searchQuery, possibleUsername, providerUserProfile, done);
-  } else {
 
-    return mergeOAuthOrOpenIDProvider(req, providerUserProfile, done);
+  } else {
+    // User is already logged in, join the provider data to the existing user
+    return mergeOAuthOrOpenIDProvider(req.user, providerUserProfile, done);
   }
 };
 
@@ -347,14 +291,14 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
     var possibleUsername = providerUserProfile.username || providerUserProfile.email;
 
     return signupOAuthOrOpenId(searchQuery, possibleUsername, providerUserProfile, done);
-  } else {
 
-    return mergeOAuthOrOpenIDProvider(req, providerUserProfile, done);
+  } else {
+    return mergeOAuthOrOpenIDProvider(req.user, providerUserProfile, done);
   }
 };
 
 // Remove OAuth provider.
-exports.removeOAuthProvider = function(req, res, next) {
+exports.removeOAuthProvider = function(req, res) {
   var user = req.user;
   var provider = req.param('provider');
 

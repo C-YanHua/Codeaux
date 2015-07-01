@@ -1,22 +1,12 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
-var mongoose = require('mongoose'),
-  errorHandler = require('./errors.server.controller'),
-  Issue = mongoose.model('Issue'),
-  _ = require('lodash');
-
+// Module dependencies.
+var _ = require('lodash');
 var async = require('async');
-var etherpadApi = require('etherpad-lite-client');
-
-// the apikey is found when installing etherpad locally
-var etherpad = etherpadApi.connect({
-  apikey: process.env.ETHERPAD_APIKEY,
-  host: 'localhost',
-  port: 9001
-});
+var errorHandler = require('./errors.server.controller');
+var etherpad = require('./etherpad/etherpad.server.controller');
+var mongoose = require('mongoose');
+var Issue = mongoose.model('Issue');
 
 /**
  * Create a Issue
@@ -28,55 +18,34 @@ exports.create = function(req, res) {
       issue.user = req.user;
 
       issue.save(function(error) {
-        if (error) {
-          var err = {message: errorHandler.getErrorMessage(err)};
-        }
-        callback(err, issue);
+        callback(error, issue);
       });
     },
     function(issue, callback) {
-      var args = {
+      etherpad.createPad({
         groupID: req.user.groupId,
         padName: issue._id.toString(),
         text: 'Helloworld'
-      };
-
-      etherpad.createGroupPad(args, function(error, data) {
-        if (error) {
-          var err = error.message;
-        } else {
-          issue.padId = data.padID;
-        }
-        callback(err, issue);
-      });
+      },
+        issue,
+        callback
+      );
     },
     function(issue, callback) {
-      var args = {
-        padID: issue.padId
-      };
-
-      etherpad.getReadOnlyID(args, function(error, data) {
-        if (error) {
-          var err = error.message;
-        } else {
-          issue.readOnlyPadId = data.readOnlyID;
-        }
-        callback(err, issue);
-      });
+      etherpad.getReadOnlyID({padID: issue.padId}, issue, callback);
     },
     function(issue, callback) {
       issue.save(function(error) {
-        if (error) {
-          var err = {message: errorHandler.getErrorMessage(err)};
-        } else {
+        if (!error) {
           res.jsonp(issue);
         }
-        callback(err);
+
+        callback(error);
       });
     }
-  ], function(err) {
-    if (err) {
-      return res.status(400).send(err);
+  ], function(error) {
+    if (error) {
+      return res.status(400).send(error);
     }
   });
 };
@@ -89,7 +58,7 @@ exports.read = function(req, res) {
     function(callback) {
       var issue = req.issue;
       var sessionTime = (Math.floor(Date.now() / 1000) + 216000);
-      var args = {
+      var userSession = {
         groupID: issue.padId.substr(0, issue.padId.indexOf('$')),
         authorID: '',
         validUntil: sessionTime
@@ -97,46 +66,24 @@ exports.read = function(req, res) {
 
       // Close the previous etherpad session before starting a new one
       if (req.cookies.sessionID) {
-        var oldSession = {
-          sessionID: req.cookies.sessionID
-        };
-
-        etherpad.deleteSession(oldSession);
+        etherpad.deleteSession({sessionID: req.cookies.sessionID});
       }
 
       if (req.user) {
-        args["authorID"] = req.user.authorId;
-        callback(null, args);
-      } else {
-        var guestArgs = {
-          name: ''
-        };
-        etherpad.createAuthor(guestArgs, function(error, data) {
-          if (error) {
-            var err = error.message;
-          } else {
-            args["authorID"] = data.authorID;
-          }
-          callback(err, args);
-        });
-      }
-    },
-    function(args, callback) {
-      etherpad.createSession(args, function(error, data) {
-        if (error) {
-          var err = error.message;
-        } else {
-          var sessionId = data.sessionID;
+        userSession.authorID = req.user.authorId;
 
-          res.cookie('sessionID', sessionId, {maxAge: 900000, httpOnly: false, secure: false});
-          res.jsonp(req.issue);
-        }
-        callback(err);
-      });
+      } else {
+        etherpad.createAuthor({name: ''}, userSession, callback);
+      }
+
+      callback(null, userSession);
+    },
+    function(userSession, callback) {
+      etherpad.createSession(userSession, req, res, callback);
     }
-  ], function(err) {
-    if (err) {
-      return res.status(400).send(err);
+  ], function(error) {
+    if (error) {
+      return res.status(400).send(error);
     }
   });
 };
@@ -197,8 +144,14 @@ exports.list = function(req, res) {
  */
 exports.issueByID = function(req, res, next, id) {
   Issue.findById(id).populate('user', 'displayName').exec(function(err, issue) {
-    if (err) return next(err);
-    if (! issue) return next(new Error('Failed to load Issue ' + id));
+    if (err) {
+      return next(err);
+    }
+
+    if (!issue) {
+      return next(new Error('Failed to load Issue ' + id));
+    }
+
     req.issue = issue ;
     next();
   });
