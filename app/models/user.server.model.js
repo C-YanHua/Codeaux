@@ -1,8 +1,8 @@
 'use strict';
 
 // Module dependencies.
-var ModelValidation = require('../validations/models/server.model.validations');
-var ModelValidator = require('../validations/models/server.model.validator');
+var ModelValidation = require('./validations/server.model.validations');
+var ModelValidator = require('./validations/server.model.validator');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -22,29 +22,29 @@ var validators = {
   ],
   email: [
     {
-      preCondition: ModelValidation.isLocal,
+      userPreCondition: ModelValidation.isLocal,
       validate: ModelValidation.isEmail,
       message: ' is invalid'
     }
   ],
   password: [
     {
-      preCondition: ModelValidation.isLocal,
+      userPreCondition: ModelValidation.isLocal,
       validate: ModelValidation.isPasswordMinLength,
       message: ' is too short (minimum ' + ModelValidation.getPasswordMinLength().toString() + ' characters)'
     },
     {
-      preCondition: ModelValidation.isLocal,
+      userPreCondition: ModelValidation.isLocal,
       validate: ModelValidation.isPasswordMaxLength,
       message: ' is too long (maximum ' + ModelValidation.getPasswordMaxLength().toString() + ' characters)'
     },
     {
-      preCondition: ModelValidation.isLocal,
+      userPreCondition: ModelValidation.isLocal,
       validate: ModelValidation.isAlpha,
       message: ' needs at least one alphabet letter'
     },
     {
-      preCondition: ModelValidation.isLocal,
+      userPreCondition: ModelValidation.isLocal,
       validate: ModelValidation.isNumeric,
       message: ' needs at least one number'
     }

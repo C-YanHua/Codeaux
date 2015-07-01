@@ -36,9 +36,12 @@ exports.validateValidatorsArray = function(value, validators, userSchema) {
   validators.forEach(function(validator) {
     var preConditionsMet = true;
 
-    // Ignore pre-conditions if they do not exist.
-    if ('userPreCondition' in validator && 'validatorPreCondition' in validator) {
-      preConditionsMet = validator.userPreCondition(userSchema) && validator.validatorPreCondition(value);
+    if ('userPreCondition' in validator) {
+      preConditionsMet = validator.userPreCondition(userSchema);
+    }
+
+    if (preConditionsMet && 'validatorPreCondition' in validator) {
+      preConditionsMet = validator.validatorPreCondition(value);
     }
 
     // Only validate if pre-conditions are met.
