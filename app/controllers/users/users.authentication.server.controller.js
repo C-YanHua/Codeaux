@@ -101,84 +101,34 @@ var requestSignIn = function(req, res, user) {
 
 // For use in real-time validation for user sign up.
 exports.signupValidation = function(req, res) {
-  var errorMessage = null;
-  var property = null;
+  var user = new User(req.body);
+  user.provider = User.localStrategyProvider;
 
-  if (Object.keys(req.body).length) {
-    var userToValidate = new User(req.body);
-    userToValidate.provider = User.localStrategyProvider;
-
-    var propertyToValidate = req.originalUrl.substring(req.originalUrl.lastIndexOf('/') + 1);
-    switch (propertyToValidate) {
-      case 'username':
-        property = {username: userToValidate.username};
-        break;
-      case 'email':
-        property = {email: userToValidate.email};
-        break;
+  var propertyToValidate = req.originalUrl.substring(req.originalUrl.lastIndexOf('/') + 1);
+  user.validate(function(error) {
+    if (error) {
+      return res.status(400).send({
+        errorMessage: error.errors[propertyToValidate].message
+      });
     }
 
-    User.findOne(property, function(error, user) {
-      if (property) {
-        if (error || user) {
-          errorMessage = propertyToValidate.charAt(0).toUpperCase() + propertyToValidate.slice(1);
-          errorMessage += ' is already taken';
-
-          return res.status(400).send({
-            message: errorMessage
-          });
-        }
-      }
-
-      userToValidate.validate(function(error) {
-        if (error) {
-          switch (propertyToValidate) {
-            case 'username':
-              if (error.errors.username) {
-                errorMessage = error.errors.username.message;
-              }
-              break;
-            case 'email':
-              if (error.errors.email) {
-                errorMessage = error.errors.email.message;
-              }
-              break;
-            case 'password':
-              if (error.errors.password) {
-                errorMessage = error.errors.password.message;
-              }
-              break;
-          }
-
-          if (errorMessage) {
-            return res.status(400).send({
-              message: errorMessage
-            });
-          } else {
-            return res.status(200).send();
-          }
-        } else {
-          return res.status(200).send();
-        }
-      });
-    });
-  }
+    return res.status(200).send();
+  });
 };
 
 // New user sign up.
 exports.signup = function(req, res) {
   // For security measurement we remove the roles from the req.body object.
   delete req.body.roles;
-
   // Init Variables.
   var user = new User(req.body);
 
-  // Add missing user fields
+  // Add missing user fields.
   user.provider = User.localStrategyProvider;
   user.displayName = user.firstName + ' ' + user.lastName;
 
   async.waterfall([
-    function(user, callback) {
+    function(callback) {
       // Generate etherpad authorID for user.
       etherpad.createAuthor({name: user.username}, user, callback);
     },
@@ -197,15 +147,22 @@ exports.signup = function(req, res) {
     }
   ], function(error) {
     if (error) {
-      return res.status(400).send(error);
+      return res.status(400).send({
+        errorMessage: 'There were problems creating your account.',
+        username: error.errors.username,
+        email: error.errors.email,
+        password: error.errors.password
+      });
     }
   });
 };
 
 // User sign in, either after passport authentication or local.
 exports.signin = function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err || !user) {
+  passport.authenticate(User.localStrategyProvider, function(error, user, info) {
+    if (error || !user) {
+      info.message = 'Incorrect username or password.';
+
       res.status(400).send(info);
     } else {
       requestSignIn(req, res, user);

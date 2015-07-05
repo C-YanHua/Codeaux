@@ -12,6 +12,10 @@
     <div class="modal-body">
       <form name="signInForm" data-ng-submit="signin()" autocomplete="off">
         <fieldset>
+          <div ng-if="signinErrorMessage !== null" class="alert text-center alert-danger">
+              <span data-ng-bind="signinErrorMessage"></span>
+          </div>
+
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon" aria-label="Pick a username">
@@ -43,7 +47,7 @@
               &nbsp;&nbsp;
               <button type="button" class="btn btn-default" ng-click="dismissModal()">Cancel</button>
               <br><br>
-              <a ng-click="dismissModal();signUpModal.openModal()">Register for an account?</a>
+              <a ng-click="dismissModal();signupModal.openModal()">Register for an account?</a>
             </div>
           </div>
         </fieldset>

@@ -3,8 +3,9 @@
 var ERROR_MESSAGE_DELIMITER = ', ';
 var ERROR_MESSAGE_END_DELIMITER = ' and ';
 
-var validationErrorsHeader = null;
 var validationErrors = [];
+var validationErrorsHeader = '';
+var validationErrorsTail = '.';
 
 function ValidationErrorRetriever() {}
 
@@ -23,6 +24,7 @@ ValidationErrorRetriever.prototype.replace = function(regexp, substr) {
       validationMessage += ERROR_MESSAGE_DELIMITER;
     }
   }
+  validationMessage += validationErrorsTail;
 
   // Refresh error message.
   validationErrors = [];
@@ -56,10 +58,18 @@ exports.validateValidatorsArray = function(value, validators, userSchema) {
   return isValid;
 };
 
-exports.validationErrorMessage = function() {
+exports.validationErrorsMessage = function() {
   return {message: new ValidationErrorRetriever()};
 };
 
-exports.setValidationErrorHeader = function(header) {
+exports.setValidationErrors = function(message) {
+  validationErrors.push(message);
+};
+
+exports.setValidationErrorsHeader = function(header) {
   validationErrorsHeader = header;
+};
+
+exports.setValidationErrorsTail = function(tail) {
+  validationErrorsTail = tail;
 };
