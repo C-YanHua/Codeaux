@@ -24,10 +24,8 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
     function(user, callback) {
       User.findUniqueUsername(possibleUsername, null, function(availableUsername) {
         user = new User({
-          firstName: providerUserProfile.firstName,
-          lastName: providerUserProfile.lastName,
+          name: providerUserProfile.name,
           username: availableUsername,
-          displayName: providerUserProfile.displayName,
           email: providerUserProfile.email,
           provider: providerUserProfile.provider,
           providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,

@@ -24,7 +24,7 @@ module.exports = function() {
 
       // Create the user OAuth profile
       var providerUserProfile = {
-        displayName: profile.displayName,
+        name: profile.displayName,
         email: profile.emails[0].value,
         username: profile.username,
         provider: 'github',

@@ -108,6 +108,11 @@ var validatePassword = function(password) {
 
 // User Schema.
 var UserSchema = new Schema({
+  name: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   username: {
     type: String,
     trim: true,
@@ -124,21 +129,6 @@ var UserSchema = new Schema({
   },
   salt: {
     type: String
-  },
-
-  firstName: {
-    type: String,
-    trim: true,
-    default: ''
-  },
-  lastName: {
-    type: String,
-    trim: true,
-    default: ''
-  },
-  displayName: {
-    type: String,
-    trim: true
   },
   provider: {
     type: String,
@@ -180,10 +170,8 @@ var UserSchema = new Schema({
 
 // Hook a pre-save method to hash the password.
 UserSchema.pre('save', function(next) {
-  if (this.password && this.password.length > 6) {
-    this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-    this.password = this.hashPassword(this.password);
-  }
+  this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+  this.password = this.hashPassword(this.password);
 
   next();
 });
