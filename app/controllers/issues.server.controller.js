@@ -71,12 +71,11 @@ exports.read = function(req, res) {
 
       if (req.user) {
         userSession.authorID = req.user.authorId;
-
+        callback(null, userSession);
       } else {
         etherpad.createAuthor({name: ''}, userSession, callback);
       }
 
-      callback(null, userSession);
     },
     function(userSession, callback) {
       etherpad.createSession(userSession, req, res, callback);

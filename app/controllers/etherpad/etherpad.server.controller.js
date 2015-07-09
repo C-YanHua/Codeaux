@@ -16,7 +16,11 @@ if (!etherpadInstance) {
 module.exports.createAuthor = function(args, user, callback) {
   etherpadInstance.createAuthor(args, function(error, data) {
     if (!error) {
-      user.authorId = data.authorID;
+      if (user.authorId === '') {
+        user.authorId = data.authorID;
+      } else if (user.authorID === '') {
+        user.authorID = data.authorID;
+      }
     }
 
     callback(error, user);
