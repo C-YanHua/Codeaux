@@ -4,7 +4,8 @@
 	// Issues Controller Spec
 	describe('Issues Controller Tests', function() {
 		// Initialize global variables
-		var IssuesController,
+
+		var IssuesCreateCtrl, IssuesEditCtrl, IssuesViewCtrl, IssuesListCtrl,
 		scope,
 		$httpBackend,
 		$stateParams,
@@ -44,8 +45,17 @@
 			$httpBackend = _$httpBackend_;
 			$location = _$location_;
 
-			// Initialize the Issues controller.
-			IssuesController = $controller('IssuesController', {
+			// Initialize the Issues controllers.
+			IssuesCreateCtrl = $controller('IssuesCreateCtrl', {
+				$scope: scope
+			});
+			IssuesEditCtrl = $controller('IssuesEditCtrl', {
+				$scope: scope
+			});
+			IssuesViewCtrl = $controller('IssuesViewCtrl', {
+				$scope: scope
+			});
+			IssuesListCtrl = $controller('IssuesListCtrl', {
 				$scope: scope
 			});
 		}));
