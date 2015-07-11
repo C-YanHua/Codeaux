@@ -3,6 +3,10 @@
         <h1>Issues</h1>
         <div class="row">
           <div class="col-xs-4">
+            <label>Search:</label>
+            <input ng-model="query" ng-change="search()" class="form-control" placeholder="Filter Text">
+          </div>
+          <div class="col-xs-4">
             <label>Items Per Page:</label>
             <input min="1" max="20" ng-model="issuesPerPage" class="form-control">
           </div>
@@ -10,13 +14,13 @@
     </div>
 
     <div class="list-group">
-        <a data-ng-repeat="issue in filteredIssues" data-ng-href="/issues/{{issue._id}}" class="list-group-item">
+        <a data-ng-repeat="issue in pagedIssues" data-ng-href="/issues/{{issue._id}}" class="list-group-item">
           <h4 class="list-group-item-heading">Title: {{issue.name}}</h4>
           <p>Coding Language: {{issue.language}}</p>
         </a>
         <pagination
           ng-model="currentPage"
-          total-items="issues.length"
+          total-items="filteredIssues.length"
           max-size="numOfPageIcons"
           boundary-links="true"
           items-per-page="issuesPerPage">
