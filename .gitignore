@@ -6,11 +6,9 @@ Thumbs.db
 
 # Node & Related
 # ================
-.env
 .nodemonignore
 npm-debug.log
 .sass-cache/
-db/
 node_modules/
 public/lib/
 app/tests/coverage/
@@ -39,6 +37,14 @@ data/
 # Brackets.io
 # ===========
 .brackets.json
+
+# Application Assets
+# ==================
+.env
+*.pem
+uploads/
+db/
+modules/users/client/img/profile/uploads
 
 # Others
 # ======

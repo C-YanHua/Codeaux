@@ -1,0 +1,99 @@
+<div data-ng-controller="AuthenticationController">
+  <!-- Close button. ARIA attributes for screen readers. -->
+  <button type="button" class="pull-right btn-lg btn-link" aria-label="Close" ng-click="dismissModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+  <div class="modal-header">
+    <h4 class="modal-title"><strong>Create an account</strong></h4>
+  </div>
+
+  <div class="container-fluid">
+    <div class="modal-body">
+      <form name="signupForm" data-ng-submit="signup()" novalidate autocomplete="off">
+        <fieldset>
+          <div ng-if="signupErrorMessage !== null" class="alert text-center alert-danger">
+              <span data-ng-bind="signupErrorMessage"></span>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" aria-label="Pick a username">
+                <span class="glyphicon glyphicon-user"></span>
+              </span>
+              <input type="text" id="username" name="username" class="form-control" data-ng-model="username"
+                     placeholder="Pick a username" autofocus validate-username>
+            </div>
+
+            <div ng-messages="signupForm.username.$error" ng-if="!errorMessages.username.isValid" class="form-group">
+              <div class="text-danger" role="alert">
+                <span ng-message="{{errorMessages.username.ngMessageName}}">{{errorMessages.username.message}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" aria-label="Your email">
+                <span class="glyphicon glyphicon-envelope"></span>
+              </span>
+              <input type="email" id="email" name="email" class="form-control" data-ng-model="email"
+                     placeholder="Your email" validate-email>
+            </div>
+
+            <div ng-messages="signupForm.email.$error" ng-if="!errorMessages.email.isValid" class="form-group">
+              <div class="text-danger" role="alert">
+                <span ng-message="{{errorMessages.email.ngMessageName}}">{{errorMessages.email.message}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" aria-label="Create a password">
+                <span class="glyphicon glyphicon-lock"></span>
+              </span>
+              <input type="password" id="password" name="password" class="form-control" data-ng-model="password"
+                     placeholder="Create a password" validate-password>
+            </div>
+
+            <div ng-messages="signupForm.password.$error" ng-if="!errorMessages.password.isValid" class="form-group">
+              <div class="text-danger" role="alert">
+                <span ng-message="{{errorMessages.password.ngMessageName}}">{{errorMessages.password.message}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="text-center">
+              <button type="submit" class="btn btn-success">Sign up</button>
+              &nbsp;&nbsp;
+              <button type="button" class="btn btn-default" ng-click="dismissModal()">Cancel</button>
+              <br><br>
+              <a ng-click="dismissModal();signinModal.openModal()">Already have an account?</a>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="form-group or-group">
+        <span class="or-line"><strong>or sign up with</strong></span>
+
+        <div class="text-center" data-toggle="tooltip">
+          <a class="btn btn-social-icon btn-facebook" href="/api/auth/facebook" target="_self" title="Facebook">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a class="btn btn-social-icon btn-github" href="/api/auth/github" target="_self" title="Github">
+            <i class="fa fa-github"></i>
+          </a>
+          <a class="btn btn-social-icon btn-google" href="/api/auth/google" target="_self" title="Google+">
+            <i class="fa fa-google"></i>
+          </a>
+          <a class="btn btn-social-icon btn-openid" href="/api/auth/nus_openid" target="_self" title="NUS OpenID">
+            <i class="fa fa-openid"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

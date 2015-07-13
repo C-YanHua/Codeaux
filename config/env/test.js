@@ -1,9 +1,12 @@
 'use strict';
 
+/*
+ * Testing stage configurations.
+ */
 module.exports = {
   app: {
     title: 'Codeaux - Test Environment',
-    description: 'Codeaux testing stage'
+    description: 'Codeaux Testing Stage'
   },
 
   db: 'mongodb://localhost/codeaux-test',

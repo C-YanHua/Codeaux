@@ -1,0 +1,76 @@
+<div class="container" data-ng-controller="NavigationBarController">
+  <div class="navbar-header">
+    <a class="navbar-brand" data-ui-sref="home">
+      <img class="navbar-logo" src="modules/core/img/brand/logo_wordmark.png" alt="Codeaux">
+    </a>
+
+    <!-- For screen readers -->
+    <button class="navbar-toggle btn-navbar" data-ng-click="toggleCollapsibleMenu()">
+      <span class="sr-only">Toggle navigation bar</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+
+  <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
+    <ul class="nav navbar-nav" data-ng-if="navbarMenu.hasAccess(authentication.user);">
+      <li data-ng-repeat="item in navbarMenu.items | orderBy: 'position'" data-ng-if="item.hasAccess(authentication.user);"
+          ng-switch="item.type" data-ng-class="{active: $state.includes(item.state), dropdown: item.type === 'dropdown'}"
+          class="{{item.class}}" dropdown="item.type === 'dropdown'">
+        <a ng-switch-when="dropdown" class="dropdown-toggle" dropdown-toggle role="button">
+          {{::item.title}}&nbsp;
+          <span class="caret"></span>
+        </a>
+        <ul ng-switch-when="dropdown" class="dropdown-menu">
+          <li data-ng-repeat="subitem in item.items | orderBy: 'position'" data-ng-if="subitem.hasAccess(authentication.user);"
+              data-ui-sref-active="active">
+            <a data-ui-sref="{{subitem.state}}" data-ng-bind="subitem.title"></a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- For guests -->
+    <ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
+      <li data-ui-sref-active="active">
+        <button class="btn btn-block btn-success navbar-btn" ng-click="signupModal.openModal()">Sign up</button>
+      </li>
+      <li class="divider-vertical">&nbsp;&nbsp;&nbsp;</li>
+      <li>
+        <button class="btn btn-block btn-default navbar-btn" ng-click="signinModal.openModal()">Sign in</button>
+      <li data-ui-sref-active="active">
+      <li class="divider-vertical">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+    </ul>
+
+    <!-- For members -->
+    <ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
+      <li class="dropdown" dropdown>
+        <a class="dropdown-toggle user-header-dropdown-toggle" dropdown-toggle role="button">
+          <img class="header-profile-image" data-ng-src="{{authentication.user.profileImageUrl}}"
+               alt="{{authentication.user.displayName}}"/>
+          <span data-ng-bind="authentication.user.displayName"></span>
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li data-ui-sref-active="active">
+            <a data-ui-sref="settings.profile">Edit Profile</a>
+          </li>
+          <li data-ui-sref-active="active">
+            <a data-ui-sref="settings.picture">Change Profile Picture</a>
+          </li>
+          <li data-ui-sref-active="active" data-ng-show="authentication.user.provider === 'local'">
+            <a data-ui-sref="settings.password">Change Password</a>
+          </li>
+          <li data-ui-sref-active="active">
+            <a data-ui-sref="settings.accounts">Manage Social Accounts</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="/api/auth/signout" target="_self">Sign out</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</div>

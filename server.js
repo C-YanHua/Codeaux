@@ -2,37 +2,36 @@
 
 // Initialize environment variables and environment files.
 require('dotenv').load();
-require('./config/init')();
-
-// Module dependencies.
-var chalk = require('chalk');
-var config = require('./config/config');
-var mongoose = require('mongoose');
 
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
  */
 
-// Bootstrap db connection.
-var db = mongoose.connect(config.db, function(err) {
-  if (err) {
-    console.error(chalk.red('Could not connect to MongoDB!'));
-    console.log(chalk.red(err));
+// Module dependencies.
+var chalk = require('chalk');
+var config = require('./config/config');
+var express = require('./config/lib/express');
+var mongoose = require('./config/lib/mongoose');
+
+// Initialize mongoose connection.
+mongoose.connect(function(db) {
+  // Initialize express middleware.
+  var app = express.init(db);
+
+  // Start the app by listening on <port>.
+  app.listen(config.port);
+
+  // Logging initialization
+  console.log('--');
+  console.log(chalk.green(config.app.title));
+  console.log(chalk.green('Environment:\t\t\t' + process.env.NODE_ENV));
+  console.log(chalk.green('Port:\t\t\t\t' + config.port));
+  console.log(chalk.green('Database:\t\t\t\t' + config.db.uri));
+
+  if (process.env.NODE_ENV === 'secure') {
+    console.log(chalk.green('HTTPs:\t\t\t\ton'));
   }
+  console.log('--');
+
 });
-
-// Init express HTTP application.
-var app = require('./config/express')(db);
-
-// Bootstrap passport config.
-require('./config/passport')();
-
-// Start the app by listening on <port>.
-app.listen(config.port);
-
-// Expose app.
-exports = module.exports = app;
-
-// Logging initialization.
-console.log('Codeaux started on port ' + config.port);
