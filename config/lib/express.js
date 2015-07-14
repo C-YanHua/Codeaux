@@ -18,7 +18,7 @@ var session = require('express-session');
 
 var MongoStore = require('connect-mongo')(session);
 
-/**
+/*
  * Initialize local variables.
  */
 var initLocalVariables = function(app) {
@@ -39,7 +39,7 @@ var initLocalVariables = function(app) {
   });
 };
 
-/**
+/*
  * Initialize application middleware.
  */
 var initMiddleware = function(app) {
@@ -97,7 +97,7 @@ var initMiddleware = function(app) {
   }));
 };
 
-/**
+/*
  * Initialize view engine.
  */
 var initViewEngine = function(app) {
@@ -109,7 +109,7 @@ var initViewEngine = function(app) {
   app.set('views', './');
 };
 
-/**
+/*
  * Initialize express session.
  */
 var initSession = function(app, db) {
@@ -125,7 +125,7 @@ var initSession = function(app, db) {
   }));
 };
 
-/**
+/*
  * Initialize server configuration.
  */
 var initModulesConfiguration = function(app, db) {
@@ -134,7 +134,7 @@ var initModulesConfiguration = function(app, db) {
   });
 };
 
-/**
+/*
  * Initialize Helmet headers configuration.
  */
 var initHelmetHeaders = function(app) {
@@ -146,7 +146,7 @@ var initHelmetHeaders = function(app) {
   app.disable('x-powered-by');
 };
 
-/**
+/*
  * Initialize client static routes.
  */
 var initModulesClientRoutes = function(app) {
@@ -159,7 +159,7 @@ var initModulesClientRoutes = function(app) {
   });
 };
 
-/**
+/*
  * Initialize server ACL policies.
  */
 var initModulesServerPolicies = function() {
@@ -169,7 +169,7 @@ var initModulesServerPolicies = function() {
   });
 };
 
-/**
+/*
  * Initialize server routes.
  */
 var initModulesServerRoutes = function(app) {
@@ -179,7 +179,7 @@ var initModulesServerRoutes = function(app) {
   });
 };
 
-/**
+/*
  * Initialize error handling routes.
  */
 var initErrorRoutes = function(app) {
@@ -197,7 +197,7 @@ var initErrorRoutes = function(app) {
   });
 };
 
-/**
+/*
  * Configure socket.io.
  */
 var configureSocketIO = function(app, db) {
@@ -207,7 +207,7 @@ var configureSocketIO = function(app, db) {
   return server;
 };
 
-/**
+/*
  * Initialize express application.
  */
 module.exports.init = function(db) {

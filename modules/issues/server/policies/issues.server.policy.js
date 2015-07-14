@@ -6,8 +6,8 @@ var acl = require('acl');
 // Using the memory backend.
 acl = new acl(new acl.memoryBackend());
 
-/**
- * Invoke Articles Permissions.
+/*
+ * Invoke Issues Permissions.
  */
 exports.invokeRolesPolicies = function() {
   acl.allow([{
@@ -16,7 +16,7 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/issues',
       permissions: '*'
     }, {
-      resources: '/api/issues/:issuesId',
+      resources: '/api/issues/:issueId',
       permissions: '*'
     }]
   }, {
@@ -25,7 +25,7 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/issues',
       permissions: ['get', 'post']
     }, {
-      resources: '/api/issues/:issuesId',
+      resources: '/api/issues/:issueId',
       permissions: ['get']
     }]
   }, {
@@ -34,19 +34,19 @@ exports.invokeRolesPolicies = function() {
       resources: '/api/issues',
       permissions: ['get']
     }, {
-      resources: '/api/issues/:issuesId',
+      resources: '/api/issues/:issueId',
       permissions: ['get']
     }]
   }]);
 };
 
-/**
- * Check If Articles Policy Allows.
+/*
+ * Check If Issues Policy Allows.
  */
 exports.isAllowed = function(req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
-  // If an article is being processed and the current user created it then allow any manipulation.
+  // If an issue is being processed and the current user created it then allow any manipulation.
   if (req.issue && req.user && req.issue.user.id === req.user.id) {
     return next();
   }
