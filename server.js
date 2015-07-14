@@ -1,8 +1,5 @@
 'use strict';
 
-// Initialize environment variables and environment files.
-require('dotenv').load();
-
 /**
  * Main application entry file.
  * Please note that the order of loading is important.

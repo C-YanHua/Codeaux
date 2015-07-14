@@ -40,7 +40,7 @@ data/
 
 # Application Assets
 # ==================
-.env
+codeaux.env.json
 *.pem
 uploads/
 db/

@@ -11,13 +11,16 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     env: {
       test: {
-        NODE_ENV: 'test'
+        NODE_ENV: 'test',
+        src: 'codeaux.env.json'
       },
       dev: {
-        NODE_ENV: 'development'
+        NODE_ENV: 'development',
+        src: 'codeaux.env.json'
       },
       prod: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        src: 'codeaux.env.json'
       }
     },
     watch: {
@@ -204,7 +207,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['env:dev', 'lint', 'ngAnnotate', 'uglify', 'cssmin']);
 
   // Run application in testing stage.
-  grunt.registerTask('test', ['env:test', 'copy:localConfig', 'mongoose', 'mochaTest', 'karma:unit']);
+  grunt.registerTask('test', ['env:test', 'mongoose', 'mochaTest', 'karma:unit']);
   grunt.registerTask('test:server', ['env:test', 'mongoose', 'mochaTest']);
   grunt.registerTask('test:client', ['env:test', 'mongoose', 'karma:unit']);
 
@@ -215,5 +218,5 @@ module.exports = function(grunt) {
   grunt.registerTask('debug', ['env:dev', 'lint', 'concurrent:debug']);
 
   // Run application in production stage.
-  grunt.registerTask('prod', ['build', 'env:prod', 'concurrent:default']);
+  grunt.registerTask('prod', ['env:prod', 'build', 'concurrent:default']);
 };

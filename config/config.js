@@ -6,7 +6,7 @@ var chalk = require('chalk');
 var glob = require('glob');
 var path = require('path');
 
-/**
+/*
  * Get files by glob patterns.
  */
 var getGlobbedPaths = function(globPatterns, excludes) {
@@ -72,9 +72,8 @@ var validateEnvironmentVariable = function() {
   console.log(chalk.white(''));
 };
 
-/**
+/*
  * Initialize global configuration files.
- *
  */
 var initGlobalConfigFolders = function(config) {
   // Appending folders.
@@ -110,7 +109,7 @@ var initGlobalConfigFiles = function(config, assets) {
   config.files.client.tests = getGlobbedPaths(assets.client.tests);
 };
 
-/**
+/*
  * Initialize global configuration.
  */
 var initGlobalConfig = function() {
