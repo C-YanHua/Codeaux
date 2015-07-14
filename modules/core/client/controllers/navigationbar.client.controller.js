@@ -5,8 +5,8 @@ angular.module('core').controller('NavigationBarController', ['$scope', '$state'
     $scope.$state = $state;
     $scope.authentication = Authentication;
 
-    // Navigation bar menus.
-    $scope.navbarMenu = Menus.getMenuById('navigationBar');
+    // Navigationbar menus.
+    $scope.navbarMenu = Menus.getMenuById('navigationbar');
 
     // Authentication modals.
     $scope.signupModal = Modals.getModalById('signup');

@@ -41,11 +41,9 @@ angular.module('core').service('Menus', [
       if (menuId && menuId.length) {
         if (this.menus[menuId]) {
           return true;
-
         } else {
           throw new Error('Menu does not exists.');
         }
-
       } else {
         throw new Error('MenuId was not provided.');
       }

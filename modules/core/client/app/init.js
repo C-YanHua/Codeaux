@@ -22,3 +22,7 @@ angular.element(document).ready(function() {
   // Initialize application.
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
+// Use Application configuration module to register a new module.
+// Always register core module first before registering other modules.
+ApplicationConfiguration.registerModule('core');
