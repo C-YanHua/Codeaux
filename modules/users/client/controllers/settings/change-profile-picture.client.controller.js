@@ -29,7 +29,7 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
 
         fileReader.onload = function(fileReaderEvent) {
           $timeout(function() {
-            $scope.imageURL = fileReaderEvent.target.result;
+            $scope.imageUrl = fileReaderEvent.target.result;
           }, 0);
         };
       }
@@ -68,7 +68,7 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
     // Cancel the upload process.
     $scope.cancelUpload = function() {
       $scope.uploader.clearQueue();
-      $scope.imageURL = $scope.user.profileImageURL;
+      $scope.imageUrl = $scope.user.profileImageUrl;
     };
   }
 ]);
