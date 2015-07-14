@@ -29,7 +29,7 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
           name: providerUserProfile.name,
           username: availableUsername,
           email: providerUserProfile.email,
-          profileImageUrl: providerUserProfile.profileImageURL,
+          profileImageUrl: providerUserProfile.profileImageUrl,
           provider: providerUserProfile.provider,
           providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
           authorId: '',
