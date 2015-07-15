@@ -40,11 +40,12 @@ data/
 
 # Application Assets
 # ==================
-codeaux.env.json
 *.pem
-uploads/
+codeaux.env.json
 db/
 modules/users/client/img/profile/uploads
+public/dist/
+uploads/
 
 # Others
 # ======
