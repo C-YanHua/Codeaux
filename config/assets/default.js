@@ -8,6 +8,7 @@ module.exports = {
     lib: {
       // Using Angular Bootstrap instead of standard Bootstrap JavaScript.
       css: [
+        'public/lib/animate.css/animate.css',
         'public/lib/bootstrap/dist/css/bootstrap.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/bootstrap-social/bootstrap-social.css',

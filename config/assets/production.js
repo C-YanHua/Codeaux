@@ -7,6 +7,7 @@ module.exports = {
   client: {
     lib: {
       css: [
+        'public/lib/animate.css/animate.min.css',
         'public/lib/bootstrap/dist/css/bootstrap.min.css',
         'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
         'public/lib/bootstrap-social/bootstrap-social.css',
