@@ -1,3 +1,4 @@
+/*jshint unused: false*/
 'use strict';
 
 // Initialize the application configuration module for AngularJS application.

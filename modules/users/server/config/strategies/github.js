@@ -1,3 +1,5 @@
+/*jshint camelcase: false*/
+//jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 'use strict';
 
 // Module dependencies.

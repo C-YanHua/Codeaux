@@ -121,6 +121,18 @@ module.exports = function(grunt) {
         configFile: 'karma.conf.js'
       }
     },
+    less: {
+      dist: {
+        files: [{
+          expand: true,
+          src: defaultAssets.client.less,
+          ext: '.css',
+          rename: function(base, src) {
+            return src.replace('/less/', '/css/');
+          }
+        }]
+      }
+    },
     mochaTest: {
       src: testAssets.tests.server,
       options: {
@@ -171,6 +183,18 @@ module.exports = function(grunt) {
         }
       }
     },
+    sass: {
+      dist: {
+        files: [{
+          expand: true,
+          src: defaultAssets.client.sass,
+          ext: '.css',
+          rename: function(base, src) {
+            return src.replace('/scss/', '/css/');
+          }
+        }]
+      }
+    },
     uglify: {
       production: {
         options: {
@@ -218,5 +242,5 @@ module.exports = function(grunt) {
   grunt.registerTask('debug', ['env:dev', 'lint', 'concurrent:debug']);
 
   // Run application in production stage.
-  grunt.registerTask('prod', ['env:prod', 'build', 'concurrent:default']);
+  grunt.registerTask('prod', ['build', 'env:prod', 'concurrent:default']);
 };

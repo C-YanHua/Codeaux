@@ -10,10 +10,10 @@ module.exports = {
   },
 
   db: {
-    uri: 'mongodb://localhost/codeaux-dev',
+    uri: process.env.LOCALDB_DEVELOPMENT_URI,
     options: {
-      user: process.env.DB_USERNAME || '',
-      pass: process.env.DB_PASSWORD || ''
+      user: process.env.LOCALDB_USERNAME || '',
+      pass: process.env.LOCALDB_PASSWORD || ''
     }
   },
 

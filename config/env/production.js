@@ -5,10 +5,10 @@
  */
 module.exports = {
   db: {
-    uri: process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/codeaux',
+    uri: process.env.MONGOLAB_URI,
     options: {
-      user: process.env.DB_USERNAME || '',
-      pass: process.env.DB_PASSWORD || ''
+      user: process.env.MONGOLAB_USERNAME,
+      pass: process.env.MONGOLAB_PASSWORD
     }
   },
 
@@ -20,6 +20,6 @@ module.exports = {
     }
   },
 
-  port: process.env.PORT || 8443,
-  secure: true
+  port: process.env.PORT || 80,
+  secure: false
 };

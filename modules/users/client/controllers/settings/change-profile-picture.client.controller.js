@@ -1,3 +1,4 @@
+/*jshint unused: false*/
 'use strict';
 
 angular.module('users').controller('ChangeProfilePictureController', ['$scope', '$timeout', '$window',

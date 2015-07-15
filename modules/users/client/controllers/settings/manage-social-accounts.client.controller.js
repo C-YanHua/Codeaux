@@ -1,3 +1,4 @@
+/*jshint unused: false*/
 'use strict';
 
 angular.module('users').controller('SocialAccountsController', ['$scope', '$http', '$location', 'Users',
