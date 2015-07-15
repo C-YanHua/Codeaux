@@ -145,6 +145,7 @@ exports.signup = function(req, res) {
     }
   ], function(err) {
     if (err) {
+      console.log(err);
       return res.status(400).send({
         errorMessage: 'There were problems creating your account.',
         error: err.errors
