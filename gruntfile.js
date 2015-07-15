@@ -213,7 +213,7 @@ module.exports = function(grunt) {
   grunt.option('force', true);
 
   // A Task for loading the configuration object
-  grunt.task.registerTask('loadConfig', 'Connects to MongoDB instance and loads the application models.', function() {
+  grunt.task.registerTask('mongoose', 'Connects to MongoDB instance and loads the application models.', function() {
     // Get callback.
     var callback = this.async();
 
