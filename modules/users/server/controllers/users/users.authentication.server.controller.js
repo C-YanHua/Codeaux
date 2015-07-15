@@ -129,17 +129,19 @@ exports.signup = function(req, res) {
     function(callback) {
       // Generate etherpad authorID for user.
       etherpad.createAuthor({name: user.username}, user, callback);
+      console.log('reach1');
     },
     function(user, callback) {
       // Generate etherpad Group for user.
       etherpad.createGroup(user, callback);
+      console.log('reach2');
     },
     function(user, callback) {
       user.save(function(err) {
         if (!err) {
           requestSignIn(req, res, user);
         }
-
+        console.log('reach3');
         callback(err);
       });
     }
