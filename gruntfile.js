@@ -243,4 +243,6 @@ module.exports = function(grunt) {
 
   // Run application in production stage.
   grunt.registerTask('heroku', ['build', 'env:prod', 'concurrent:default']);
+
+  grunt.registerTask('heroku:production', ['build']);
 };
