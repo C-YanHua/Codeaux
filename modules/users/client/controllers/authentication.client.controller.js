@@ -32,8 +32,8 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         $scope.signupErrorMessage = response.errorMessage;
 
         for (var key in $scope.credentials) {
-          if (response.hasOwnProperty(key)) {
-            $scope.setErrorMessage(key, response[key].message, false);
+          if (response.error.hasOwnProperty(key)) {
+            $scope.setErrorMessage(key, response.error[key].message, false);
           }
         }
       });
