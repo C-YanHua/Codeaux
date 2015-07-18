@@ -10,7 +10,8 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
       // Create new Issue object.
       var issue = new Issues ({
         name: this.name,
-        language: this.language
+        description: this.description,
+        isPrivateIssue: this.isPrivateIssue
       });
 
       // Redirect after save.
@@ -19,6 +20,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
 
         // Clear form fields.
         $scope.name = '';
+        $scope.description = '';
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
       });

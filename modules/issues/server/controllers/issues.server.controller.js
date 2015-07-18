@@ -129,15 +129,28 @@ exports.delete = function(req, res) {
  * List of Issues.
  */
 exports.list = function(req, res) {
-  Issue.find().sort('-created').populate('user', 'displayName').exec(function(err, issues) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(issues);
-    }
-  });
+
+  if (req.query["user"]) {
+    Issue.find({"user" : mongoose.Types.ObjectId.createFromHexString(req.query["user"]) }).sort("-created").exec(function(err, issues) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp(issues);
+      }
+    });
+  } else {
+    Issue.find().sort('-created').populate('user', 'name').exec(function(err, issues) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp(issues);
+      }
+    });
+  }
 };
 
 /**
@@ -150,7 +163,7 @@ exports.issueByID = function(req, res, next, id) {
     });
   }
 
-  Issue.findById(id).populate('user', 'displayName').exec(function(err, issue) {
+  Issue.findById(id).populate('user', 'name').exec(function(err, issue) {
     if (err) {
       return next(err);
     }

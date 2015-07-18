@@ -25,6 +25,10 @@ angular.module('issues').config(['$stateProvider',
     state('issues.edit', {
       url: '/:issueId/edit',
       templateUrl: '/modules/issues/views/edit-issue.client.view.html'
+    }).
+    state('my-issues', {
+      url: '/myissues',
+      templateUrl: '/modules/issues/views/my-issues.client.view.html'
     });
   }
 ]);

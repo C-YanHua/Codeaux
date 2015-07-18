@@ -14,10 +14,10 @@ var IssueSchema = new Schema({
     required: 'Please fill Issue name',
     trim: true
   },
-  language: {
+  description: {
     type: String,
     default: '',
-    required: 'Language cannot be blank',
+    required: 'Description cannot be blank',
     trim: true
   },
   created: {
@@ -35,6 +35,11 @@ var IssueSchema = new Schema({
   readOnlyPadId: {
     type: String,
     default: ''
+  },
+  // 0=false 1=true
+  isPrivateIssue: {
+    type: Number,
+    default: 0
   }
 });
 

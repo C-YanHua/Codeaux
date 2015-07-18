@@ -14,11 +14,21 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label" for="language">Language</label>
+          <label class="control-label" for="description">Description</label>
           <div class="controls">
-            <input type="text" data-ng-model="language" id="language" class="form-control"
-                   placeholder="Language" required>
+            <input type="text" data-ng-model="description" id="description" class="form-control"
+                   placeholder="Description" required>
           </div>
+        </div>
+
+        <div class="form-group">
+            <div class="controls">
+              <label class="control-label" for="isPrivateIssue">Private
+                <input type="checkbox" data-ng-model="isPrivateIssue" id="isPrivateIssue" class="form-control"
+                     ng-true-value="1" ng-false-value="0" required>
+              </label>
+            </div>
+          </label>
         </div>
 
         <div class="form-group">

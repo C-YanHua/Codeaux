@@ -9,21 +9,27 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
 
     // Find a list of Issues.
     $scope.find = function() {
-      $scope.issues = Issues.query(function() {
+      var issues = Issues.query(function() {
         $scope.currentPage = 1;
         $scope.pagedIssues = [];
         $scope.issuesPerPage = 5;
         $scope.numOfPageIcons = 5;
 
-        $scope.filteredIssues = $scope.issues.slice(0, $scope.issues.length);
+        $scope.filteredIssues = issues.slice(0, issues.length);
       });
 
-      $scope.$watch('currentPage + issuesPerPage + filteredIssues', function() {
-        var begin = (($scope.currentPage - 1) * $scope.issuesPerPage);
-        var end = begin + $scope.issuesPerPage;
+      $scope.search = function() {
+        $scope.filteredIssues = $filter('filter')(issues, function(issue) {
 
-        $scope.pagedIssues = $scope.filteredIssues.slice(begin, end);
-      });
+          if (searchMatch(issue["name"], $scope.query)) {
+            return true;
+          } else if (searchMatch(issue["description"], $scope.query)) {
+            return true;
+          }
+
+          return false;
+        });
+      };
     };
 
     var searchMatch = function(stuff, target) {
@@ -33,15 +39,11 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
       return stuff.toString().toLowerCase().indexOf(target.toLowerCase()) !== -1;
     };
 
-    $scope.search = function() {
-      $scope.filteredIssues = $filter('filter')($scope.issues, function(issue) {
-        for (var property in issue) {
-          if (searchMatch(issue[property], $scope.query)) {
-            return true;
-          }
-        }
-        return false;
-      });
-    };
+    $scope.$watch('currentPage + issuesPerPage + filteredIssues', function() {
+      var begin = (($scope.currentPage - 1) * $scope.issuesPerPage);
+      var end = begin + $scope.issuesPerPage;
+
+      $scope.pagedIssues = $scope.filteredIssues.slice(begin, end);
+    });
   }
 ]);
