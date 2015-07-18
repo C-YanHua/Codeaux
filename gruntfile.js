@@ -12,15 +12,15 @@ module.exports = function(grunt) {
     env: {
       test: {
         NODE_ENV: 'test',
-        src: 'codeaux.env.json'
+        src: '.env'
       },
       dev: {
         NODE_ENV: 'development',
-        src: 'codeaux.env.json'
+        src: '.env'
       },
       prod: {
         NODE_ENV: 'production',
-        src: 'codeaux.env.json'
+        src: '.env'
       }
     },
     watch: {

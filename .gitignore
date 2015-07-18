@@ -41,7 +41,7 @@ data/
 # Application Assets
 # ==================
 *.pem
-codeaux.env.json
+.env
 db/
 modules/users/client/img/profile/uploads
 public/dist/
