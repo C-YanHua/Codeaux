@@ -30,11 +30,16 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
       }).error(function(response) {
         $scope.signupErrorMessage = response.errorMessage;
-        console.log(response);
-        for (var key in $scope.credentials) {
-          if (response.error.hasOwnProperty(key)) {
-            $scope.setErrorMessage(key, response.error[key].message, false);
+
+        if ('errors' in response.error) {
+          for (var key in $scope.credentials) {
+            if (key in response.error.errors) {
+              $scope.setErrorMessage(key, response.error.errors[key].message, false);
+            }
           }
+        // Should only occur during development stage. (etherpad errors)
+        } else if ('message' in response.error) {
+          $scope.signupErrorMessage += ' ' + response.error.message;
         }
       });
     };

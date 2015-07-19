@@ -147,7 +147,7 @@ exports.signup = function(req, res) {
     if (err) {
       return res.status(400).send({
         errorMessage: 'There were problems creating your account.',
-        error: err.errors
+        error: err
       });
     }
   });
