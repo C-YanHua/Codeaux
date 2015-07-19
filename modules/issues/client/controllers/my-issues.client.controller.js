@@ -28,21 +28,33 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
       });
     };
 
+    var rePaginate = function() {
+      var begin = (($scope.currentPage - 1) * $scope.issuesPerPage);
+      var end = begin + $scope.issuesPerPage;
+
+      $scope.pagedIssues = $scope.currentIssues.slice(begin, end);
+    };
+
     $scope.showPublicIssues = function() {
       $scope.issuesToShow = 'Public Issues';
       $scope.currentIssues = publicIssues;
+
+      if (publicIssues.length === privateIssues.length) {
+        rePaginate();
+      }
     };
 
     $scope.showPrivateIssues = function() {
       $scope.issuesToShow = 'Private Issues';
       $scope.currentIssues = privateIssues;
+
+      if (publicIssues.length === privateIssues.length) {
+        rePaginate();
+      }
     };
 
     $scope.$watch('currentPage + issuesPerPage + currentIssues', function() {
-      var begin = (($scope.currentPage - 1) * $scope.issuesPerPage);
-      var end = begin + $scope.issuesPerPage;
-
-      $scope.pagedIssues = $scope.currentIssues.slice(begin, end);
+      rePaginate();
     });
 
   }
