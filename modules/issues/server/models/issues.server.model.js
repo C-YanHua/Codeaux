@@ -24,7 +24,7 @@ var IssueSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  user: {
+  owner: {
     type: Schema.ObjectId,
     ref: 'User'
   },

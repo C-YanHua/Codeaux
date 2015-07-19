@@ -17,10 +17,10 @@ exports.create = function(req, res) {
   async.waterfall([
     function(callback) {
       var issue = new Issue(req.body);
-      issue.user = req.user;
+      issue.owner = req.user;
 
-      issue.save(function(error) {
-        callback(error, issue);
+      issue.save(function(err) {
+        callback(err, issue);
       });
     },
     // Generate a unique padId for the issue.
@@ -36,17 +36,17 @@ exports.create = function(req, res) {
       etherpad.generateReadOnlyPadId({padID: issue.padId}, issue, callback);
     },
     function(issue, callback) {
-      issue.save(function(error) {
-        if (!error) {
+      issue.save(function(err) {
+        if (!err) {
           res.jsonp(issue);
         }
 
-        callback(error);
+        callback(err);
       });
     }
-  ], function(error) {
-    if (error) {
-      return res.status(400).send(error);
+  ], function(err) {
+    if (err) {
+      return res.status(400).send(err);
     }
   });
 };
@@ -84,10 +84,9 @@ exports.read = function(req, res) {
     function(userSession, callback) {
       etherpad.createSession(userSession, req, res, callback);
     }
-  ], function(error) {
-    if (error) {
-      console.log(error);
-      return res.status(400).send(error);
+  ], function(err) {
+    if (err) {
+      return res.status(400).send(err);
     }
   });
 };
