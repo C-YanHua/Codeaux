@@ -10,7 +10,7 @@ module.exports = function(config) {
   passport.use(new FacebookStrategy({
       clientID: config.facebook.clientID,
       clientSecret: config.facebook.clientSecret,
-      callbackURL: config.facebook.callbackURL,
+      callbackURL: config.facebook.callbackUrl,
       profileFields: ['id', 'displayName', 'emails', 'photos'],
       passReqToCallback: true
     },

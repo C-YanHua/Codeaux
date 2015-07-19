@@ -9,9 +9,9 @@ angular.module('issues').controller('ViewIssuesController', ['$scope', '$statePa
     $scope.findOne = function() {
       $scope.issue = Issues.get({issueId: $stateParams.issueId}, function() {
         if ($scope.authentication.user) {
-          $scope.etherpadSrc = $sce.trustAsResourceUrl('http://localhost:9001/p/' + $scope.issue.padId);
+          $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
         } else {
-          $scope.etherpadSrc = $sce.trustAsResourceUrl('http://localhost:9001/p/' + $scope.issue.readOnlyPadId);
+          $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.readOnlyPadId);
         }
       });
     };
@@ -22,7 +22,7 @@ angular.module('issues').controller('ViewIssuesController', ['$scope', '$statePa
         issue.$remove();
 
         for (var i in $scope.issues) {
-          if ($scope.issues [i] === issue) {
+          if ($scope.issues[i] === issue) {
             $scope.issues.splice(i, 1);
           }
         }

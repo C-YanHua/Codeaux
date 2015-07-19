@@ -8,7 +8,7 @@ var NUSStrategy = require('passport-nus-openid').Strategy;
 module.exports = function(config) {
   // Use OpenID Strategy for NUS.
   passport.use(new NUSStrategy({
-      returnURL: config.nusOpenId.returnURL,
+      returnURL: config.nusOpenId.returnUrl,
       realm: config.nusOpenId.realm,
       profile: true,
       passReqToCallback: true

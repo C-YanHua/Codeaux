@@ -4,7 +4,7 @@
  * Default configurations. If specify in another environment JS file, merge with it.
  */
 module.exports = {
-  // Default app configurations for production and secure.
+  // Default app object configurations for production.
   app: {
     title: 'Codeaux',
     description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
@@ -20,23 +20,17 @@ module.exports = {
   facebook: {
     clientID: process.env.FACEBOOK_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: '/api/auth/facebook/callback'
+    callbackUrl: '/api/auth/facebook/callback'
   },
   google: {
     clientID: process.env.GOOGLE_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: '/api/auth/google/callback'
+    callbackUrl: '/api/auth/google/callback'
   },
-
   github: {
     clientID: process.env.GITHUB_ID,
     clientSecret: process.env.GITHUB_SECRET,
-    callbackURL: '/api/auth/github/callback'
-  },
-
-  nusOpenId: {
-    returnURL: 'http://localhost:3000/api/auth/nus_openid/return',
-    realm: 'http://localhost:3000/'
+    callbackUrl: '/api/auth/github/callback'
   },
 
   mailer: {

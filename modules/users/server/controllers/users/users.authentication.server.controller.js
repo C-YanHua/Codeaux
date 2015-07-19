@@ -40,12 +40,12 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
       });
     },
     function(user, callback) {
-      // Generate etherpad authorID for user.
-      etherpad.createAuthor({name: user.username}, user, callback);
+      // Generate etherpad authorId for user.
+      etherpad.generateAuthorId({name: user.username}, user, callback);
     },
     function(user, callback) {
-      // Generate etherpad Group for user.
-      etherpad.createGroup(user, callback);
+      // Generate etherpad groupId for user.
+      etherpad.generateGroupId(user, callback);
     },
     function(user, callback) {
       user.save(function(err) {
@@ -127,27 +127,24 @@ exports.signup = function(req, res) {
 
   async.waterfall([
     function(callback) {
-      // Generate etherpad authorID for user.
-      etherpad.createAuthor({name: user.username}, user, callback);
-      console.log('reach1');
+      // Generate etherpad authorId for user.
+      etherpad.generateAuthorId({name: user.username}, user, callback);
     },
     function(user, callback) {
-      // Generate etherpad Group for user.
-      etherpad.createGroup(user, callback);
-      console.log('reach2');
+      // Generate etherpad groupId for user.
+      etherpad.generateGroupId(user, callback);
     },
     function(user, callback) {
       user.save(function(err) {
         if (!err) {
           requestSignIn(req, res, user);
         }
-        console.log('reach3');
+
         callback(err);
       });
     }
   ], function(err) {
     if (err) {
-      console.log(err);
       return res.status(400).send({
         errorMessage: 'There were problems creating your account.',
         error: err.errors

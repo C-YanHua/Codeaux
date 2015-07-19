@@ -23,5 +23,16 @@ module.exports = {
     options: {
       //stream: 'codeaux_access.log'
     }
-  }
+  },
+
+  etherpad: {
+    host: process.env.ETHERPAD_DEVELOPMENT_HOST,
+    port: parseInt(process.env.ETHERPAD_DEVELOPMENT_PORT),
+    apikey: process.env.ETHERPAD_DEVELOPMENT_APIKEY
+  },
+
+  nusOpenId: {
+    realm: process.env.DEVELOPMENT_URL,
+    returnUrl: process.env.DEVELOPMENT_URL + '/api/auth/nus_openid/return'
+  },
 };

@@ -21,5 +21,16 @@ module.exports = {
   },
 
   port: process.env.PORT || 80,
-  secure: false
+  secure: false,
+
+  etherpad: {
+    host: process.env.ETHERPAD_PRODUCTION_HOST,
+    port: parseInt(process.env.ETHERPAD_PRODUCTION_PORT),
+    apikey: process.env.ETHERPAD_PRODUCTION_APIKEY
+  },
+
+  nusOpenId: {
+    realm: process.env.PRODUCTION_URL,
+    returnUrl: process.env.PRODUCTION_URL + '/api/auth/nus_openid/return'
+  },
 };

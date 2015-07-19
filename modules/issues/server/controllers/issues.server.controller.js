@@ -23,18 +23,17 @@ exports.create = function(req, res) {
         callback(error, issue);
       });
     },
+    // Generate a unique padId for the issue.
     function(issue, callback) {
-      etherpad.createPad({
+      etherpad.generatePadId({
         groupID: req.user.groupId,
         padName: issue._id.toString(),
         text: 'Helloworld'
-      },
-        issue,
-        callback
-      );
+
+      }, issue, callback);
     },
     function(issue, callback) {
-      etherpad.getReadOnlyID({padID: issue.padId}, issue, callback);
+      etherpad.generateReadOnlyPadId({padID: issue.padId}, issue, callback);
     },
     function(issue, callback) {
       issue.save(function(error) {
@@ -66,7 +65,11 @@ exports.read = function(req, res) {
         validUntil: sessionTime
       };
 
-      // Close the previous etherpad session before starting a new one
+      // Append etherpadUrl to padId and readOnlyPadId for displaying on page.
+      req.issue.padId = etherpad.getEtherpadUrl() + '/p/' + issue.padId;
+      req.issue.readOnlyPadId = etherpad.getEtherpadUrl() + '/p/' + issue.readOnlyPadId;
+
+      // Kill the previous etherpad session before starting a new one.
       if (req.cookies.sessionID) {
         etherpad.deleteSession({sessionID: req.cookies.sessionID});
       }
@@ -75,15 +78,15 @@ exports.read = function(req, res) {
         userSession.authorID = req.user.authorId;
         callback(null, userSession);
       } else {
-        etherpad.createAuthor({name: ''}, userSession, callback);
+        etherpad.generateAuthorId({name: ''}, userSession, callback);
       }
-
     },
     function(userSession, callback) {
       etherpad.createSession(userSession, req, res, callback);
     }
   ], function(error) {
     if (error) {
+      console.log(error);
       return res.status(400).send(error);
     }
   });
@@ -158,10 +161,10 @@ exports.list = function(req, res) {
 /**
  * Issue middleware.
  */
-exports.issueByID = function(req, res, next, id) {
+exports.issueById = function(req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'Article is invalid'
+      message: 'Issues is invalid'
     });
   }
 
