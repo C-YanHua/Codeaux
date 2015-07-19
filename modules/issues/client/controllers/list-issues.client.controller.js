@@ -21,9 +21,9 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
       $scope.search = function() {
         $scope.filteredIssues = $filter('filter')(issues, function(issue) {
 
-          if (searchMatch(issue["name"], $scope.query)) {
+          if (searchMatch(issue.name, $scope.query)) {
             return true;
-          } else if (searchMatch(issue["description"], $scope.query)) {
+          } else if (searchMatch(issue.description, $scope.query)) {
             return true;
           }
 

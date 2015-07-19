@@ -130,8 +130,10 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 
-  if (req.query["user"]) {
-    Issue.find({"user" : mongoose.Types.ObjectId.createFromHexString(req.query["user"]) }).sort("-created").exec(function(err, issues) {
+  if (req.query.user) {
+    Issue.find({
+      user : mongoose.Types.ObjectId.createFromHexString(req.query.user)
+    }).sort('-created').exec(function(err, issues) {
       if (err) {
         return res.status(400).send({
           message: errorHandler.getErrorMessage(err)

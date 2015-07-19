@@ -6,7 +6,7 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
 
     var publicIssues = [];
     var privateIssues = [];
-    $scope.issuesToShow = "Public Issues";
+    $scope.issuesToShow = 'Public Issues';
 
     $scope.currentPage = 1;
     $scope.currentIssues = [];
@@ -16,11 +16,11 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
 
     $scope.find = function() {
       Issues.query({user:$scope.authentication.user._id}, function(issues) {
-        for (var i=0; i<issues.length; i++) {
+        for (var i = 0; i < issues.length; i++) {
           var eachIssue = issues[i];
-          if (eachIssue["isPrivateIssue"] === 0) {
+          if (eachIssue.isPrivateIssue === 0) {
             publicIssues.push(eachIssue);
-          } else if (eachIssue["isPrivateIssue"] === 1) {
+          } else if (eachIssue.isPrivateIssue === 1) {
             privateIssues.push(eachIssue);
           }
         }
@@ -29,12 +29,12 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
     };
 
     $scope.showPublicIssues = function() {
-      $scope.issuesToShow = "Public Issues";
+      $scope.issuesToShow = 'Public Issues';
       $scope.currentIssues = publicIssues;
     };
 
     $scope.showPrivateIssues = function() {
-      $scope.issuesToShow = "Private Issues";
+      $scope.issuesToShow = 'Private Issues';
       $scope.currentIssues = privateIssues;
     };
 
