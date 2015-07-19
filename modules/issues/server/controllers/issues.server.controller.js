@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var path = require('path');
 
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-var etherpad = require(path.resolve('./modules/core/server/controllers/etherpad/etherpad.server.controller'));
+var etherpad = require('./etherpad/etherpad.server.controller');
 var Issue = mongoose.model('Issue');
 
 /*

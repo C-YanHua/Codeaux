@@ -7,7 +7,7 @@ var passport = require('passport');
 var path = require('path');
 
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-var etherpad = require(path.resolve('./modules/core/server/controllers/etherpad/etherpad.server.controller'));
+var etherpad = require(path.resolve('./modules/issues/server/controllers/etherpad/etherpad.server.controller'));
 var User = mongoose.model('User');
 
 // Private function for sign up new OAuth or OpenID user.
