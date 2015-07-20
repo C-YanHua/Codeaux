@@ -40,6 +40,15 @@ module.exports.getEtherpadUrl = function() {
 };
 
 /*
+ * Remove etherpad Url.
+ */
+module.exports.removeEtherpadUrl = function(fullUrl) {
+  var padUrl = etherpadUrl + '/p/';
+  var padIdOnly = fullUrl.replace(padUrl, "");
+  return padIdOnly;
+}
+
+/*
  * Generate a unique authorId for each user.
  */
 module.exports.generateAuthorId = function(args, user, callback) {

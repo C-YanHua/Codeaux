@@ -96,6 +96,8 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
   var issue = req.issue;
+  req.body.padId = etherpad.removeEtherpadUrl(req.issue.padId);
+  req.body.readOnlyPadId =  etherpad.removeEtherpadUrl(req.issue.readOnlyPadId);
 
   issue = _.extend(issue , req.body);
 
@@ -132,9 +134,9 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 
-  if (req.query.user) {
+  if (req.query.owner) {
     Issue.find({
-      user : mongoose.Types.ObjectId.createFromHexString(req.query.user)
+      owner : mongoose.Types.ObjectId.createFromHexString(req.query.owner)
     }).sort('-created').exec(function(err, issues) {
       if (err) {
         return res.status(400).send({
@@ -145,7 +147,7 @@ exports.list = function(req, res) {
       }
     });
   } else {
-    Issue.find().sort('-created').populate('user', 'name').exec(function(err, issues) {
+    Issue.find().sort('-created').populate('owner', 'name').exec(function(err, issues) {
       if (err) {
         return res.status(400).send({
           message: errorHandler.getErrorMessage(err)
@@ -167,7 +169,7 @@ exports.issueById = function(req, res, next, id) {
     });
   }
 
-  Issue.findById(id).populate('user', 'name').exec(function(err, issue) {
+  Issue.findById(id).populate('owner', 'name').exec(function(err, issue) {
     if (err) {
       return next(err);
     }
