@@ -6,8 +6,8 @@
   <div class="col-md-12">
     <form class="form-horizontal" data-ng-submit="create()" novalidate>
       <fieldset>
-        <div class="form-group">
-          <label class="control-label" for="name">Name</label>
+        <div class="form-group input-group">
+          <span class="input-group-addon"><strong>Name</strong></span>
           <div class="controls">
             <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
           </div>
@@ -16,16 +16,17 @@
         <div class="form-group">
           <label class="control-label" for="description">Description</label>
           <div class="controls">
-            <input type="text" data-ng-model="description" id="description" class="form-control"
-                   placeholder="Description" required>
+            <textarea rows="5" data-ng-model="description" id="description" class="form-control" placeholder="Description" required>
+            </textarea>
           </div>
         </div>
 
         <div class="form-group">
             <div class="controls">
-              <label class="control-label" for="isPrivateIssue">Private
-                <input type="checkbox" data-ng-model="isPrivateIssue" id="isPrivateIssue" class="form-control"
-                     ng-true-value="1" ng-false-value="0" required>
+              <label class="control-label checkbox-inline" for="isPrivateIssue">
+                <input type="checkbox" data-ng-model="isPrivateIssue" id="isPrivateIssue"
+                     ng-true-value="1" ng-false-value="0">
+                <strong>Private</strong>
               </label>
             </div>
           </label>

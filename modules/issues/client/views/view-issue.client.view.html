@@ -2,7 +2,9 @@
   <div class="page-header">
     <h1 data-ng-bind="issue.name"></h1>
   </div>
-  <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == issue.user._id))">
+  <textarea readonly data-ng-bind="issue.description" style="width:100%"></textarea>
+  <br>
+  <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == issue.owner._id))">
     <a class="btn btn-primary" data-ui-sref="issues.edit({issueId: issue._id})">
       <i class="glyphicon glyphicon-edit"></i>
     </a>
@@ -10,6 +12,7 @@
       <i class="glyphicon glyphicon-trash"></i>
     </a>
   </div>
+  <br>
   <small>
     <em class="text-muted">
       Posted on
@@ -18,6 +21,7 @@
       <span data-ng-bind="issue.user.name"></span>
     </em>
   </small>
+  <br>
 
   <div style="position:relative; height:50em; width:100%;">
     <iframe ng-src="{{etherpadSrc}}" width="100%" height="100%"></iframe>

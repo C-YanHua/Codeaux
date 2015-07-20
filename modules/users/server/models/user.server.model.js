@@ -176,6 +176,11 @@ var UserSchema = new Schema({
   groupId: {
     type: String,
     default: ''
+  },
+  // For list of friends
+  friends: {
+    type: Array,
+    dafault: []
   }
 });
 
