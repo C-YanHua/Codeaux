@@ -15,7 +15,7 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
     $scope.numOfPageIcons = 5;
 
     $scope.find = function() {
-      Issues.query({user:$scope.authentication.user._id}, function(issues) {
+      Issues.query({owner:$scope.authentication.user._id}, function(issues) {
         for (var i = 0; i < issues.length; i++) {
           var eachIssue = issues[i];
           if (eachIssue.isPrivateIssue === 0) {
