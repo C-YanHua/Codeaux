@@ -10,7 +10,7 @@ angular.module('users').config(['$httpProvider',
           responseError: function(rejection) {
             switch (rejection.status) {
               case 401:
-                // Deauthenticate the global user
+                // Deauthenticate the global user.
                 Authentication.user = null;
                 $window.user = null;
 
@@ -19,6 +19,10 @@ angular.module('users').config(['$httpProvider',
                 break;
               case 403:
                 // Add unauthorized behaviour.
+                break;
+              case 404:
+                // Redirect to 404 not found page.
+                $location.path('not-found');
                 break;
             }
 

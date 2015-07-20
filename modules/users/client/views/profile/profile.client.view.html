@@ -1,4 +1,6 @@
-<section data-ng-controller="ProfileController" data-ng-init="findUserProfile()">
-  <div>{{userprofile}}</div>
-
+<section data-ng-controller="ProfileController" data-ng-init="findOne()">
+  <div>This is {{profile.name}} profile page.</div>
+  <div class="col-sm-9 col-md-8 settings-view">
+    <div data-ui-view></div>
+  </div>
 </section>

@@ -5,10 +5,20 @@ angular.module('users').config(['$stateProvider',
   function($stateProvider) {
     // Users state routing.
     $stateProvider.
+
     state('profile', {
       url: '/:username',
       templateUrl: '/modules/users/views/profile/profile.client.view.html'
     }).
+    state('profile.friends', {
+      url: '/friends',
+      templateUrl: '/modules/users/views/profile/profile-friends.client.view.html'
+    }).
+    state('profile.issues', {
+      url: '/issues',
+      templateUrl: '/modules/users/views/profile/profile-issues.client.view.html'
+    }).
+
     state('settings', {
       abstract: true,
       url: '/settings',
@@ -30,6 +40,7 @@ angular.module('users').config(['$stateProvider',
       url: '/picture',
       templateUrl: '/modules/users/views/settings/change-profile-picture.client.view.html'
     }).
+
     state('password', {
       abstract: true,
       url: '/password',
