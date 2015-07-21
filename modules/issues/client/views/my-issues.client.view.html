@@ -11,33 +11,46 @@
   <br>
 
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">{{issuesToShow}}</h3>
-    </div>
     <div class="panel-body">
-      <div class="row">
-        <div class="col-xs-4">
-          <label>Items Per Page:</label>
-          <input min="1" max="20" ng-model="issuesPerPage" class="form-control">
-        </div>
-      </div>
-
-      <br>
-
-      <div class="list-group">
-        <a data-ng-repeat="issue in pagedIssues" data-ui-sref="issues.view({issueId: issue._id})" class="list-group-item">
-          <h4 class="list-group-item-heading">Title: {{issue.name}}</h4>
-          <p>Description: {{issue.description}}</p>
-        </a>
-        <pagination
-          ng-model="currentPage"
-          total-items="currentIssues.length"
-          max-size="numOfPageIcons"
-          boundary-links="true"
-          items-per-page="issuesPerPage">
-        </pagination>
-      </div>
+      <h3>{{issuesToShow}}</h3>
     </div>
   </div>
 
+  <div class="table-responsive">
+    <table class="table table-hover" style="table-layout:fixed">
+      <col width="5px" />
+      <col width="65px" />
+      <col width="20px" />
+      <tr>
+        <th>#</th>
+        <th>Title & Description</th>
+        <th>Permissions</th>
+      </tr>
+      <tr data-ng-repeat="issue in currentIssues">
+        <td>
+          <p>{{$index + 1}}</p>
+        </td>
+        <td style="overflow:hidden">
+          <a data-ui-sref="issues.view({issueId: issue._id})">
+            <h3 class="list-group-item-heading">{{issue.name}}</h3>
+          </a>
+          <p>{{issue.description}}</p>
+        </td>
+        <td>
+          <div data-ng-if="issuesToShow == 'Public Issues'">
+            <p>Available To All</p>
+          </div>
+          <div data-ng-if="issuesToShow == 'Private Issues'">
+            <button type="button" class="btn btn-primary" data-ui-sref="issues.permissions({issueId: issue._id})">View / Edit Permissions
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <center><strong>-- End of {{issuesToShow}} --</strong></center>
+        </td>
+      </tr>
+    </table>
+  </div>
 </section>

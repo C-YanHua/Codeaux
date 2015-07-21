@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div class="list-group">
+  <div class="list-group" style="overflow:hidden">
     <a data-ng-repeat="issue in pagedIssues" data-ui-sref="issues.view({issueId: issue._id})" class="list-group-item">
       <h4 class="list-group-item-heading">Title: {{issue.name}}</h4>
       <p>Description: {{issue.description}}</p>
