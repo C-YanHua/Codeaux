@@ -4,6 +4,11 @@
  * Production stage configurations.
  */
 module.exports = {
+  app: {
+    title: 'Codeaux',
+    description: 'Codeaux Production Stage',
+  },
+
   db: {
     uri: process.env.MONGOLAB_URI,
     options: {
@@ -12,6 +17,10 @@ module.exports = {
     }
   },
 
+  livereload: false,
+  port: process.env.PORT || 80,
+  secure: false,
+
   log: {
     // Can specify either: 'combined', 'common', 'dev', 'short', 'tiny'
     format: 'combined',
@@ -19,9 +28,6 @@ module.exports = {
       stream: 'codeaux_access.log'
     }
   },
-
-  port: process.env.PORT || 80,
-  secure: false,
 
   etherpad: {
     host: process.env.ETHERPAD_PRODUCTION_HOST,

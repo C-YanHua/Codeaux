@@ -5,10 +5,13 @@ var _ = require('lodash');
 var defaultAssets = require('./config/assets/default');
 var testAssets = require('./config/assets/test');
 
+/*
+ * Initialize project configuration through grunt.
+ */
 module.exports = function(grunt) {
-  // Project Configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    // Initialize Environment variables.
     env: {
       test: {
         NODE_ENV: 'test',
@@ -23,6 +26,7 @@ module.exports = function(grunt) {
         src: '.env'
       }
     },
+    // Files to listen for changes. For automation reload.
     watch: {
       serverViews: {
         files: defaultAssets.server.views,
@@ -96,7 +100,7 @@ module.exports = function(grunt) {
     },
     jscs: {
       all: {
-        src: _.union(defaultAssets.server.allJS, defaultAssets.client.js,
+        src: _.union(defaultAssets.server.grunt, defaultAssets.server.allJS, defaultAssets.client.js,
                      testAssets.tests.server, testAssets.tests.client, testAssets.tests.e2e),
         options: {
           config: '.jscsrc',
@@ -106,7 +110,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       all: {
-        src: _.union(defaultAssets.server.allJS, defaultAssets.client.js,
+        src: _.union(defaultAssets.server.grunt, defaultAssets.server.allJS, defaultAssets.client.js,
                      testAssets.tests.server, testAssets.tests.client, testAssets.tests.e2e),
         options: {
           jshintrc: true,
@@ -153,7 +157,8 @@ module.exports = function(grunt) {
         options: {
           nodeArgs: ['--debug'],
           ext: 'js,html',
-          watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
+          watch: _.union(defaultAssets.server.grunt, defaultAssets.server.views,
+                         defaultAssets.server.allJS, defaultAssets.server.config)
         }
       }
     },
@@ -207,17 +212,17 @@ module.exports = function(grunt) {
     }
   });
 
-  // Load NPM tasks
+  // Load NPM tasks.
   require('load-grunt-tasks')(grunt);
   // Making grunt default to force in order not to break the project.
   grunt.option('force', true);
 
-  // A Task for loading the configuration object
+  // A Task for loading the configuration object.
   grunt.task.registerTask('mongoose', 'Connects to MongoDB instance and loads the application models.', function() {
     // Get callback.
     var callback = this.async();
 
-    // Use mongoose configuration to connect to mongo database.
+    // Use mongoose configuration to connect to mongoDB.
     var mongoose = require('./config/lib/mongoose.js');
     mongoose.connect(function() {
       callback();
@@ -231,9 +236,9 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['env:dev', 'lint', 'ngAnnotate', 'uglify', 'cssmin']);
 
   // Run application in testing stage.
-  grunt.registerTask('test', ['env:test', 'mongoose', 'mochaTest', 'karma:unit']);
-  grunt.registerTask('test:server', ['env:test', 'mongoose', 'mochaTest']);
-  grunt.registerTask('test:client', ['env:test', 'mongoose', 'karma:unit']);
+  grunt.registerTask('test', ['env:test', 'lint', 'mochaTest', 'karma:unit']);
+  grunt.registerTask('test:server', ['env:test', 'lint', 'mochaTest']);
+  grunt.registerTask('test:client', ['env:test', 'lint', 'karma:unit']);
 
   // Run application in development stage.
   grunt.registerTask('default', ['env:dev', 'lint', 'concurrent:default']);

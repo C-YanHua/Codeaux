@@ -6,16 +6,18 @@
 module.exports = {
   // Default app object configurations for production.
   app: {
-    title: 'Codeaux',
-    description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
     keywords: 'Codeaux, Orbital',
-    googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
+    logo: 'modules/core/img/brand/logo_wordmark.png',
+    favicon: '/modules/core/img/brand/favicon.ico'
   },
 
-  port: process.env.PORT || 3000,
   templateEngine: 'swig',
   sessionSecret: 'MEAN',
   sessionCollection: 'sessions',
+
+  livereload: true,
+  port: process.env.PORT || 3000,
+  secure: false,
 
   facebook: {
     clientID: process.env.FACEBOOK_ID,

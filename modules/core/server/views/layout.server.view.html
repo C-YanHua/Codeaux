@@ -28,11 +28,11 @@
 <meta property="og:title" content="{{title}}">
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="{{url}}">
-<meta property="og:image" content="{{url}}modules/core/img/brand/logo_wordmark.png">
+<meta property="og:image" content="{{url}}{{logo}}">
 <meta property="og:type" content="website">
 
 <!-- Fav Icon (Tab Icon)-->
-<link href="/modules/core/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link href="{{favicon}}" rel="shortcut icon" type="image/x-icon">
 
 <!--Application CSS Files-->
 {% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
@@ -67,7 +67,7 @@
   {% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>
   {% endfor %}
 
-  {% if process.env.NODE_ENV === 'development' %}
+  {% if livereload %}
   <!--Livereload script rendered -->
   <script type="text/javascript" src="{{host}}:35729/livereload.js"></script>
   {% endif %}

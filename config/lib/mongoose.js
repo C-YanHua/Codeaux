@@ -6,7 +6,9 @@ var config = require('../config');
 var mongoose = require('mongoose');
 var path = require('path');
 
-// Load mongoose models.
+/*
+ * Load mongoDB schemas (models).
+ */
 var loadModels = function() {
   // Globbing model files.
   config.files.server.models.forEach(function(modelPath) {
@@ -14,12 +16,14 @@ var loadModels = function() {
   });
 };
 
-// Initialize Mongoose
+/*
+ * Initialize connection to MongoDB using mongoose.
+ */
 module.exports.connect = function(callback) {
   var db = mongoose.connect(config.db.uri, config.db.options, function(err) {
     // Log database error.
     if (err) {
-      console.error(chalk.red('Could not connect to MongoDB!'));
+      console.error(chalk.red('Error: Could not connect to MongoDB!'));
       console.log(err);
     } else {
       // Load modules
@@ -32,9 +36,12 @@ module.exports.connect = function(callback) {
   });
 };
 
+/*
+ * Disconnect from MongoDB using mongoose.
+ */
 module.exports.disconnect = function(callback) {
   mongoose.disconnect(function(err) {
-    console.info(chalk.yellow('Disconnected from MongoDB.'));
+    console.info(chalk.blue('Info: Disconnected from MongoDB.'));
     callback(err);
   });
 };

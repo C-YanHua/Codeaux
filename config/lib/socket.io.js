@@ -13,7 +13,9 @@ var socketio = require('socket.io');
 
 var MongoStore = require('connect-mongo')(session);
 
-// Define Socket.io configuration.
+/*
+ * Initialize HTTP/HTTPS server and socket.io configurations.
+ */
 module.exports = function(app, db) {
   var server;
   if (config.secure === true) {
@@ -59,7 +61,7 @@ module.exports = function(app, db) {
             if (socket.request.user) {
               next(null, true);
             } else {
-              next(new Error('User is not authenticated'), false);
+              next(new Error('User is not authenticated.'), false);
             }
           });
         });
