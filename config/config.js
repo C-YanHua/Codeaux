@@ -3,6 +3,7 @@
 // Module dependencies.
 var _ = require('lodash');
 var chalk = require('chalk');
+var fs = require('fs');
 var glob = require('glob');
 var path = require('path');
 
@@ -32,6 +33,7 @@ var getGlobbedPaths = function(globPatterns, excludes) {
       // Remove root directory name from the files.
       if (excludes) {
         files = files.map(function(file) {
+
           if (_.isArray(excludes)) {
             for (var i in excludes) {
               file = file.replace(excludes[i], '');
@@ -53,16 +55,17 @@ var getGlobbedPaths = function(globPatterns, excludes) {
 
 /*
  * Validate environment variable existance.
+ * If invalid NODE_ENV or NODE_ENV does not exist, set default NODE_ENV=development.
  */
 var validateEnvironmentVariable = function() {
   var environmentFiles = glob.sync('./config/env/' + process.env.NODE_ENV + '.js');
 
   if (!environmentFiles.length) {
     if (process.env.NODE_ENV) {
-      console.error(chalk.red('No configuration file found for "' + process.env.NODE_ENV +
-                              '" environment using development instead'));
+      console.error(chalk.yellow('Warning: No configuration file found for "' +
+                                 process.env.NODE_ENV + '" environment using "development" instead'));
     } else {
-      console.error(chalk.red('NODE_ENV is not defined! Using default development environment'));
+      console.error(chalk.yellow('Warning: NODE_ENV is not defined! Using default "development" environment.'));
     }
 
     process.env.NODE_ENV = 'development';
@@ -73,7 +76,25 @@ var validateEnvironmentVariable = function() {
 };
 
 /*
- * Initialize global configuration files.
+ * Validate if certs and keys that are required for https exists.
+ * If secure=true but certs and keys are missing, secure will be set to false.
+ */
+var validateSecureMode = function(config) {
+  if (config.secure === true) {
+    var privateKey = fs.existsSync('./config/sslcerts/key.pem');
+    var certificate = fs.existsSync('./config/sslcerts/cert.pem');
+
+    if (!privateKey || !certificate) {
+      config.secure = false;
+
+      console.error(chalk.red('Error: Certificate or Private Key file is required for SSL is missing. ' +
+                              'Falling back to non-SSL mode.'));
+    }
+  }
+};
+
+/*
+ * Initialize global configuration folders.
  */
 var initGlobalConfigFolders = function(config) {
   // Appending folders.
@@ -86,6 +107,9 @@ var initGlobalConfigFolders = function(config) {
                                           process.cwd().replace(new RegExp(/\\/g), '/'));
 };
 
+/*
+ * Initialize global configuration files.
+ */
 var initGlobalConfigFiles = function(config, assets) {
   // Appending files.
   config.files = {
@@ -121,7 +145,7 @@ var initGlobalConfig = function() {
   var environmentAssets = require(path.join(process.cwd(), 'config/assets/', process.env.NODE_ENV)) || {};
 
   // Merge assets.
-  var assets = _.extend(defaultAssets, environmentAssets);
+  var assets = _.merge(defaultAssets, environmentAssets);
 
   // Get default and environment config.
   var defaultConfig = require(path.join(process.cwd(), 'config/env/default'));
@@ -129,6 +153,8 @@ var initGlobalConfig = function() {
 
   // Merge config.
   var config = _.merge(defaultConfig, environmentConfig);
+
+  validateSecureMode(config);
 
   // Initialize Global files and folders.
   initGlobalConfigFiles(config, assets);
