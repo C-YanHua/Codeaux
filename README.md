@@ -1,9 +1,9 @@
 # Codeaux
 
-[![Build Status] (https://travis-ci.org/Codeaux/Codeaux.svg?branch=master)](https://travis-ci.org/Codeaux/Codeaux)
+[![Build Status] (https://travis-ci.org/Codeaux/codeaux.svg?branch=master)](https://travis-ci.org/Codeaux/codeaux)
 [![Code Climate](https://codeclimate.com/github/Codeaux/Codeaux/badges/gpa.svg)](https://codeclimate.com/github/Codeaux/Codeaux)
-[![Dependencies Status] (https://david-dm.org/Codeaux/Codeaux.svg)](https://david-dm.org/Codeaux/Codeaux)
-[![devDependency Status](https://david-dm.org/Codeaux/Codeaux/dev-status.svg)](https://david-dm.org/Codeaux/Codeaux#info=devDependencies)
+[![Dependencies Status] (https://david-dm.org/Codeaux/codeaux.svg)](https://david-dm.org/Codeaux/codeaux)
+[![devDependency Status](https://david-dm.org/Codeaux/codeaux/dev-status.svg)](https://david-dm.org/Codeaux/codeaux#info=devDependencies)
 
 Codeaux aims to provide people with a community-driven and interactive web application to receive assistance for any coding issues they faced and also allows the community to host code discussion to promote best practices and approaches to certain coding aspects.
 
