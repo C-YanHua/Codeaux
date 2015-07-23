@@ -37,11 +37,15 @@
     <!-- For guests -->
     <ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
       <li data-ui-sref-active="active">
-        <button class="btn btn-block btn-success navbar-btn" ng-click="signupModal.openModal()">Sign up</button>
+        <button class="btn btn-block btn-success navbar-btn" ng-click="signupModal.openModal()">
+          <i class="fa fa-user-plus"></i> Sign up
+        </button>
       </li>
       <li class="divider-vertical">&nbsp;&nbsp;&nbsp;</li>
       <li>
-        <button class="btn btn-block btn-default navbar-btn" ng-click="signinModal.openModal()">Sign in</button>
+        <button class="btn btn-block btn-default navbar-btn" ng-click="signinModal.openModal()">
+          <i class="fa fa-sign-in"></i> Sign in
+        </button>
       <li data-ui-sref-active="active">
       <li class="divider-vertical">&nbsp;&nbsp;&nbsp;&nbsp;</li>
     </ul>
@@ -57,20 +61,30 @@
         </a>
         <ul class="dropdown-menu" role="menu">
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.profile">Edit Profile</a>
+            <a data-ui-sref="settings.profile">
+              <i class="fa fa-edit fa-fw"></i> Edit Profile
+            </a>
           </li>
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.picture">Change Profile Picture</a>
+            <a data-ui-sref="settings.picture">
+              <i class="fa fa-picture-o fa-fw"></i> Change Profile Picture
+            </a>
           </li>
           <li data-ui-sref-active="active" data-ng-show="authentication.user.provider === 'local'">
-            <a data-ui-sref="settings.password">Change Password</a>
+            <a data-ui-sref="settings.password">
+              <i class="fa fa-user-secret fa-fw"></i> Change Password
+            </a>
           </li>
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.accounts">Manage Social Accounts</a>
+            <a data-ui-sref="settings.accounts">
+              <i class="fa fa-cog fa-fw"></i> Manage Social Accounts
+            </a>
           </li>
           <li class="divider"></li>
           <li>
-            <a href="/api/auth/signout" target="_self">Sign out</a>
+            <a href="/api/auth/signout" target="_self">
+              <i class="fa fa-sign-out fa-fw"></i> Sign out
+            </a>
           </li>
         </ul>
       </li>
