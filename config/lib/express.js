@@ -2,6 +2,7 @@
 
 // Module dependencies.
 var bodyParser = require('body-parser');
+var chalk = require('chalk');
 var compression = require('compression');
 var config = require('../config');
 var consolidate = require('consolidate');
@@ -191,10 +192,11 @@ var initErrorRoutes = function(app) {
     }
 
     // Log error.
+    console.error(chalk.red('Error 500: Server Internal Error.'));
     console.error(err.stack);
 
-    // Redirect to error page.
-    res.redirect('/server-error');
+    // Redirect to 500 internal error page.
+    res.redirect('/500-server-error');
   });
 };
 

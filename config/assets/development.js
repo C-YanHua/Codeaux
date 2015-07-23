@@ -3,5 +3,4 @@
 /*
  * Development stage assets.
  */
-module.exports = {
-};
+module.exports = {};

@@ -1,10 +1,13 @@
 'use strict';
 
-//Setting up route.
+/*
+ * Setting up issues route.
+ */
 angular.module('issues').config(['$stateProvider',
   function($stateProvider) {
-    // Issues state routing.
     $stateProvider.
+
+    // Issues state routing.
     state('issues', {
       abstract: true,
       url: '/issues',

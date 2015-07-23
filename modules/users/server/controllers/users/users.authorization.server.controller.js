@@ -5,13 +5,14 @@ var mongoose = require('mongoose');
 
 var User = mongoose.model('User');
 
-// View user profile by username middleware.
+/*
+ * Find user by username middleware.
+ * Redirects to route not found if username does not exists.
+ */
 exports.userByUsername = function(req, res, next, username) {
-  User.findOne({username: username}).exec(function(err, user) {
+  User.findOne({username: username}, 'name username email profileImageUrl').exec(function(err, user) {
     if (err || !user) {
-      return res.status(404).send({
-        message: 'Username is invalid'
-      });
+      return res.redirect('/404-page-not-found');
     }
 
     req.profile = user;

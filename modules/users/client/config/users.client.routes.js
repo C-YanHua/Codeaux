@@ -1,11 +1,13 @@
 'use strict';
 
-// Setting up route.
+/*
+ * Setting up users route.
+ */
 angular.module('users').config(['$stateProvider',
   function($stateProvider) {
-    // Users state routing.
     $stateProvider.
 
+    // User profile state routing.
     state('profile', {
       url: '/:username',
       templateUrl: '/modules/users/views/profile/profile.client.view.html'
@@ -19,6 +21,7 @@ angular.module('users').config(['$stateProvider',
       templateUrl: '/modules/users/views/profile/profile-issues.client.view.html'
     }).
 
+    // User settings state routing.
     state('settings', {
       abstract: true,
       url: '/settings',
@@ -41,6 +44,7 @@ angular.module('users').config(['$stateProvider',
       templateUrl: '/modules/users/views/settings/change-profile-picture.client.view.html'
     }).
 
+    // User password state routing.
     state('password', {
       abstract: true,
       url: '/password',

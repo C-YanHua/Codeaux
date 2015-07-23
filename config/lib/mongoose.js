@@ -26,7 +26,7 @@ module.exports.connect = function(callback) {
       console.error(chalk.red('Error: Could not connect to MongoDB!'));
       console.log(err);
     } else {
-      // Load modules
+      // Load models.
       loadModels();
 
       if (callback) {

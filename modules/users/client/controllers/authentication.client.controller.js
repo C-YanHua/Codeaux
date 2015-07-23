@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location',
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$state',
                                    'Authentication', 'Modals',
-  function($scope, $http, $location, Authentication, Modals) {
+  function($scope, $http, $state, Authentication, Modals) {
     // If user is signed in then redirect back home.
     if (Authentication.user) {
       $location.path('/');
@@ -26,7 +26,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
         $scope.closeModal();
         // Redirect back to the index page.
-        $location.path('/');
+        $state.go('home.main');
 
       }).error(function(response) {
         $scope.signupErrorMessage = response.errorMessage;
@@ -52,7 +52,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 
         $scope.closeModal();
         // Redirect back to the index page.
-        $location.path('/');
+        $state.go('home.main');
       }).error(function(response) {
         $scope.signinErrorMessage = response.message;
       });

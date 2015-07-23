@@ -1,6 +1,6 @@
 'use strict';
 
-/**
+/*
  * Render main application page.
  */
 exports.renderIndex = function(req, res) {
@@ -9,33 +9,18 @@ exports.renderIndex = function(req, res) {
   });
 };
 
-/**
- * Render server error 500 error page.
+/*
+ * Sends error 500 server internal error to client side.
+ * Client is expected to transit to 500 page.
  */
-exports.renderServerError = function(req, res) {
-  res.status(500).render('modules/core/server/views/500', {
-    error: 'Oops! Something went wrong...'
-  });
+exports.sendServerError = function(req, res) {
+  res.status(500).send();
 };
 
-/**
- * Render the server not found responses.
- * Performs content-negotiation on the Accept HTTP header.
+/*
+ * Sends error 404 page not found to client side.
+ * Client is expected to transit to 404 page.
  */
-exports.renderNotFound = function(req, res) {
-  res.status(404).format({
-    'text/html': function() {
-      res.render('modules/core/server/views/404', {
-        url: req.originalUrl
-      });
-    },
-
-    'application/json': function() {
-      res.json({error: 'Path not Found'});
-    },
-
-    'default': function() {
-      res.send('Path not Found');
-    }
-  });
+exports.sendPageNotFound = function(req, res) {
+  return res.status(404).send();
 };
