@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>{{title}}</title>
-
-<!-- HTML5 base URL for application -->
-<base href="/">
-
 <!-- HTML META Tags -->
 <meta charset="UTF-8">
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 <!-- IE META Tags -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
@@ -31,20 +25,20 @@
 <meta property="og:image" content="{{url}}{{logo}}">
 <meta property="og:type" content="website">
 
+<title>{{title}}</title>
+
+<!-- HTML5 base URL for application -->
+<base href="/">
+
 <!-- Fav Icon (Tab Icon)-->
-<link href="{{favicon}}" rel="shortcut icon" type="image/x-icon">
+<link href="{{url}}{{favicon}}" rel="shortcut icon" type="image/x-icon">
 
 <!--Application CSS Files-->
 {% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">
 {% endfor %}
 
-<!-- HTML5 Shim -->
-<!--[if lt IE 9]>
- <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"><r/script>
-<![endif]-->
-
 <body class="ng-cloak">
-  <header  class="navbar navbar-fixed-top navbar-default">
+  <header  class="navbar navbar-default">
     <div class="navbar-inner" data-ng-include="'/modules/core/views/navigationbar.client.view.html'">
     </div>
   </header>
