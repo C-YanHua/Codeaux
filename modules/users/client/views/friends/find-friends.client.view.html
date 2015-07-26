@@ -1,0 +1,66 @@
+<section class="row" data-ng-controller="FindFriendsController">
+  <div class="page-header">
+    <h1>Find Friends</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3 col-sm-12">
+      <div class="input-group">
+        <input type="text" class="form-control" ng-model="query" placeholder="Search for ...">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" ng-click="search()">Find</button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="table-responsive">
+    <table class="table table-hover" style="table-layout:fixed">
+      <col width="5px" />
+      <col width="65px" />
+      <col width="20px" />
+      <tr>
+        <th>#</th>
+        <th>People</th>
+        <th>Friend Status</th>
+      </tr>
+      <tr data-ng-repeat="eachUser in foundUsers">
+        <td>
+          <p>{{$index + 1}}</p>
+        </td>
+        <td style="overflow:hidden">
+<!--      <a data-ui-sref=""> -->
+            <h3 class="list-group-item-heading">{{eachUser.username}}</h3>
+<!--      </a> -->
+          <p>{{eachUser.name}}</p>
+        </td>
+        <td>
+          <div data-ng-if="friendStatuses[$index] == 'friend'">
+            <p>Friends Already</p>
+          </div>
+
+          <div data-ng-if="friendStatuses[$index] == 'stranger'">
+            <button type="button" class="btn btn-primary">Send Friend Request
+            </button>
+          </div>
+          <!--
+          <div data-ng-if="">
+            <p></p>
+          </div>
+          <div data-ng-if="">
+            <button type="button" class="btn btn-primary">Send Friend Request
+            </button>
+          </div>
+        -->
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <center><strong>-- End of Search --</strong></center>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</section>

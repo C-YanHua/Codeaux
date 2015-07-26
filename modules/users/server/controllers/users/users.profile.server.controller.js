@@ -88,4 +88,3 @@ exports.changeProfilePicture = function(req, res) {
     });
   }
 };
-

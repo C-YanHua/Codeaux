@@ -21,6 +21,21 @@ angular.module('users').config(['$stateProvider',
       templateUrl: '/modules/users/views/profile/profile-issues.client.view.html'
     }).
 
+    // State routing for friends component
+    state('friends', {
+      abstract: true,
+      url: '/friends',
+      template: '<ui-view/>'
+    }).
+    state('friends.search', {
+      url: '/search',
+      templateUrl: '/modules/users/views/friends/find-friends.client.view.html'
+    }).
+    state('friends.requests', {
+      url: '/requests',
+      templateUrl: '/modules/users/views/friends/friend-requests.client.view.html'
+    }).
+
     // User settings state routing.
     state('settings', {
       abstract: true,
