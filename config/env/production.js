@@ -19,7 +19,7 @@ module.exports = {
 
   livereload: false,
   port: process.env.PORT || 80,
-  secure: false,
+  secure: false, // Change to true if HTTPs certs and keys are available.
 
   log: {
     // Can specify either: 'combined', 'common', 'dev', 'short', 'tiny'

@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Default assets unless specify in another environment JS file.
+ * Default assets. If specify in another environment JS file, merge with it.
  */
 module.exports = {
   client: {

@@ -6,9 +6,11 @@
 module.exports = {
   // Default app object configurations for production.
   app: {
+    title: 'Codeaux - Default Environment',
+    description: 'Codeaux Default',
     keywords: 'Codeaux, Orbital',
     logo: 'modules/core/img/brand/logo_wordmark.png',
-    favicon: '/modules/core/img/brand/favicon.ico'
+    favicon: 'modules/core/img/brand/favicon.ico'
   },
 
   templateEngine: 'swig',
@@ -16,7 +18,6 @@ module.exports = {
   sessionCollection: 'sessions',
 
   livereload: true,
-  port: process.env.PORT || 3000,
   secure: false,
 
   facebook: {

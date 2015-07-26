@@ -24,14 +24,18 @@ var MongoStore = require('connect-mongo')(session);
  */
 var initLocalVariables = function(app) {
   // Setting application local variables. Persists throughout the life of the application.
-  app.locals.title = config.app.title;
+  app.locals.livereload = config.livereload;
+
   app.locals.description = config.app.description;
-  app.locals.keywords = config.app.keywords;
-  app.locals.logo = config.app.logo;
-  app.locals.favicon = config.app.favicon;
   app.locals.facebookAppId = config.facebook.clientID;
-  app.locals.jsFiles = config.files.client.js;
+  app.locals.keywords = config.app.keywords;
+  app.locals.title = config.app.title;
+
+  app.locals.favicon = config.app.favicon;
+  app.locals.logo = config.app.logo;
+
   app.locals.cssFiles = config.files.client.css;
+  app.locals.jsFiles = config.files.client.js;
 
   // Passing request URL to environment locals.
   app.use(function(req, res, next) {

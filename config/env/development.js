@@ -10,12 +10,14 @@ module.exports = {
   },
 
   db: {
-    uri: process.env.LOCALDB_DEVELOPMENT_URI,
+    uri: 'mongodb://localhost/codeaux-dev',
     options: {
       user: process.env.LOCALDB_USERNAME || '',
       pass: process.env.LOCALDB_PASSWORD || ''
     }
   },
+
+  port: process.env.PORT || 3000,
 
   log: {
     // Can specify either: 'combined', 'common', 'dev', 'short', 'tiny'

@@ -79,7 +79,7 @@ var validateEnvironmentVariable = function() {
  * Validate if certs and keys that are required for https exists.
  * If secure=true but certs and keys are missing, secure will be set to false.
  */
-var validateSecureMode = function(config) {
+var validateHttpsDependencies = function(config) {
   if (config.secure === true) {
     var privateKey = fs.existsSync('./config/sslcerts/key.pem');
     var certificate = fs.existsSync('./config/sslcerts/cert.pem');
@@ -154,7 +154,7 @@ var initGlobalConfig = function() {
   // Merge config.
   var config = _.merge(defaultConfig, environmentConfig);
 
-  validateSecureMode(config);
+  validateHttpsDependencies(config);
 
   // Initialize Global files and folders.
   initGlobalConfigFiles(config, assets);
