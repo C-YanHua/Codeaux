@@ -23,6 +23,7 @@ var FriendRequestSchema = new Schema({
   status : {
     type: String,
     enum: ['pending', 'accepted', 'rejected'],
+    trim: true,
     default: 'pending'
   },
   created: {
@@ -30,7 +31,8 @@ var FriendRequestSchema = new Schema({
     default: Date.now
   },
   updated: {
-    type: Date
+    type: Date,
+    default: Date.now
   }
 });
 
