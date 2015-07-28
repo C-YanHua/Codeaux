@@ -5,8 +5,6 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
   function($scope, $stateParams, $http, $location, Authentication, Users, Requests) {
     $scope.authentication = Authentication;
 
-    console.log("This is the find-friends controller speaking...");
-
     $scope.foundUsers = [];
     $scope.friendStatuses = [];
     var myFriends = Authentication.user.friends;

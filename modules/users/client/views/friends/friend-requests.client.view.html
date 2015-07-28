@@ -1,5 +1,55 @@
-<section class="row" data-ng-controller="FriendRequestsController">
+<section class="row" data-ng-controller="FriendRequestsController" data-ng-init="getRequests()">
   <div class="page-header">
     <h1>Friend Requests</h1>
   </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover" style="table-layout:fixed">
+      <col width="5px" />
+      <col width="45px" />
+      <col width="20px" />
+      <col width="20px" />
+      <tr>
+        <th>#</th>
+        <th>People</th>
+        <th>Add</th>
+        <th>Reject</th>
+      </tr>
+      <tr data-ng-repeat="eachRequest in friendRequests">
+        <td>
+          <p>{{$index + 1}}</p>
+        </td>
+        <td style="overflow:hidden">
+          <img data-ng-src="{{eachRequest.requester.profileImageUrl}}" class="pull-left" style="border-radius:50%; height:40px; width:40px"/>
+          <h3 class="list-group-item-heading">{{eachRequest.requester.username}}</h3>
+          <p>{{eachRequest.requester.name}}</p>
+        </td>
+        <td>
+          <div data-ng-if="friendStatuses[$index] == 'unchanged'">
+            <button type="button" class="btn btn-primary" ng-click="acceptRequest($index)">Accept Request
+            </button>
+          </div>
+          <div data-ng-if="friendStatuses[$index] == 'accepted'">
+            <p>Friend Added</p>
+          </div>
+        </td>
+        <td>
+          <div data-ng-if="friendStatuses[$index] == 'unchanged'">
+            <button type="button" class="btn btn-danger" ng-click="rejectRequest($index)">Reject Request
+            </button>
+          </div>
+          <div data-ng-if="friendStatuses[$index] == 'rejected'">
+            <p>Friend Rejected</p>
+          </div>
+
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <center><strong>-- End of Requests --</strong></center>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 </section>

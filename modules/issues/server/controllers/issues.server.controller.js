@@ -147,7 +147,7 @@ exports.list = function(req, res) {
       }
     });
   } else {
-    Issue.find().sort('-created').populate('owner', 'name').exec(function(err, issues) {
+    Issue.find().sort('-created').populate('owner', 'username name').exec(function(err, issues) {
       if (err) {
         return res.status(400).send({
           message: errorHandler.getErrorMessage(err)

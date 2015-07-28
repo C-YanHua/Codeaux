@@ -10,4 +10,8 @@ module.exports = function(app) {
   // Create new friend request
   app.route('/api/requests').post(requests.create);
 
+  // Update a friend request
+  app.route('/api/requests/:requestId').put(requests.update);
+  app.param('requestId', requests.requestById);
+
 };
