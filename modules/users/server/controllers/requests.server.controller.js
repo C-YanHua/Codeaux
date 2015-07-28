@@ -12,7 +12,7 @@ var Request = mongoose.model('FriendRequest');
  * List of Users.
  */
 exports.listForUser = function(req, res) {
-  Request.find({receiver: req.query.receiverID, status: "pending"}).sort('-created').populate('requester', 'username name profileImageUrl').exec(function(err, requests) {
+  Request.find({receiver: req.query.receiverID, status: 'pending'}).sort('-created').populate('requester', 'username name profileImageUrl').exec(function(err, requests) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)

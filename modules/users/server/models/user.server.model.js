@@ -179,8 +179,11 @@ var UserSchema = new Schema({
   },
   // For list of friends
   friends: {
-    type: Array,
-    dafault: []
+    type: [{
+      type: Schema.ObjectId,
+      ref: 'User'
+    }],
+    default: []
   }
 });
 

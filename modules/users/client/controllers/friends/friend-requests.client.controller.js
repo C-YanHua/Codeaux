@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('users').controller('FriendRequestsController', ['$scope', '$stateParams', '$http', '$location',
-                                                          'Authentication', 'Requests',
-  function($scope, $stateParams, $http, $location, Authentication, Requests) {
+                                                          'Authentication', 'Requests', 'Users',
+  function($scope, $stateParams, $http, $location, Authentication, Requests, Users) {
     $scope.authentication = Authentication;
 
     $scope.friendStatuses = [];
@@ -21,7 +21,12 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
       selectedRequest.status = "accepted";
 
       selectedRequest.$update(function() {
-        $scope.friendStatuses[index] = "accepted";
+        $http.post('api/users/friends', selectedRequest).success(function() {
+          $scope.friendStatuses[index] = "accepted";
+        }).error(function(response) {
+          $scope.error = response.message;
+        });
+
       }, function(errorResponse) {
         // todo: display error message
       });
