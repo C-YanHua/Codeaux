@@ -1,19 +1,18 @@
 'use strict';
 
 var etherpadApi = require('etherpad-lite-client');
+var path = require('path');
+
+var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 var etherpadUrl = null;
-var etherpadHost = null;
-var etherpadPort = null;
 var etherpadInstance = null;
 
 /*
  * Set etherpad Url.
  */
-var setEtherpadUrl = function() {
-  if (etherpadHost && etherpadPort) {
-    etherpadUrl = 'http://' + etherpadHost + ':' + etherpadPort;
-  }
+var setEtherpadUrl = function(host, port) {
+  etherpadUrl = 'http://' + host + ':' + port;
 };
 
 /*
@@ -21,9 +20,7 @@ var setEtherpadUrl = function() {
  */
 module.exports = function(config) {
   // Initialize etherpad client connection to etherpad server.
-  etherpadHost = config.etherpad.host;
-  etherpadPort = config.etherpad.port;
-  setEtherpadUrl();
+  setEtherpadUrl(config.etherpad.host, config.etherpad.port);
 
   etherpadInstance = etherpadApi.connect({
     host: config.etherpad.host,
@@ -40,31 +37,24 @@ module.exports.getEtherpadUrl = function() {
 };
 
 /*
- * Remove etherpad Url.
- */
-module.exports.removeEtherpadUrl = function(fullUrl) {
-  var padUrl = etherpadUrl + '/p/';
-  var padIdOnly = fullUrl.replace(padUrl, "");
-  return padIdOnly;
-}
-
-/*
  * Generate a unique authorId for each user.
  */
 module.exports.generateAuthorId = function(args, user, callback) {
   etherpadInstance.createAuthor(args, function(err, data) {
     if (!err) {
-      // Catch different casing convention used.
+      // Catch different casing convention used in different situations.
       if (user.authorId === '') {
         user.authorId = data.authorID;
       } else if (user.authorID === '') {
         user.authorID = data.authorID;
       } else {
-        callback({message: 'AuthorId undefined!'}, user);
+        callback(errorHandler.getErrorResponse(3), user);
       }
-    }
 
-    callback(err, user);
+      callback(null, user);
+    } else {
+      callback(errorHandler.getErrorResponse(3), user);
+    }
   });
 };
 
@@ -75,9 +65,10 @@ module.exports.generateGroupId = function(user, callback) {
   etherpadInstance.createGroup(function(err, data) {
     if (!err) {
       user.groupId = data.groupID;
+      callback(null, user);
+    } else {
+      callback(errorHandler.getErrorResponse(3), user);
     }
-
-    callback(err, user);
   });
 };
 
@@ -91,9 +82,11 @@ module.exports.createSession = function(args, req, res, callback) {
 
       res.cookie('sessionID', sessionId, {maxAge: 900000, httpOnly: false, secure: false});
       res.jsonp(req.issue);
-    }
 
-    callback(err);
+      callback(null);
+    } else {
+      callback(errorHandler.getErrorResponse(3));
+    }
   });
 };
 
@@ -111,9 +104,10 @@ module.exports.generatePadId = function(args, issue, callback) {
   etherpadInstance.createGroupPad(args, function(err, data) {
     if (!err) {
       issue.padId = data.padID;
+      callback(null, issue);
+    } else {
+      callback(errorHandler.getErrorResponse(3), issue);
     }
-
-    callback(err, issue);
   });
 };
 
@@ -124,8 +118,9 @@ module.exports.generateReadOnlyPadId = function(args, issue, callback) {
   etherpadInstance.getReadOnlyID(args, function(err, data) {
     if (!err) {
       issue.readOnlyPadId = data.readOnlyID;
+      callback(null, issue);
+    } else {
+      callback(errorHandler.getErrorResponse(3), issue);
     }
-
-    callback(err, issue);
   });
 };

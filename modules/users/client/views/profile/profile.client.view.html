@@ -1,6 +1,56 @@
 <section data-ng-controller="ProfileController" data-ng-init="findOne()">
-  <div>This is {{profile.name}} profile page.</div>
-  <div class="col-sm-9 col-md-8 settings-view">
-    <div data-ui-view></div>
+  <div class="row" style="margin: 20px 0;" >
+    <div class="col-sm-12 col-md-3">
+      <img data-ng-src="{{profile.imageUrl}}" alt="{{profile.name}}" class="img-rounded"
+           style="height: 200px; width: 200px;">
+    </div>
+
+    <div class="col-sm-12 col-md-5">
+      <h3 style="margin: 0;">
+        {{profile.username}}<br/>
+        <small>{{profile.name}}name</small>
+      </h3>
+      <div class="divider"></div>
+      <div>
+        <span class="glyphicon glyphicon-link"></span>
+        <span>{{profile.email}}</span>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>Friend's List</strong>
+        </div>
+        <div class="panel-body">
+          Panel content
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <tabset class="col-sm-12 col-md-12">
+      <tab data-ui-sref="profile.friends">
+        <tab-heading>
+          <a data-ui-sref-active="active">All Issues</a>
+        </tab-heading>
+      </tab>
+      <tab data-ui-sref="profile.issues">
+        <tab-heading>
+          <a data-ui-sref-active="active">My Issues</a>
+        </tab-heading>
+      </tab>
+    </tabset>
+  </div>
+
+  <div class="row" style="margin: 20px 0;">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div data-ui-view>
+          Basic panel example
+        </div>
+      </div>
+    </div>
   </div>
 </section>

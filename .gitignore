@@ -2,10 +2,20 @@
 # ===========
 .DS_Store
 ehthumbs.db
+Icon?
 Thumbs.db
 
+# Application Assets
+# ==================
+*.pem
+.env
+db/
+modules/users/client/img/profile/uploads
+public/dist/
+uploads/
+
 # Node & Related
-# ================
+# ==============
 .nodemonignore
 npm-debug.log
 .sass-cache/
@@ -15,8 +25,32 @@ app/tests/coverage/
 .bower-*/
 .idea/
 
-# Eclipse Project Files
-# =====================
+# General Extensions
+# ==================
+*.bak
+*.csv
+*.dat
+*.gz
+*.log
+*.out
+*.pid
+*.swp
+*.tmp
+logs/
+builds/
+
+# Brackets.io
+# ===========
+.brackets.json
+
+# Cloud9 IDE
+# ==========
+mongod
+.c9/
+data/
+
+# Eclipse IDE
+# ===========
 .project
 .*.md.html
 .metadata
@@ -28,32 +62,15 @@ local.properties
 # =============
 *.iml
 
-# Cloud9 IDE
-# ==========
-mongod
-.c9/
-data/
+# Sublime Text
+# ============
+.sublime-project
+*.sublime-project
+*.sublime-workspace
 
-# Brackets.io
-# ===========
-.brackets.json
-
-# Application Assets
-# ==================
-*.pem
-.env
-db/
-modules/users/client/img/profile/uploads
-public/dist/
-uploads/
-
-# Others
-# ======
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.tmp
-*.bak
-*.swp
+# Visual Studio
+# =============
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

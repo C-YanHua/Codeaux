@@ -3,53 +3,66 @@
 // Module dependencies.
 var _ = require('lodash');
 var fs = require('fs');
+var mongoose = require('mongoose');
 var path = require('path');
 
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+var User = mongoose.model('User');
 
-// Send User profile.
+/*
+ * Function to validate if properties parse when signing up are empty.
+ * Returns error message for properties that are empty.
+ */
+var updateUser = function(req, res, query, profile) {
+  if (req.user) {
+    User.findOneAndUpdate(query, profile, {new: true}, function(err, user) {
+      if (err) {
+        res.status(400).send(errorHandler.getErrorResponse(2));
+      } else if (!user) {
+        res.status(400).send(errorHandler.getErrorResponse(501));
+      } else {
+        res.json(user);
+      }
+    });
+  } else {
+    res.status(401).send(errorHandler.getErrorResponse(502));
+  }
+};
+
+/*
+ * Retrieve user profile.
+ */
 exports.read = function(req, res) {
   res.jsonp(req.profile);
 };
 
-/**
- * Update user details.
+/*
+ * Update user profile.
  */
-exports.update = function(req, res) {
-  // Init Variables.
-  var user = req.user;
+exports.updateProfile = function(req, res) {
+  var query = req.body._id;
+  // Only these properties will be updated.
+  var properties = ['link', 'location', 'name'];
 
-  // For security measurement we remove the roles from the req.body object.
-  delete req.body.roles;
+  var profile = _.pick(req.body, properties);
+  profile.updated = Date.now();
 
-  if (user) {
-    // Merge existing user.
-    user = _.extend(user, req.body);
-    user.updated = Date.now();
-
-    user.save(function(err) {
-      if (err) {
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        req.login(user, function(err) {
-          if (err) {
-            res.status(400).send(err);
-          } else {
-            res.json(user);
-          }
-        });
-      }
-    });
-  } else {
-    res.status(400).send({
-      message: 'User is not signed in.'
-    });
-  }
+  updateUser(req, res, query, profile);
 };
 
-/**
+/*
+ * Add new friend into user friend's list.
+ */
+exports.addFriend = function(req, res) {
+  var query = req.body._id;
+
+  var profile = _.pick(req.body, 'friends');
+  profile.updated = Date.now();
+
+  updateUser(req, res, query, profile);
+};
+
+/*
  * Update profile picture.
  */
 exports.changeProfilePicture = function(req, res) {
@@ -63,7 +76,7 @@ exports.changeProfilePicture = function(req, res) {
           message: 'Error occurred while uploading profile picture'
         });
       } else {
-        user.profileImageUrl = 'modules/users/img/profile/uploads/' + req.files.file.name;
+        user.imageUrl = 'modules/users/img/profile/uploads/' + req.files.file.name;
 
         user.save(function(saveError) {
           if (saveError) {

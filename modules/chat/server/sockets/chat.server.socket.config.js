@@ -7,7 +7,7 @@ module.exports = function(io, socket) {
     type: 'status',
     text: 'Is now connected',
     created: Date.now(),
-    profileImageUrl: socket.request.user.profileImageUrl,
+    imageUrl: socket.request.user.imageUrl,
     username: socket.request.user.username
   });
 
@@ -15,7 +15,7 @@ module.exports = function(io, socket) {
   socket.on('chatMessage', function(message) {
     message.type = 'message';
     message.created = Date.now();
-    message.profileImageUrl = socket.request.user.profileImageUrl;
+    message.imageUrl = socket.request.user.imageUrl;
     message.username = socket.request.user.username;
 
     // Emit the 'chatMessage' event.

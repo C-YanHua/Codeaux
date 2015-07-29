@@ -5,8 +5,10 @@ var passport = require('passport');
 var users = require('../../controllers/users.server.controller');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+/*
+ * Facebook OAuth Strategy.
+ */
 module.exports = function(config) {
-  // Use facebook strategy.
   passport.use(new FacebookStrategy({
       clientID: config.facebook.clientID,
       clientSecret: config.facebook.clientSecret,
@@ -24,7 +26,7 @@ module.exports = function(config) {
       var providerUserProfile = {
         name: profile.displayName,
         email: profile.emails[0].value,
-        profileImageUrl: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
+        imageUrl: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
         provider: 'facebook',
         providerIdentifierField: 'id',
         providerData: providerData

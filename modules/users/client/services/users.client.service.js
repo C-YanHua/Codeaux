@@ -13,6 +13,6 @@ angular.module('users').factory('Users', ['$resource',
 
 angular.module('users').factory('UserProfile', ['$resource',
   function($resource) {
-    return $resource('api/:username', {username: '@username'}, {});
+    return $resource('api/:username', {username: '@username'});
   }
 ]);

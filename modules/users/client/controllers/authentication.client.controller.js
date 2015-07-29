@@ -5,7 +5,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
   function($scope, $http, $state, Authentication, Modals) {
     // If user is signed in then redirect back home.
     if (Authentication.user) {
-      $location.path('/');
+      $state.go('home.main');
     }
 
     $scope.signupModal = Modals.getModalById('signup');
@@ -27,19 +27,11 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
         $scope.closeModal();
         // Redirect back to the index page.
         $state.go('home.main');
-
       }).error(function(response) {
-        $scope.signupErrorMessage = response.errorMessage;
+        $scope.signupErrorMessage = response.message;
 
-        if ('errors' in response.error) {
-          for (var key in $scope.credentials) {
-            if (key in response.error.errors) {
-              $scope.setErrorMessage(key, response.error.errors[key].message, false);
-            }
-          }
-        // Should only occur during development stage. (etherpad errors)
-        } else if ('message' in response.error) {
-          $scope.signupErrorMessage += ' ' + response.error.message;
+        for (var key in response.error) {
+          $scope.setErrorMessage(key, response.error[key], false);
         }
       });
     };

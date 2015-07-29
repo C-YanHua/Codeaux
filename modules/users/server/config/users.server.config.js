@@ -7,16 +7,16 @@ var path = require('path');
 var config = require(path.resolve('./config/config'));
 var User = require('mongoose').model('User');
 
-/**
- * Module init function.
+/*
+ * Users server configuration.
  */
 module.exports = function(app) {
-  // Serialize sessions.
+  // Serialize passport sessions.
   passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
 
-  // Deserialize sessions.
+  // Deserialize passport sessions.
   passport.deserializeUser(function(id, done) {
     User.findOne({
       _id: id
@@ -25,7 +25,7 @@ module.exports = function(app) {
     });
   });
 
-  // Initialize strategies.
+  // Initialize passport strategies.
   config.utils.getGlobbedPaths(path.join(__dirname, './strategies/**/*.js')).forEach(function(strategy) {
     require(path.resolve(strategy))(config);
   });

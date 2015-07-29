@@ -13,11 +13,9 @@ angular.module('users').config(['$stateProvider',
       templateUrl: '/modules/users/views/profile/profile.client.view.html'
     }).
     state('profile.friends', {
-      url: '/friends',
       templateUrl: '/modules/users/views/profile/profile-friends.client.view.html'
     }).
     state('profile.issues', {
-      url: '/issues',
       templateUrl: '/modules/users/views/profile/profile-issues.client.view.html'
     }).
 

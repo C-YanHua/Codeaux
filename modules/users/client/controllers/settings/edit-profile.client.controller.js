@@ -8,11 +8,21 @@ angular.module('users').controller('EditProfileController', ['$scope', '$http', 
     $scope.updateUserProfile = function(isValid) {
       if (isValid) {
         $scope.success = $scope.error = null;
-        var user = new Users($scope.user);
+        var testcase = {
+          _id: $scope.user._id,
+          name: 'test',
+          location: 'singapore',
+          link: 'www.something.com'
+        };
+
+        var user = new Users(testcase);
 
         user.$update(function(response) {
           $scope.success = true;
+          console.log('wtf', Authentication.user);
+          console.log(response);
           Authentication.user = response;
+          console.log('after', Authentication.user);
         }, function(response) {
           $scope.error = response.data.message;
         });

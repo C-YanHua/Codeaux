@@ -5,7 +5,7 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
                                                                       'Authentication', 'FileUploader',
   function($scope, $timeout, $window, Authentication, FileUploader) {
     $scope.user = Authentication.user;
-    $scope.profileImageUrl = $scope.user.profileImageUrl;
+    $scope.imageUrl = $scope.user.imageUrl;
 
     // Create file uploader instance.
     $scope.uploader = new FileUploader({
@@ -69,7 +69,7 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
     // Cancel the upload process.
     $scope.cancelUpload = function() {
       $scope.uploader.clearQueue();
-      $scope.imageUrl = $scope.user.profileImageUrl;
+      $scope.imageUrl = $scope.user.imageUrl;
     };
   }
 ]);

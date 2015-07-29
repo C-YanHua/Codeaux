@@ -1,6 +1,7 @@
 'use strict';
 
 // Module dependencies.
+var _ = require('lodash');
 var async = require('async');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -14,13 +15,15 @@ var User = mongoose.model('User');
 var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserProfile, done) {
   async.waterfall([
     function(callback) {
+      // Checks if OAuth user already exists.
       User.findOne(searchQuery, function(err, user) {
-        // If user already exists.
-        if (user) {
-          return done(err, user);
+        if (err) {
+          return done(errorHandler.getErrorResponse(2), user);
+        } else if (user) {
+          return done(null, user);
+        } else {
+          callback(null, user);
         }
-
-        callback(err, user);
       });
     },
     function(user, callback) {
@@ -29,7 +32,7 @@ var signupOAuthOrOpenId = function(searchQuery, possibleUsername, providerUserPr
           name: providerUserProfile.name,
           username: availableUsername,
           email: providerUserProfile.email,
-          profileImageUrl: providerUserProfile.profileImageUrl,
+          imageUrl: providerUserProfile.imageUrl,
           provider: providerUserProfile.provider,
           providerData: providerUserProfile.providerData || providerUserProfile.providerIdentifierField,
           authorId: '',
@@ -84,8 +87,8 @@ var mergeOAuthOrOpenIDProvider = function(user, providerUserProfile, done) {
   }
 };
 
-var requestSignIn = function(req, res, user) {
-  // Remove sensitive data before login.
+var requestSignin = function(req, res, user) {
+  // Remove sensitive data before signin.
   user.password = undefined;
   user.salt = undefined;
 
@@ -98,34 +101,164 @@ var requestSignIn = function(req, res, user) {
   });
 };
 
-// For use in real-time validation for user sign up.
-exports.signupValidation = function(req, res) {
-  var user = new User(req.body);
-  user.provider = User.localStrategyProvider;
+/*
+ * Function to validate if properties parse when signing up are empty.
+ * Returns error message for properties that are empty.
+ */
+var validateSignupEmpty = function(properties, errorMessage) {
+  var message = {};
 
-  var propertyToValidate = req.originalUrl.substring(req.originalUrl.lastIndexOf('/') + 1);
-  user.validate(function(error) {
-    if (error) {
-      return res.status(400).send({
-        errorMessage: error.errors[propertyToValidate].message
+  for (var key in properties) {
+    if (User.validateIsEmpty(properties[key])) {
+      if (errorMessage) {
+        message = _.merge(message, errorHandler.getErrorResponse(1000, key, errorMessage));
+      } else {
+        message = _.merge(message, errorHandler.getErrorResponse(1000, key));
+      }
+    }
+  }
+
+  return message;
+};
+
+/*
+ * Function to validate if properties are unique (does not exist in database)
+ * Only the following properties are to be validated: `username`, `email`.
+ */
+var validateSignupUnique = function(properties, message, errorMessage, callback) {
+  // Properties that will be validated. Other properties will be ignored.
+  var propertiesToValidate = ['username', 'email'];
+
+  async.forEachOf(_.pick(properties, propertiesToValidate), function(value, key, next) {
+    // Validate only if validation error does not already exist for that property.
+    if (_.has(message.error, key)) {
+      next(null);
+    } else {
+      User.validateIsUnique(undefined, key, value, function(isUnique) {
+        if (!isUnique) {
+          if (errorMessage) {
+            message = _.merge(message, errorHandler.getErrorResponse(1001, key, errorMessage));
+          } else {
+            message = _.merge(message, errorHandler.getErrorResponse(1001, key));
+          }
+        }
+
+        next(null);
       });
     }
-
-    return res.status(200).send();
+  }, function() {
+    callback(message);
   });
 };
 
-// New user sign up.
-exports.signup = function(req, res) {
-  // For security measurement we remove the roles from the req.body object.
-  delete req.body.roles;
-  // Init Variables.
-  var user = new User(req.body);
+/*
+ * Function to validate properties against database validators.
+ */
+var validateSignup = function(properties, user, message, errorMessage, callback) {
+  user.validate(function(err) {
+    if (err) {
+      // Initialize message if message is empty.
+      if (_.isEmpty(message)) {
+        message = {
+          message: '',
+          error: {}
+        };
+      }
 
-  // Add missing user fields.
-  user.provider = User.localStrategyProvider;
+      message.message = (errorMessage) ? errorMessage : err.message;
+      err = errorHandler.getCustomErrorResponse(err.message, err.errors);
+
+      for (var key in properties) {
+        // Only if validation error does not already exist and validation error occurred for that property.
+        if (!_.has(message.error, key) && _.has(err.error, key)) {
+          message.error[key] = err.error[key];
+        }
+      }
+    }
+
+    if (_.isEmpty(message)) {
+      callback(null);
+    } else {
+      callback(message);
+    }
+  });
+};
+
+/*
+ * Key event validation for user signup.
+ * Validates only one property per function call.
+ */
+exports.validateSignupProperty = function(req, res) {
+  var message = {};
+  var property = req.body;
+  var propertyKey = req.originalUrl.slice(req.originalUrl.lastIndexOf('/') + 1);
+
+  // Initialize user object.
+  var user = new User(req.body);
+  user.provider = User.LOCAL_STRATEGY_PROVIDER;
+
+  // Validate if property is empty.
+  message = validateSignupEmpty(property);
+  if (!_.isEmpty(message)) {
+    return res.status(400).send(message);
+  }
 
   async.waterfall([
+    function(callback) {
+      validateSignupUnique(property, message, undefined, function(err) {
+        if (_.isEmpty(err)) {
+          callback(null);
+        } else {
+          callback(errorHandler.getErrorResponse(1001, propertyKey));
+        }
+      });
+    },
+    function(callback) {
+      validateSignup(property, user, message, undefined, callback);
+    }
+  ], function(err) {
+    if (err) {
+      return res.status(400).send(err);
+    } else {
+      return res.status(200).send();
+    }
+  });
+};
+
+/*
+ * User signup function.
+ */
+exports.signup = function(req, res) {
+  var message = {};
+  var credentials = req.body;
+  var genericErrorMessage = 'There were problems creating your account.';
+
+  // Initialize user object.
+  var user = new User(req.body);
+  user.provider = User.LOCAL_STRATEGY_PROVIDER;
+
+  // Validate if any of the credentials are empty.
+  message = validateSignupEmpty(credentials, genericErrorMessage);
+
+  // Throw error when all properties have validation error.
+  if (_.every(_.keysIn(credentials), _.partial(_.has, message.error))) {
+    return res.status(400).send(message);
+  }
+
+  async.waterfall([
+    function(callback) {
+      validateSignupUnique(credentials, message, genericErrorMessage, function(err) {
+        // Throw error when all properties have validation error.
+        if (_.every(_.keysIn(credentials), _.partial(_.has, message.error))) {
+          callback(err);
+        } else {
+          callback(null);
+        }
+      });
+    },
+    function(callback) {
+      validateSignup(credentials, user, message, genericErrorMessage, callback);
+    },
     function(callback) {
       // Generate etherpad authorId for user.
       etherpad.generateAuthorId({name: user.username}, user, callback);
@@ -136,37 +269,38 @@ exports.signup = function(req, res) {
     },
     function(user, callback) {
       user.save(function(err) {
-        if (!err) {
-          requestSignIn(req, res, user);
+        // Error should never occur at this stage as credentials have already been validated.
+        if (err) {
+          callback(errorHandler.getErrorResponse(1));
+        } else {
+          requestSignin(req, res, user);
+          callback(null);
         }
-
-        callback(err);
       });
     }
   ], function(err) {
     if (err) {
-      return res.status(400).send({
-        errorMessage: 'There were problems creating your account.',
-        error: err
-      });
+      return res.status(400).send(err);
     }
   });
 };
 
-// User sign in, either after passport authentication or local.
+/*
+ * User signin function.
+ */
 exports.signin = function(req, res, next) {
-  passport.authenticate(User.localStrategyProvider, function(error, user) {
-    if (error || !user) {
-      res.status(400).send({
-        message: 'Invalid username or password.'
-      });
+  passport.authenticate(User.LOCAL_STRATEGY_PROVIDER, function(err, user) {
+    if (err || !user) {
+      res.status(400).send(errorHandler.getErrorResponse(503));
     } else {
-      requestSignIn(req, res, user);
+      requestSignin(req, res, user);
     }
   })(req, res, next);
 };
 
-// User sign out.
+/*
+ * User signout function.
+ */
 exports.signout = function(req, res) {
   // Delete etherpad session if found.
   if (req.cookies.sessionID) {
@@ -177,15 +311,19 @@ exports.signout = function(req, res) {
   res.redirect('/');
 };
 
-// OpenID Return (Same implementation as OAuth Callback).
+/*
+ * OpenId return function. (Similar to OAuth callback)
+ */
 exports.openIdReturn = function(strategy) {
   return this.oauthCallback(strategy);
 };
 
-// OAuth callback.
+/*
+ * OAuth callback.
+ */
 exports.oauthCallback = function(strategy) {
   return function(req, res, next) {
-    passport.authenticate(strategy, function(err, user, redirectURL) {
+    passport.authenticate(strategy, function(err, user, redirectUrl) {
       if (err || !user) {
         return res.redirect('/');
       }
@@ -195,7 +333,7 @@ exports.oauthCallback = function(strategy) {
           return res.redirect('/');
         }
 
-        return res.redirect(redirectURL || '/');
+        return res.redirect(redirectUrl || '/');
       });
     })(req, res, next);
   };
@@ -257,9 +395,7 @@ exports.removeOAuthProvider = function(req, res) {
   var provider = req.query.provider;
 
   if (!user) {
-    return res.status(401).json({
-      message: 'User is not authenticated'
-    });
+    return res.status(401).json(errorHandler.getErrorResponse(502));
   }
 
   if (!provider) {
@@ -276,13 +412,11 @@ exports.removeOAuthProvider = function(req, res) {
 
   user.save(function(err) {
     if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+      return res.status(400).send(errorHandler.getErrorResponse(800));
     } else {
       req.login(user, function(err) {
         if (err) {
-          return res.status(400).send(err);
+          return res.status(400).send(errorHandler.getErrorResponse(800));
         } else {
           return res.json(user);
         }

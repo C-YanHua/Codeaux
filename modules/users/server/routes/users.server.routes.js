@@ -9,7 +9,7 @@ module.exports = function(app) {
   // Setting up the Users Profile API.
   app.route('/api/:username').get(users.read);
 
-  app.route('/api/users').put(users.update);
+  app.route('/api/users').put(users.updateProfile);
   app.route('/api/users/accounts').delete(users.removeOAuthProvider);
   app.route('/api/users/password').post(users.changePassword);
   app.route('/api/users/picture').post(users.changeProfilePicture);

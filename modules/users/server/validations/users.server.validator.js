@@ -42,10 +42,6 @@ exports.validateValidatorsArray = function(value, validators, userSchema) {
       preConditionsMet = validator.userPreCondition(userSchema);
     }
 
-    if (preConditionsMet && 'validatorPreCondition' in validator) {
-      preConditionsMet = validator.validatorPreCondition(value);
-    }
-
     // Only validate if pre-conditions are met.
     if (preConditionsMet && !validator.validate(value)) {
       isValid = false;

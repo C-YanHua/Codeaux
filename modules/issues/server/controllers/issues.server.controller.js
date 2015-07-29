@@ -96,8 +96,8 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
   var issue = req.issue;
-  req.body.padId = etherpad.removeEtherpadUrl(req.issue.padId);
-  req.body.readOnlyPadId =  etherpad.removeEtherpadUrl(req.issue.readOnlyPadId);
+  req.body.padId = req.issue.padId.replace(etherpad.getEtherpadUrl + '/p/', '');
+  req.body.readOnlyPadId = req.issue.readOnlyPadId.replace(etherpad.getEtherpadUrl + '/p/', '');
 
   issue = _.extend(issue , req.body);
 

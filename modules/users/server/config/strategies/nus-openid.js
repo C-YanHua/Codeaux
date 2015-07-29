@@ -5,8 +5,10 @@ var passport = require('passport');
 var users = require('../../controllers/users.server.controller');
 var NUSStrategy = require('passport-nus-openid').Strategy;
 
+/*
+ * NUS OpenId Strategy.
+ */
 module.exports = function(config) {
-  // Use OpenID Strategy for NUS.
   passport.use(new NUSStrategy({
       returnURL: config.nusOpenId.returnUrl,
       realm: config.nusOpenId.realm,

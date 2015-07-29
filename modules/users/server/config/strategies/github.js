@@ -7,8 +7,10 @@ var passport = require('passport');
 var users = require('../../controllers/users.server.controller');
 var GithubStrategy = require('passport-github').Strategy;
 
+/*
+ * Github OAuth Strategy.
+ */
 module.exports = function(config) {
-  // Use github strategy.
   passport.use(new GithubStrategy({
       clientID: config.github.clientID,
       clientSecret: config.github.clientSecret,
@@ -26,7 +28,7 @@ module.exports = function(config) {
         name: profile.displayName,
         email: profile.emails[0].value,
         username: profile.username,
-        profileImageUrl: (providerData.avatar_url) ? providerData.avatar_url : undefined,
+        imageUrl: (providerData.avatar_url) ? providerData.avatar_url : undefined,
         provider: 'github',
         providerIdentifierField: 'id',
         providerData: providerData

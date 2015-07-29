@@ -5,8 +5,10 @@ var passport = require('passport');
 var users = require('../../controllers/users.server.controller');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+/*
+ * Google OAuth Strategy.
+ */
 module.exports = function(config) {
-  // Use google strategy.
   passport.use(new GoogleStrategy({
       clientID: config.google.clientID,
       clientSecret: config.google.clientSecret,
@@ -24,7 +26,7 @@ module.exports = function(config) {
         name: profile.displayName,
         email: profile.emails[0].value,
         username: profile.username,
-        profileImageUrl: (providerData.picture) ? providerData.picture : undefined,
+        imageUrl: (providerData.picture) ? providerData.picture : undefined,
         provider: 'google',
         providerIdentifierField: 'id',
         providerData: providerData

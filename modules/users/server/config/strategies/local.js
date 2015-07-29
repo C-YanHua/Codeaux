@@ -2,30 +2,31 @@
 
 // Module dependencies.
 var passport = require('passport');
+var path = require('path');
 var User = require('mongoose').model('User');
 var LocalStrategy = require('passport-local').Strategy;
 
+var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+
+/*
+ * Application local authentication mechanism.
+ */
 module.exports = function() {
-  // Use local strategy.
   passport.use(new LocalStrategy({
       usernameField: 'username',
       passwordField: 'password'
     },
     function(username, password, done) {
-      User.findOne({
-        username: username
-      }, function(err, user) {
-        if (err) {
-          return done(err);
+      // Validate username exists.
+      User.findOne({username: username}, function(err, user) {
+        if (user) {
+          // Validate input password matches against the database.
+          if (user.authenticate(password)) {
+            return done(null, user);
+          }
         }
 
-        if (!user || !user.authenticate(password)) {
-          return done(null, false, {
-            message: 'Invalid username or password.'
-          });
-        }
-
-        return done(null, user);
+        return done(null, false, errorHandler.getErrorResponse(503));
       });
     }
   ));
