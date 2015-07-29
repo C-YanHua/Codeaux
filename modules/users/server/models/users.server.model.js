@@ -123,8 +123,11 @@ var UserSchema = new Schema({
     default: ''
   },
   friends: {
-    type: Array,
-    dafault: []
+    type: [{
+      type: Schema.ObjectId,
+      ref: 'User'
+    }],
+    default: []
   },
   created: {
     type: Date,

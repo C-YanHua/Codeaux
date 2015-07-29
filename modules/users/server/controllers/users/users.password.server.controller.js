@@ -131,9 +131,7 @@ exports.reset = function(req, res, next) {
 
             user.save(function(err) {
               if (err) {
-                return res.status(400).send({
-                  message: errorHandler.getErrorMessage(err)
-                });
+                return res.status(400).send(errorHandler.getErrorResponse(2));
               } else {
                 req.login(user, function(err) {
                   if (err) {
@@ -204,9 +202,7 @@ exports.changePassword = function(req, res) {
 
               user.save(function(err) {
                 if (err) {
-                  return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                  });
+                  return res.status(400).send(errorHandler.getErrorResponse(2));
                 } else {
                   req.login(user, function(err) {
                     if (err) {

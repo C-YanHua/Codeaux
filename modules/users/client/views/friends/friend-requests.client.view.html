@@ -20,13 +20,15 @@
           <p>{{$index + 1}}</p>
         </td>
         <td style="overflow:hidden">
-          <img data-ng-src="{{eachRequest.requester.profileImageUrl}}" class="pull-left" style="border-radius:50%; height:40px; width:40px"/>
+          <img data-ng-src="{{eachRequest.requester.imageUrl}}" class="pull-left"
+               style="border-radius:50%; height:40px; width:40px"/>
           <h3 class="list-group-item-heading">{{eachRequest.requester.username}}</h3>
           <p>{{eachRequest.requester.name}}</p>
         </td>
         <td>
           <div data-ng-if="friendStatuses[$index] == 'unchanged'">
-            <button type="button" class="btn btn-primary" ng-click="acceptRequest($index)">Accept Request
+            <button type="button" class="btn btn-primary" ng-click="acceptRequest($index)">
+              Accept Request
             </button>
           </div>
           <div data-ng-if="friendStatuses[$index] == 'accepted'">
@@ -35,7 +37,8 @@
         </td>
         <td>
           <div data-ng-if="friendStatuses[$index] == 'unchanged'">
-            <button type="button" class="btn btn-danger" ng-click="rejectRequest($index)">Reject Request
+            <button type="button" class="btn btn-danger" ng-click="rejectRequest($index)">
+              Reject Request
             </button>
           </div>
           <div data-ng-if="friendStatuses[$index] == 'rejected'">

@@ -15,18 +15,18 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
 
           console.log($scope.foundUsers.length);
 
-          for (var i=0; i<$scope.foundUsers.length; i++) {
-            console.log("foundUsers part "+i);
-            for (var j=0; j<myFriends.length; j++) {
-              console.log("myfriends part "+j);
+          for (var i = 0; i < $scope.foundUsers.length; i++) {
+            console.log('foundUsers part ' + i);
+            for (var j = 0; j < myFriends.length; j++) {
+              console.log('myfriends part ' + j);
               if ($scope.foundUsers[i] === myFriends[j]) {
-                $scope.friendStatuses.push("friend");
+                $scope.friendStatuses.push('friend');
                 console.log($scope.friendStatuses);
               }
             }
 
             if ($scope.friendStatuses.length === i) {
-              $scope.friendStatuses.push("stranger");
+              $scope.friendStatuses.push('stranger');
               console.log($scope.friendStatuses);
             }
           }

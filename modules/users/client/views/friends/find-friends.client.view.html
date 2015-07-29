@@ -31,7 +31,7 @@
         </td>
         <td style="overflow:hidden">
 <!--      <a data-ui-sref=""> -->
-            <img data-ng-src="{{eachUser.profileImageUrl}}" class="pull-left" style="border-radius:50%; height:40px; width:40px"/>
+            <img data-ng-src="{{eachUser.imageUrl}}" class="pull-left" style="border-radius:50%; height:40px; width:40px"/>
             <h3 class="list-group-item-heading">{{eachUser.username}}</h3>
             <p>{{eachUser.name}}</p>
 <!--      </a> -->
@@ -42,7 +42,8 @@
           </div>
 
           <div data-ng-if="friendStatuses[$index] == 'stranger'">
-            <button type="button" class="btn btn-primary" ng-click="addFriend(eachUser)">Send Friend Request
+            <button type="button" class="btn btn-primary" ng-click="addFriend(eachUser)">
+              Send Friend Request
             </button>
           </div>
           <!--

@@ -15,7 +15,5 @@ angular.module('issues').controller('IssuePermissionsController', ['$scope', '$s
         }
       });
     };
-
-
   }
 ]);

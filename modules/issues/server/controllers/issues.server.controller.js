@@ -103,9 +103,7 @@ exports.update = function(req, res) {
 
   issue.save(function(err) {
     if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+      return res.status(400).send(errorHandler.getErrorResponse(2));
     } else {
       res.jsonp(issue);
     }
@@ -120,9 +118,7 @@ exports.delete = function(req, res) {
 
   issue.remove(function(err) {
     if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
+      return res.status(400).send(errorHandler.getErrorResponse(2));
     } else {
       res.jsonp(issue);
     }
@@ -135,13 +131,10 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) {
 
   if (req.query.owner) {
-    Issue.find({
-      owner : mongoose.Types.ObjectId.createFromHexString(req.query.owner)
-    }).sort('-created').exec(function(err, issues) {
+    Issue.find({owner : mongoose.Types.ObjectId.createFromHexString(req.query.owner)})
+    .sort('-created').exec(function(err, issues) {
       if (err) {
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
+        return res.status(400).send(errorHandler.getErrorResponse(2));
       } else {
         res.jsonp(issues);
       }
@@ -149,9 +142,7 @@ exports.list = function(req, res) {
   } else {
     Issue.find().sort('-created').populate('owner', 'username name').exec(function(err, issues) {
       if (err) {
-        return res.status(400).send({
-          message: errorHandler.getErrorMessage(err)
-        });
+        return res.status(400).send(errorHandler.getErrorResponse(2));
       } else {
         res.jsonp(issues);
       }
