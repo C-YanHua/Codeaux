@@ -5,47 +5,115 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
   function($scope, $stateParams, $http, $location, Authentication, Users, Requests) {
     $scope.authentication = Authentication;
 
-    $scope.foundUsers = [];
-    $scope.friendStatuses = [];
-    var myFriends = Authentication.user.friends;
+    $scope.getInfo = function() {
+      $scope.myFriends = $scope.authentication.user.friends;
+      $scope.requestsSent = Requests.query({requesterID: $scope.authentication.user._id});
+      $scope.requestsReceived = Requests.query({receiverID: $scope.authentication.user._id});
+    };
 
     $scope.search = function() {
+      $scope.foundUsers = [];
+      $scope.statuses = [];
+
       if ($scope.query) {
-        $scope.foundUsers = Users.query({username: $scope.query}, function() {
+        Users.query({username: $scope.query}, function(foundPeople) {
 
-          console.log($scope.foundUsers.length);
+          for (var i=0; i<foundPeople.length; i++) {
+            if (foundPeople[i].username !== $scope.authentication.user.username) {
+              $scope.foundUsers.push(foundPeople[i]);
+            }
 
-          for (var i = 0; i < $scope.foundUsers.length; i++) {
-            console.log('foundUsers part ' + i);
-            for (var j = 0; j < myFriends.length; j++) {
-              console.log('myfriends part ' + j);
-              if ($scope.foundUsers[i] === myFriends[j]) {
-                $scope.friendStatuses.push('friend');
-                console.log($scope.friendStatuses);
+            for (var j=0; j<$scope.requestsSent.length; j++) {
+              if ($scope.requestsSent[j].receiver._id === foundPeople[i]._id) {
+                $scope.statuses.push('awaitingReply');
+                break;
+              }
+            }
+            for (var k=0; k<$scope.requestsReceived.length; k++) {
+              if ($scope.requestsReceived[k].requester._id === foundPeople[i]._id) {
+                $scope.statuses.push('toReply');
+                break;
+              }
+            }
+            for (var l=0; l<$scope.myFriends.length; l++) {
+              if ($scope.myFriends[l] === foundPeople[i]._id) {
+                $scope.statuses.push('friend');
+                break;
               }
             }
 
-            if ($scope.friendStatuses.length === i) {
-              $scope.friendStatuses.push('stranger');
-              console.log($scope.friendStatuses);
+            if ($scope.statuses.length !== $scope.foundUsers.length) {
+              $scope.statuses.push('stranger');
             }
           }
         });
       }
     };
 
-    $scope.addFriend = function(newFriend) {
-
+    $scope.sendRequest = function(newFriend, index) {
       var friendRequest  = new Requests({
         requester: $scope.authentication.user,
         receiver: newFriend
       });
 
       friendRequest.$save(function(response) {
-        // Update the current view to display friend request sent
+        $scope.statuses[index] = 'awaitingReply';
       }, function(errorRes) {
-        // Create a pop up to show the error message
+        $scope.statuses[index] = 'errorSent';
+        $scope.err = errorRes;
       });
+    };
+
+    $scope.acceptRequest = function(index) {
+      var selectedRequest = [];
+      for (var k=0; k<$scope.requestsReceived.length; k++) {
+        if ($scope.requestsReceived[k].requester._id === $scope.foundUsers[index]._id) {
+          selectedRequest = $scope.requestsReceived[k];
+          break;
+        }
+      }
+
+      if (selectedRequest === []) {
+        $scope.statuses[index] = 'errorAccept';
+        $scope.err = 'Friend Request not found';
+      } else {
+        selectedRequest.status = 'accepted';
+        selectedRequest.$update(function() {
+          $http.post('api/users/friends', selectedRequest).success(function() {
+            $scope.statuses[index] = 'friend';
+          }).error(function(response) {
+            $scope.friendStatuses[index] = 'errorAccept';
+            $scope.err = response.message;
+          });
+        }, function(errorResponse) {
+          $scope.friendStatuses[index] = 'errorAccept';
+          $scope.err = errorResponse;
+        });
+      }
+    };
+
+    $scope.rejectRequest = function(index) {
+      var selectedRequest = [];
+      for (var k=0; k<$scope.requestsReceived.length; k++) {
+        if ($scope.requestsReceived[k].requester._id === $scope.foundUsers[index]._id) {
+          selectedRequest = $scope.requestsReceived[k];
+          break;
+        }
+      }
+
+      if (selectedRequest === []) {
+        $scope.statuses[index] = 'errorReject';
+        $scope.err = 'Friend Request not found';
+      } else {
+        selectedRequest.status = 'rejected';
+
+        selectedRequest.$update(function() {
+          $scope.statuses[index] = 'stranger';
+        }, function(errorResponse) {
+          $scope.friendStatuses[index] = 'errorReject';
+          $scope.err = errorResponse;
+        });
+      }
     };
 
   }

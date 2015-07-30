@@ -34,6 +34,9 @@
           <div data-ng-if="friendStatuses[$index] == 'accepted'">
             <p>Friend Added</p>
           </div>
+          <div data-ng-if="friendStatuses[$index] == 'errorAccept'">
+            <p>{{err}}</p>
+          </div>
         </td>
         <td>
           <div data-ng-if="friendStatuses[$index] == 'unchanged'">
@@ -44,7 +47,9 @@
           <div data-ng-if="friendStatuses[$index] == 'rejected'">
             <p>Friend Rejected</p>
           </div>
-
+          <div data-ng-if="friendStatuses[$index] == 'errorReject'">
+            <p>{{err}}</p>
+          </div>
         </td>
       </tr>
       <tr>

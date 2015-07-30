@@ -1,6 +1,7 @@
 'use strict';
 
 // Module dependencies.
+var _ = require('lodash');
 var mongoose = require('mongoose');
 var path = require('path');
 
@@ -24,21 +25,38 @@ exports.addFriend = function(req, res) {
   var newFriendRequest = req.body;
 
   if (req.user) {
-    User.findById(req.user.id, function(err, user) {
-      if (!err && user) {
-        user.friends.push(newFriendRequest.requester);
+    var query = {'_id':req.user._id};
+    var fieldsToUpdate = _.pick(req.user, 'friends');
+    fieldsToUpdate.friends.push(newFriendRequest.requester);
 
-        user.save(function(err) {
-          if (err) {
-            return res.status(400).send(errorHandler.getErrorResponse(2));
-          } else {
-            res.send('New friend added.');
-          }
-        });
-
+    User.findOneAndUpdate(query, fieldsToUpdate, {new: true}, function(err, user) {
+      if (err) {
+        res.status(400).send(errorHandler.getErrorResponse(2));
+      } else if (!user) {
+        res.status(400).send(errorHandler.getErrorResponse(501));
       } else {
-        res.status(400).send({
-          message: 'User is not found.'
+
+        // Find friend and friend's friends array will add current user
+        User.findById(newFriendRequest.requester, function(err, friend) {
+          if (!err && friend) {
+            var friendQuery = {'_id':friend._id};
+            var friendFieldsToUpdate = _.pick(friend, 'friends');
+            friendFieldsToUpdate.friends.push(newFriendRequest.receiver);
+
+            User.findOneAndUpdate(friendQuery, friendFieldsToUpdate, {new: true}, function(err, friendUser) {
+              if (err) {
+                res.status(400).send(errorHandler.getErrorResponse(2));
+              } else if (!friendUser) {
+                res.status(400).send(errorHandler.getErrorResponse(501));
+              } else {
+                res.send('Friend is added.');
+              }
+            });
+          } else {
+            res.status(400).send({
+              message: 'Friend is not found.'
+            });
+          }
         });
       }
     });

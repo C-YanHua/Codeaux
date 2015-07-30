@@ -1,6 +1,10 @@
-<section class="row" data-ng-controller="FindFriendsController">
+<section class="row" data-ng-controller="FindFriendsController" data-ng-init="getInfo()">
   <div class="page-header">
     <h1>Find Friends</h1>
+    <p>{{statuses}}</p>
+    <p>{{myFriends}}</p>
+    <p>{{requestsSent}}</p>
+    <p>{{requestsReceived}}</p>
   </div>
 
   <div class="row">
@@ -37,24 +41,38 @@
 <!--      </a> -->
         </td>
         <td>
-          <div data-ng-if="friendStatuses[$index] == 'friend'">
+          <div data-ng-if="statuses[$index] == 'friend'">
             <p>Friends Already</p>
           </div>
 
-          <div data-ng-if="friendStatuses[$index] == 'stranger'">
-            <button type="button" class="btn btn-primary" ng-click="addFriend(eachUser)">
-              Send Friend Request
+          <div data-ng-if="statuses[$index] == 'stranger'">
+            <button type="button" class="btn btn-primary" ng-click="sendRequest(eachUser, $index)">Send Friend Request
             </button>
           </div>
-          <!--
-          <div data-ng-if="">
-            <p></p>
+
+          <div data-ng-if="statuses[$index] == 'awaitingReply'">
+            <p>Friend Request Sent</p>
           </div>
-          <div data-ng-if="">
-            <button type="button" class="btn btn-primary">Send Friend Request
+
+          <div data-ng-if="statuses[$index] == 'toReply'">
+            <button type="button" class="btn btn-success" ng-click="acceptRequest($index)">Accept Friend
+            </button>
+            <button type="button" class="btn btn-danger" ng-click="rejectRequest($index)">Reject Friend
             </button>
           </div>
-        -->
+
+          <div data-ng-if="statuses[$index] == 'errorSent'">
+            <p>{{err}}</p>
+          </div>
+
+          <div data-ng-if="friendStatuses[$index] == 'errorReject'">
+            <p>{{err}}</p>
+          </div>
+
+          <div data-ng-if="friendStatuses[$index] == 'errorAccept'">
+            <p>{{err}}</p>
+          </div>
+
         </td>
       </tr>
       <tr>

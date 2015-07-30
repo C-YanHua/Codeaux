@@ -12,17 +12,31 @@ var Request = mongoose.model('FriendRequest');
  * List of Users.
  */
 exports.listForUser = function(req, res) {
-  Request.find({receiver: req.query.receiverID, status: 'pending'})
-  .sort('-created')
-  .populate('requester', 'username name imageUrl')
-  .exec(function(err, requests) {
+  if (req.query.receiverID) {
+    Request.find({receiver: req.query.receiverID, status: 'pending'})
+    .sort('-created')
+    .populate('requester', 'username name imageUrl')
+    .exec(function(err, requests) {
 
-    if (err) {
-      return res.status(400).send(errorHandler.getErrorResponse(2));
-    } else {
-      res.jsonp(requests);
-    }
-  });
+      if (err) {
+        return res.status(400).send(errorHandler.getErrorResponse(2));
+      } else {
+        res.jsonp(requests);
+      }
+    });
+  } else if (req.query.requesterID) {
+    Request.find({requester: req.query.requesterID, status: 'pending'})
+    .sort('-created')
+    .populate('receiver', 'username name imageUrl')
+    .exec(function(err, requests) {
+
+      if (err) {
+        return res.status(400).send(errorHandler.getErrorResponse(2));
+      } else {
+        res.jsonp(requests);
+      }
+    });
+  }
 };
 
 exports.create = function(req, res) {

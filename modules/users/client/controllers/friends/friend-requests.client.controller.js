@@ -24,11 +24,13 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
         $http.post('api/users/friends', selectedRequest).success(function() {
           $scope.friendStatuses[index] = 'accepted';
         }).error(function(response) {
-          $scope.error = response.message;
+          $scope.friendStatuses[index] = 'errorAccept';
+          $scope.err = response.message;
         });
 
       }, function(errorResponse) {
-        // todo: display error message
+        $scope.friendStatuses[index] = 'errorAccept';
+        $scope.err = errorResponse;
       });
     };
 
@@ -39,7 +41,8 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
       selectedRequest.$update(function() {
         $scope.friendStatuses[index] = 'rejected';
       }, function(errorResponse) {
-        // todo: display error message
+        $scope.friendStatuses[index] = 'errorReject';
+        $scope.err = errorResponse;
       });
     };
 

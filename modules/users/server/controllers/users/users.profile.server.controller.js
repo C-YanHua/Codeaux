@@ -53,6 +53,7 @@ exports.updateProfile = function(req, res) {
 /*
  * Add new friend into user friend's list.
  */
+/*
 exports.addFriend = function(req, res) {
   var query = req.body._id;
 
@@ -61,6 +62,7 @@ exports.addFriend = function(req, res) {
 
   updateUser(req, res, query, profile);
 };
+*/
 
 /*
  * Update profile picture.
