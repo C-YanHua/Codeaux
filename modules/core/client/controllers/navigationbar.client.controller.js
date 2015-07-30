@@ -1,11 +1,14 @@
-'use strict';
+/*
+ * Navigation bar controller.
+ */
+(function() {
+  'use strict';
 
-angular.module('core').controller('NavigationBarController', ['$scope', '$state', 'Authentication', 'Menus', 'Modals',
-  function($scope, $state, Authentication, Menus, Modals) {
+  function NavigationBarController($scope, $state, Authentication, Menus, Modals) {
     $scope.$state = $state;
     $scope.authentication = Authentication;
 
-    // Navigationbar menus.
+    // Navigationbar settings.
     $scope.navbarMenu = Menus.getMenuById('navigationbar');
 
     // Authentication modals.
@@ -23,4 +26,11 @@ angular.module('core').controller('NavigationBarController', ['$scope', '$state'
       $scope.isCollapsed = false;
     });
   }
-]);
+
+  angular
+    .module('core')
+    .controller('NavigationBarController', NavigationBarController);
+
+  NavigationBarController.$inject = ['$scope', '$state', 'Authentication', 'Menus', 'Modals'];
+
+})();

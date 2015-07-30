@@ -1,8 +1,18 @@
-'use strict';
+/*
+ * Main page controller.
+ */
+(function() {
+  'use strict';
 
-angular.module('core').controller('HomeMainController', ['$scope', 'Authentication',
-  function($scope, Authentication) {
-    // This provides Authentication context.
-    $scope.authentication = Authentication;
+  function HomeMainController(Authentication) {
+    var vm = this;
+    vm.authentication = Authentication;
   }
-]);
+
+  angular
+    .module('core')
+    .controller('HomeMainController', HomeMainController);
+
+  HomeMainController.$inject = ['Authentication'];
+
+})();

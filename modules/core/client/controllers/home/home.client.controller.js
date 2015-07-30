@@ -1,15 +1,24 @@
-'use strict';
+/*
+ * Home page controller.
+ */
+(function() {
+  'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', '$state', 'Authentication',
-  function($scope, $state, Authentication) {
-    // This provides Authentication context.
-    $scope.authentication = Authentication;
+  function HomeController($state, Authentication) {
+    var vm = this;
+    vm.authentication = Authentication;
 
-    // If client is authenticated, direct to main page.
-    if (Authentication.user) {
+    if (vm.authentication.user) {
       $state.go('home.main');
     } else {
       $state.go('home.landing');
     }
   }
-]);
+
+  angular
+    .module('core')
+    .controller('HomeController', HomeController);
+
+  HomeController.$inject = ['$state', 'Authentication'];
+
+})();

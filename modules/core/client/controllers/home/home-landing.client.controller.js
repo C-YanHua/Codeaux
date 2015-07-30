@@ -1,8 +1,18 @@
-'use strict';
+/*
+ * Landing page controller.
+ */
+(function() {
+  'use strict';
 
-angular.module('core').controller('HomeLandingController', ['$scope', 'Authentication',
-  function($scope, Authentication) {
-    // This provides Authentication context.
-    $scope.authentication = Authentication;
+  function HomeLandingController(Authentication) {
+    var vm = this;
+    vm.authentication = Authentication;
   }
-]);
+
+  angular
+    .module('core')
+    .controller('HomeLandingController', HomeLandingController);
+
+  HomeLandingController.$inject = ['Authentication'];
+
+})();

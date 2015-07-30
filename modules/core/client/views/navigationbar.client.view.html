@@ -1,7 +1,10 @@
 <div class="container" data-ng-controller="NavigationBarController">
   <div class="navbar-header">
-    <a class="navbar-brand" data-ui-sref="home">
-      <img class="navbar-logo" src="modules/core/img/brand/logo_wordmark.png" alt="Codeaux">
+    <a class="navbar-brand" data-ui-sref="home.landing" data-ng-hide="authentication.user">
+      <img class="navbar-full-logo" src="modules/core/img/brand/full_logo.png" alt="Codeaux">
+    </a>
+    <a class="navbar-brand" data-ui-sref="home.main" data-ng-show="authentication.user">
+      <img class="navbar-full-logo" src="modules/core/img/brand/full_logo.png" alt="Codeaux">
     </a>
 
     <!-- For screen readers -->
@@ -55,8 +58,7 @@
       <li class="dropdown" dropdown>
         <a class="dropdown-toggle user-header-dropdown-toggle" dropdown-toggle role="button">
           <img class="header-profile-image" data-ng-src="{{authentication.user.imageUrl}}"
-               alt="{{authentication.user.displayName}}"/>
-          <span data-ng-bind="authentication.user.displayName"></span>
+               alt="{{authentication.user.username}}"/>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu" role="menu">
