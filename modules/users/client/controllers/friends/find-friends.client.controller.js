@@ -59,7 +59,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
       friendRequest.$save(function(response) {
         $scope.statuses[index] = 'awaitingReply';
       }, function(errorRes) {
-        $scope.statuses[index] = 'errorSent';
+        $scope.statuses[index] = 'error';
         $scope.err = errorRes;
       });
     };
@@ -74,19 +74,19 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
       }
 
       if (selectedRequest === []) {
-        $scope.statuses[index] = 'errorAccept';
+        $scope.statuses[index] = 'error';
         $scope.err = 'Friend Request not found';
       } else {
         selectedRequest.status = 'accepted';
         selectedRequest.$update(function() {
-          $http.post('api/users/friends', selectedRequest).success(function() {
+          $http.post('api/users/addFriend', selectedRequest).success(function() {
             $scope.statuses[index] = 'friend';
           }).error(function(response) {
-            $scope.friendStatuses[index] = 'errorAccept';
+            $scope.friendStatuses[index] = 'error';
             $scope.err = response.message;
           });
         }, function(errorResponse) {
-          $scope.friendStatuses[index] = 'errorAccept';
+          $scope.friendStatuses[index] = 'error';
           $scope.err = errorResponse;
         });
       }
@@ -102,7 +102,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
       }
 
       if (selectedRequest === []) {
-        $scope.statuses[index] = 'errorReject';
+        $scope.statuses[index] = 'error';
         $scope.err = 'Friend Request not found';
       } else {
         selectedRequest.status = 'rejected';
@@ -110,10 +110,19 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
         selectedRequest.$update(function() {
           $scope.statuses[index] = 'stranger';
         }, function(errorResponse) {
-          $scope.friendStatuses[index] = 'errorReject';
+          $scope.friendStatuses[index] = 'error';
           $scope.err = errorResponse;
         });
       }
+    };
+
+    $scope.unfriend = function(index) {
+      $http.post('api/users/removeFriend', $scope.foundUsers[index]).success(function() {
+        $scope.statuses[index] = 'stranger';
+      }).error(function(response) {
+        $scope.friendStatuses[index] = 'error';
+        $scope.err = response.message;
+      });
     };
 
   }

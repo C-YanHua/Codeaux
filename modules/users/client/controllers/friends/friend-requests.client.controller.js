@@ -21,7 +21,7 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
       selectedRequest.status = 'accepted';
 
       selectedRequest.$update(function() {
-        $http.post('api/users/friends', selectedRequest).success(function() {
+        $http.post('api/users/addFriend', selectedRequest).success(function() {
           $scope.friendStatuses[index] = 'accepted';
         }).error(function(response) {
           $scope.friendStatuses[index] = 'errorAccept';

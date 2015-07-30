@@ -1,10 +1,6 @@
 <section class="row" data-ng-controller="FindFriendsController" data-ng-init="getInfo()">
   <div class="page-header">
     <h1>Find Friends</h1>
-    <p>{{statuses}}</p>
-    <p>{{myFriends}}</p>
-    <p>{{requestsSent}}</p>
-    <p>{{requestsReceived}}</p>
   </div>
 
   <div class="row">
@@ -42,7 +38,8 @@
         </td>
         <td>
           <div data-ng-if="statuses[$index] == 'friend'">
-            <p>Friends Already</p>
+            <button type="button" class="btn btn-warning" ng-click="unfriend($index)">Unfriend
+            </button>
           </div>
 
           <div data-ng-if="statuses[$index] == 'stranger'">
@@ -61,15 +58,7 @@
             </button>
           </div>
 
-          <div data-ng-if="statuses[$index] == 'errorSent'">
-            <p>{{err}}</p>
-          </div>
-
-          <div data-ng-if="friendStatuses[$index] == 'errorReject'">
-            <p>{{err}}</p>
-          </div>
-
-          <div data-ng-if="friendStatuses[$index] == 'errorAccept'">
+          <div data-ng-if="statuses[$index] == 'error'">
             <p>{{err}}</p>
           </div>
 
