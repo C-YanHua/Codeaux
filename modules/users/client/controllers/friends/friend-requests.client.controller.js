@@ -59,7 +59,7 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
       selectedRequest.status = 'cancelled';
 
       selectedRequest.$update(function() {
-        $scope.sentStatuses[index] = 'cancelled';
+        $scope.sentStatuses[index].splice(index, 1);
         $scope.sentRequests.splice(index, 1);
       }, function(errorResponse) {
         $scope.sentStatuses[index] = 'errorCancel';
