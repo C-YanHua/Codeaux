@@ -3,6 +3,10 @@
 angular.module('users').controller('FriendRequestsController', ['$scope', '$stateParams', '$http', '$location',
                                                                 'Authentication', 'Requests',
   function($scope, $stateParams, $http, $location, Authentication, Requests) {
+    if (!Authentication.user) {
+      $state.go('404-page-not-found');
+    }
+
     $scope.authentication = Authentication;
 
     $scope.friendStatuses = [];
@@ -59,7 +63,7 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
       selectedRequest.status = 'cancelled';
 
       selectedRequest.$update(function() {
-        $scope.sentStatuses[index].splice(index, 1);
+        $scope.sentStatuses.splice(index, 1);
         $scope.sentRequests.splice(index, 1);
       }, function(errorResponse) {
         $scope.sentStatuses[index] = 'errorCancel';

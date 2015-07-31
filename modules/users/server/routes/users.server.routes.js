@@ -18,9 +18,9 @@ module.exports = function(app) {
   app.route('/api/users/password').post(users.changePassword);
   app.route('/api/users/picture').post(users.changeProfilePicture);
 
-  // Add friend into User schema.
   app.route('/api/users/addFriend').post(users.addFriend);
   app.route('/api/users/removeFriend').post(users.removeFriend);
+  app.route('/api/users/searchFriends').get(users.searchFriends);
 
   // Finish by binding the user middleware.
   app.param('username', users.userByUsername);

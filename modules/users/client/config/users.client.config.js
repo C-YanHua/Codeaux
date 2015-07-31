@@ -36,5 +36,10 @@ angular.module('users').run(['Menus',
       state: 'friends.requests'
     });
 
+    Menus.addSubMenuItem('navigationbar', 'friends', {
+      title: 'My Friends',
+      state: 'friends.myfriends'
+    });
+
   }
 ]);

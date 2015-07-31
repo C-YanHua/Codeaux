@@ -106,3 +106,19 @@ exports.removeFriend = function(req, res) {
     });
   }
 };
+
+exports.searchFriends = function(req, res) {
+  User.findById(req.user._id)
+  .sort('-created')
+  .populate('friends', 'username name imageUrl friends')
+  .exec(function(err, user) {
+
+    if (err) {
+      res.status(400).send(errorHandler.getErrorResponse(2));
+    } else if (!user) {
+      res.status(400).send(errorHandler.getErrorResponse(501));
+    } else {
+      res.jsonp(user.friends);
+    }
+  });
+};
