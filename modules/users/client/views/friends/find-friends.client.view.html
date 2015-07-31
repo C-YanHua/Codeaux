@@ -23,7 +23,7 @@
       <tr>
         <th>#</th>
         <th>People</th>
-        <th>Friend Status</th>
+        <th>Actions</th>
       </tr>
       <tr data-ng-repeat="eachUser in foundUsers">
         <td>
@@ -48,7 +48,8 @@
           </div>
 
           <div data-ng-if="statuses[$index] == 'awaitingReply'">
-            <p>Friend Request Sent</p>
+            <button type="button" class="btn btn-default" ng-click="cancelRequest($index)">Cancel Friend Request
+            </button>
           </div>
 
           <div data-ng-if="statuses[$index] == 'toReply'">

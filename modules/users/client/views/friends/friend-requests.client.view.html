@@ -5,6 +5,49 @@
 
   <div class="table-responsive">
     <table class="table table-hover" style="table-layout:fixed">
+      <caption>Requests Sent</caption>
+      <col width="5px" />
+      <col width="65px" />
+      <col width="20px" />
+      <tr>
+        <th>#</th>
+        <th>People</th>
+        <th>Cancel</th>
+      </tr>
+      <tr data-ng-repeat="eachSentRequest in sentRequests">
+        <td>
+          <p>{{$index + 1}}</p>
+        </td>
+        <td style="overflow:hidden">
+          <img data-ng-src="{{eachSentRequest.receiver.imageUrl}}" class="pull-left"
+               style="border-radius:50%; height:40px; width:40px"/>
+          <h3 class="list-group-item-heading">{{eachSentRequest.receiver.username}}</h3>
+          <p>{{eachSentRequest.receiver.name}}</p>
+        </td>
+        <td>
+          <div data-ng-if="sentStatuses[$index] == 'sent'">
+            <button type="button" class="btn btn-default" ng-click="cancelRequest($index)">
+              Cancel Request
+            </button>
+          </div>
+          <div data-ng-if="sentStatuses[$index] == 'errorCancel'">
+            <p>{{err}}</p>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <center><strong>-- End of Sent Requests --</strong></center>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <div class="table-responsive">
+    <table class="table table-hover" style="table-layout:fixed">
+      <caption>Requests Received</caption>
       <col width="5px" />
       <col width="45px" />
       <col width="20px" />
@@ -27,7 +70,7 @@
         </td>
         <td>
           <div data-ng-if="friendStatuses[$index] == 'unchanged'">
-            <button type="button" class="btn btn-primary" ng-click="acceptRequest($index)">
+            <button type="button" class="btn btn-success" ng-click="acceptRequest($index)">
               Accept Request
             </button>
           </div>
@@ -54,7 +97,7 @@
       </tr>
       <tr>
         <td colspan="4">
-          <center><strong>-- End of Requests --</strong></center>
+          <center><strong>-- End of Received Requests --</strong></center>
         </td>
       </tr>
     </table>

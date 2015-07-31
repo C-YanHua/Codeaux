@@ -22,7 +22,7 @@ var FriendRequestSchema = new Schema({
 
   status : {
     type: String,
-    enum: ['pending', 'accepted', 'rejected'],
+    enum: ['pending', 'accepted', 'rejected', 'cancelled'],
     trim: true,
     default: 'pending'
   },

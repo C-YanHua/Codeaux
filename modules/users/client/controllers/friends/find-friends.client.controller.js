@@ -58,6 +58,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
 
       friendRequest.$save(function(response) {
         $scope.statuses[index] = 'awaitingReply';
+        $scope.requestsSent = Requests.query({requesterID: $scope.authentication.user._id});
       }, function(errorRes) {
         $scope.statuses[index] = 'error';
         $scope.err = errorRes;
@@ -73,7 +74,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
         }
       }
 
-      if (selectedRequest === []) {
+      if (selectedRequest === [] || (!selectedRequest)) {
         $scope.statuses[index] = 'error';
         $scope.err = 'Friend Request not found';
       } else {
@@ -82,11 +83,11 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
           $http.post('api/users/addFriend', selectedRequest).success(function() {
             $scope.statuses[index] = 'friend';
           }).error(function(response) {
-            $scope.friendStatuses[index] = 'error';
+            $scope.statuses[index] = 'error';
             $scope.err = response.message;
           });
         }, function(errorResponse) {
-          $scope.friendStatuses[index] = 'error';
+          $scope.statuses[index] = 'error';
           $scope.err = errorResponse;
         });
       }
@@ -101,7 +102,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
         }
       }
 
-      if (selectedRequest === []) {
+      if (selectedRequest === [] || (!selectedRequest)) {
         $scope.statuses[index] = 'error';
         $scope.err = 'Friend Request not found';
       } else {
@@ -110,7 +111,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
         selectedRequest.$update(function() {
           $scope.statuses[index] = 'stranger';
         }, function(errorResponse) {
-          $scope.friendStatuses[index] = 'error';
+          $scope.statuses[index] = 'error';
           $scope.err = errorResponse;
         });
       }
@@ -120,9 +121,34 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
       $http.post('api/users/removeFriend', $scope.foundUsers[index]).success(function() {
         $scope.statuses[index] = 'stranger';
       }).error(function(response) {
-        $scope.friendStatuses[index] = 'error';
+        $scope.statuses[index] = 'error';
         $scope.err = response.message;
       });
+    };
+
+    $scope.cancelRequest = function(index) {
+      var selectedRequest = [];
+      for (var k=0; k<$scope.requestsSent.length; k++) {
+        if ($scope.requestsSent[k].receiver._id === $scope.foundUsers[index]._id) {
+          selectedRequest = $scope.requestsSent[k];
+          break;
+        }
+      }
+
+      if (selectedRequest === [] || (!selectedRequest)) {
+        $scope.statuses[index] = 'error';
+        $scope.err = 'Friend Request not found';
+      } else {
+        selectedRequest.status = 'cancelled';
+
+        selectedRequest.$update(function() {
+          $scope.statuses[index] = 'stranger';
+        }, function(errorResponse) {
+          $scope.statuses[index] = 'error';
+          $scope.err = errorResponse;
+        });
+      }
+
     };
 
   }

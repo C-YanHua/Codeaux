@@ -6,12 +6,20 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
     $scope.authentication = Authentication;
 
     $scope.friendStatuses = [];
+    $scope.sentStatuses = [];
 
     $scope.getRequests = function() {
-      Requests.query({receiverID: $scope.authentication.user._id}, function(allRequests) {
-        $scope.friendRequests = allRequests;
+      Requests.query({receiverID: $scope.authentication.user._id}, function(requestsReceived) {
+        $scope.friendRequests = requestsReceived;
         for (var i = 0; i < $scope.friendRequests.length; i++) {
           $scope.friendStatuses.push('unchanged');
+        }
+      });
+
+      Requests.query({requesterID: $scope.authentication.user._id}, function(requestsSent) {
+        $scope.sentRequests = requestsSent;
+        for (var j=0; j<$scope.sentRequests.length; j++) {
+          $scope.sentStatuses.push('sent');
         }
       });
     };
@@ -44,6 +52,20 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
         $scope.friendStatuses[index] = 'errorReject';
         $scope.err = errorResponse;
       });
+    };
+
+    $scope.cancelRequest = function(index) {
+      var selectedRequest = $scope.sentRequests[index];
+      selectedRequest.status = 'cancelled';
+
+      selectedRequest.$update(function() {
+        $scope.sentStatuses[index] = 'cancelled';
+        $scope.sentRequests.splice(index, 1);
+      }, function(errorResponse) {
+        $scope.sentStatuses[index] = 'errorCancel';
+        $scope.err = errorResponse;
+      });
+
     };
 
   }

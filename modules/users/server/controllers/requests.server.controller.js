@@ -66,7 +66,7 @@ exports.update = function(req, res) {
 exports.requestById = function(req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send({
-      message: 'Issues is invalid'
+      message: 'Request is invalid'
     });
   }
 
