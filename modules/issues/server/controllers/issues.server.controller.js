@@ -10,8 +10,32 @@ var errorHandler = require(path.resolve('./modules/core/server/controllers/error
 var etherpad = require('./etherpad/etherpad.server.controller');
 var Issue = mongoose.model('Issue');
 
+var findIssueById = function(id, populate, callback) {
+  Issue.findById(id).populate('owner', populate).exec(function(err, issue) {
+    callback(err, issue);
+  });
+};
+
+var findIssues = function(query, sort, populate, callback) {
+  Issue.find(query).sort(sort).populate('owner', populate).exec(function(err, issues) {
+    if (err) {
+      callback(null);
+    } else {
+      callback(issues);
+    }
+  });
+};
+
+var sendIssues = function(res, issues) {
+  if (issues) {
+    res.jsonp(issues);
+  } else {
+    res.status(400).send(errorHandler.getErrorResponse(2));
+  }
+}
+
 /*
- * Create a Issue.
+ * Create an issue.
  */
 exports.create = function(req, res) {
   async.waterfall([
@@ -28,7 +52,7 @@ exports.create = function(req, res) {
       etherpad.generatePadId({
         groupID: req.user.groupId,
         padName: issue._id.toString(),
-        text: 'Helloworld'
+        text: ''
 
       }, issue, callback);
     },
@@ -52,7 +76,7 @@ exports.create = function(req, res) {
 };
 
 /*
- * Show the current Issue.
+ * Show the selected issue.
  */
 exports.read = function(req, res) {
   async.waterfall([
@@ -110,7 +134,7 @@ exports.update = function(req, res) {
   });
 };
 
-/**
+/*
  * Delete an Issue.
  */
 exports.delete = function(req, res) {
@@ -125,48 +149,81 @@ exports.delete = function(req, res) {
   });
 };
 
-/**
- * List of Issues.
+/*
+ * List all the issues.
  */
-exports.list = function(req, res) {
-
-  if (req.query.owner) {
-    Issue.find({owner : mongoose.Types.ObjectId.createFromHexString(req.query.owner)})
-    .sort('-created').exec(function(err, issues) {
-      if (err) {
-        return res.status(400).send(errorHandler.getErrorResponse(2));
-      } else {
-        res.jsonp(issues);
-      }
-    });
-  } else {
-    Issue.find().sort('-created').populate('owner', 'username name').exec(function(err, issues) {
-      if (err) {
-        return res.status(400).send(errorHandler.getErrorResponse(2));
-      } else {
-        res.jsonp(issues);
-      }
-    });
-  }
+exports.listAllIssues = function(req, res) {
+  findIssues('', '-created', 'username name', function(issues) {
+    sendIssues(res, issues);
+  });
 };
 
-/**
- * Issue middleware.
+/*
+ * List all public issues.
+ */
+exports.listPublicIssues = function(req, res) {
+  var query = {isPrivate: 0};
+  findIssues(query, '-created', 'username name', function(issues) {
+    sendIssues(res, issues);
+  });
+};
+
+/*
+ * List all private issues.
+ */
+exports.listPrivateIssues = function(req, res) {
+  var query = {isPrivate: 1};
+  findIssues(query, '-created', 'username name', function(issues) {
+    sendIssues(res, issues);
+  });
+};
+
+/*
+ * List issues by user Id.
+ */
+exports.listUserIssues = function(req, res) {
+  var query = {owner: req.profile._id};
+  findIssues(query, '-created', 'username name', function(issues) {
+    sendIssues(res, issues);
+  });
+};
+
+/*
+ * List all issues belonging to the user's friends.
+ */
+exports.listUserFriendsIssues = function(req, res) {
+  var query = {owner: {$in: req.profile.friends}};
+  findIssues(query, '-created', 'username name', function(issues) {
+    sendIssues(res, issues);
+  });
+};
+
+/*
+ * List all issues belonging to the user's friends and the user.
+ */
+exports.listUserAndFriendsIssues = function(req, res) {
+  var issues = null;
+  var query = {owner: req.profile._id};
+
+  findIssues(query, '-created', 'username name', function(ownerIssues) {
+    query = {owner: {$in: req.profile.friends}};
+
+    findIssues(query, '-created', 'username name', function(friendsIssues) {
+      issues = _.union(ownerIssues, friendsIssues);
+
+      sendIssues(res, issues);
+    });
+  });
+};
+
+/*
+ * Find issue by id middleware.
+ * Redirects to route not found if id does not exists.
  */
 exports.issueById = function(req, res, next, id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).send({
-      message: 'Issues is invalid'
-    });
-  }
-
-  Issue.findById(id).populate('owner', 'name').exec(function(err, issue) {
-    if (err) {
-      return next(err);
-    }
-
-    if (!issue) {
-      return next(new Error('Failed to load Issue ' + id));
+  findIssueById(id, 'username name', function(err, issue) {
+    if (err || !issue) {
+      return res.redirect('/404-page-not-found');
     }
 
     req.issue = issue;

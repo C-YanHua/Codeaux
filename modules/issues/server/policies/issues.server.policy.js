@@ -18,6 +18,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/issues/:issueId',
       permissions: '*'
+    }, {
+      resources: '/api/:username/issues',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -27,6 +30,9 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/issues/:issueId',
       permissions: ['get']
+    }, {
+      resources: '/api/:username/issues',
+      permissions: ['get']
     }]
   }, {
     roles: ['guest'],
@@ -35,6 +41,9 @@ exports.invokeRolesPolicies = function() {
       permissions: ['get']
     }, {
       resources: '/api/issues/:issueId',
+      permissions: ['get']
+    }, {
+      resources: '/api/:username/issues',
       permissions: ['get']
     }]
   }]);
@@ -55,15 +64,13 @@ exports.isAllowed = function(req, res, next) {
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function(err, isAllowed) {
     if (err) {
       // An authorization error occurred.
-      return res.status(500).send('Unexpected authorization error');
+      return res.redirect('/500-server-error');
     } else {
       if (isAllowed) {
         // Access granted! Invoke next middleware.
         return next();
       } else {
-        return res.status(403).json({
-          message: 'User is not authorized'
-        });
+        return res.redirect('/403-forbidden');
       }
     }
   });

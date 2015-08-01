@@ -1,14 +1,19 @@
 'use strict';
 
+/*
+ * Setting up issues route.
+ */
 module.exports = function(app) {
   // Issues routing.
   var issues = require('../controllers/issues.server.controller');
   var issuesPolicy = require('../policies/issues.server.policy');
 
-  // Articles collection routes.
   app.route('/api/issues').all(issuesPolicy.isAllowed)
-    .get(issues.list)
+    .get(issues.listPublicIssues)
     .post(issues.create);
+
+  app.route('/api/:username/issues').all(issuesPolicy.isAllowed)
+    .get(issues.listUserAndFriendsIssues);
 
   // Single article routes.
   app.route('/api/issues/:issueId').all(issuesPolicy.isAllowed)
