@@ -10,11 +10,11 @@ exports.renderIndex = function(req, res) {
 };
 
 /*
- * Sends error 500 server internal error to client side.
- * Client is expected to transit to 500 page.
+ * Sends error 403 forbidden to client side.
+ * Client is expected to transit to 403 page.
  */
-exports.sendServerError = function(req, res) {
-  res.status(500).send();
+exports.sendForbidden = function(req, res) {
+  return res.status(403).send();
 };
 
 /*
@@ -23,4 +23,12 @@ exports.sendServerError = function(req, res) {
  */
 exports.sendPageNotFound = function(req, res) {
   return res.status(404).send();
+};
+
+/*
+ * Sends error 500 server internal error to client side.
+ * Client is expected to transit to 500 page.
+ */
+exports.sendServerError = function(req, res) {
+  res.status(500).send();
 };
