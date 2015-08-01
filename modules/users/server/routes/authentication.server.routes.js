@@ -7,9 +7,9 @@ module.exports = function(app) {
   // User routing.
   var users = require('../controllers/users.server.controller');
 
-  app.route('/api/auth/signup_validate/username').post(users.validateSignupProperty);
-  app.route('/api/auth/signup_validate/email').post(users.validateSignupProperty);
-  app.route('/api/auth/signup_validate/password').post(users.validateSignupProperty);
+  app.route('/api/auth/signup-validate/username').post(users.validateSignupProperty);
+  app.route('/api/auth/signup-validate/email').post(users.validateSignupProperty);
+  app.route('/api/auth/signup-validate/password').post(users.validateSignupProperty);
 
   // Setting up the route for Users Authentication.
   app.route('/api/auth/signup').post(users.signup);

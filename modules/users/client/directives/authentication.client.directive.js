@@ -15,7 +15,7 @@ angular.module('users').directive('validateUsername', ['$http', '$q',
           if (isUsernameDirty) {
             scope.credentials.username = value;
 
-            return $http.post('api/auth/signup_validate/username', {username: value}).success(function() {
+            return $http.post('api/auth/signup-validate/username', {username: value}).success(function() {
               scope.setErrorMessage('username', null, true);
             }).error(function(response) {
               scope.setErrorMessage('username', response.error.username, false);
@@ -48,7 +48,7 @@ angular.module('users').directive('validateEmail', ['$http', '$q',
           if (isEmailDirty) {
             scope.credentials.email = value;
 
-            return $http.post('api/auth/signup_validate/email', {email: value}).success(function() {
+            return $http.post('api/auth/signup-validate/email', {email: value}).success(function() {
               scope.setErrorMessage('email', null, true);
             }).error(function(response) {
               scope.setErrorMessage('email', response.error.email, false);
@@ -85,7 +85,7 @@ angular.module('users').directive('validatePassword', ['$http', '$q',
           if (isPasswordDirty) {
             scope.credentials.password = value;
 
-            return $http.post('api/auth/signup_validate/password', {password: value}).success(function() {
+            return $http.post('api/auth/signup-validate/password', {password: value}).success(function() {
               scope.setErrorMessage('password', null, true);
             }).error(function(response) {
               scope.setErrorMessage('password', response.error.password, false);
