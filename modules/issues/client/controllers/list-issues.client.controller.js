@@ -1,3 +1,6 @@
+/*
+ * List issues page controller.
+ */
 'use strict';
 
 angular.module('issues').controller('ListIssuesController', ['$scope', '$filter', '$stateParams', '$location',
@@ -21,9 +24,9 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
       $scope.search = function() {
         $scope.filteredIssues = $filter('filter')(issues, function(issue) {
 
-          if (searchMatch(issue.name, $scope.query)) {
-            return true;
-          } else if (searchMatch(issue.description, $scope.query)) {
+          var match = [issue.title, issue.description];
+
+          if (matcher(match, $scope.query)) {
             return true;
           }
 
@@ -32,11 +35,18 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
       };
     };
 
-    var searchMatch = function(stuff, target) {
-      if (!target) {
+    var matcher = function(match, query) {
+      if (!query || !Array.isArray(match)) {
         return true;
       }
-      return stuff.toString().toLowerCase().indexOf(target.toLowerCase()) !== -1;
+
+      for (var i = 0; i < match.length; i++) {
+        if (match[i].toString().toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+          return true;
+        }
+      }
+
+      return false;
     };
 
     $scope.$watch('currentPage + issuesPerPage + filteredIssues', function() {

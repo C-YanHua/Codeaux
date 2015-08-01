@@ -1,8 +1,8 @@
-'use strict';
-
 /*
  * Setting up issues route.
  */
+'use strict';
+
 angular.module('issues').config(['$stateProvider',
   function($stateProvider) {
     $stateProvider.

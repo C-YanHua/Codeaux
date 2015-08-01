@@ -9,7 +9,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
     $scope.create = function() {
       // Create new Issue object.
       var issue = new Issues ({
-        name: this.name,
+        title: this.title,
         description: this.description,
         isPrivateIssue: this.isPrivateIssue
       });
@@ -19,7 +19,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
         $location.path('issues/' + response._id);
 
         // Clear form fields.
-        $scope.name = '';
+        $scope.title = '';
         $scope.description = '';
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
