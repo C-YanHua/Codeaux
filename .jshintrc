@@ -19,7 +19,7 @@
     "require": true
   },
 
-  "latedef": true,           // Prohibit variable use before definition.
+  "latedef": "nofunc",           // Prohibit variable use before definition.
   "nonbsp": true,            // Warns about "non-breaking whitespace" characters.
   "strict": true,            // Require `use strict` pragma in every file.
   "undef": true,             // Require all non-global variables be declared before they are used.
