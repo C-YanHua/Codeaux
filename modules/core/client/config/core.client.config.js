@@ -21,7 +21,8 @@ angular.module('core').config(['$httpProvider',
                 break;
 
               case 403:
-                // Add unauthorized behaviour.
+                // Transit to 403 forbidden page.
+                $injector.get('$state').go('403-forbidden');
                 break;
 
               case 404:

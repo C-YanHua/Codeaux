@@ -4,6 +4,12 @@
 (function() {
   'use strict';
 
+  angular
+    .module('core')
+    .controller('NavigationBarController', NavigationBarController);
+
+  NavigationBarController.$inject = ['$scope', '$state', 'Authentication', 'Menus', 'Modals'];
+
   function NavigationBarController($scope, $state, Authentication, Menus, Modals) {
     $scope.$state = $state;
     $scope.authentication = Authentication;
@@ -26,11 +32,4 @@
       $scope.isCollapsed = false;
     });
   }
-
-  angular
-    .module('core')
-    .controller('NavigationBarController', NavigationBarController);
-
-  NavigationBarController.$inject = ['$scope', '$state', 'Authentication', 'Menus', 'Modals'];
-
 })();

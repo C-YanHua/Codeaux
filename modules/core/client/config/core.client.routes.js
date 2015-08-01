@@ -4,6 +4,12 @@
 (function() {
   'use strict';
 
+  angular
+    .module('core')
+    .config(routeConfig);
+
+  routeConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
   function routeConfig($stateProvider, $urlRouterProvider) {
     $stateProvider
       // Home state routing.
@@ -25,6 +31,9 @@
       })
 
       // HTTP error routing.
+      .state('403-forbidden', {
+        templateUrl: '/modules/core/views/403.client.view.html'
+      })
       .state('404-page-not-found', {
         templateUrl: '/modules/core/views/404.client.view.html'
       })
@@ -40,11 +49,4 @@
       return $location.path();
     });
   }
-
-  angular
-    .module('core')
-    .config(routeConfig);
-
-  routeConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
-
 })();

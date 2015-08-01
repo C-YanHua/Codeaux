@@ -4,6 +4,12 @@
 (function() {
   'use strict';
 
+  angular
+    .module('core')
+    .controller('HomeController', HomeController);
+
+  HomeController.$inject = ['$state', 'Authentication'];
+
   function HomeController($state, Authentication) {
     var vm = this;
     vm.authentication = Authentication;
@@ -14,11 +20,4 @@
       $state.go('home.landing');
     }
   }
-
-  angular
-    .module('core')
-    .controller('HomeController', HomeController);
-
-  HomeController.$inject = ['$state', 'Authentication'];
-
 })();
