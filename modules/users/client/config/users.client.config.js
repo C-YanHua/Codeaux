@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').run(['Modals',
-  function(Modals) {
+angular.module('users').run(['Modals', 'Menus',
+  function(Modals, Menus) {
     var AUTH_VIEW_DIRECTORY = '/modules/users/views/authentication/';
 
     // Initialize sign up modal.
@@ -15,11 +15,8 @@ angular.module('users').run(['Modals',
       templateUrl: AUTH_VIEW_DIRECTORY + 'signin.client.view.html',
       size: 'sm'
     });
-  }
-]);
 
-angular.module('users').run(['Menus',
-  function(Menus) {
+    // Initialize friend's menu.
     Menus.addMenuItem('navigationbar', {
       title: 'Friends',
       state: 'friends',
@@ -35,6 +32,6 @@ angular.module('users').run(['Menus',
       title: 'Friend Requests',
       state: 'friends.requests'
     });
-
   }
 ]);
+
