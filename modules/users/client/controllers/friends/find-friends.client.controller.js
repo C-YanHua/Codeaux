@@ -3,6 +3,10 @@
 angular.module('users').controller('FindFriendsController', ['$scope', '$stateParams', '$http', '$location',
                                                           'Authentication', 'Users', 'Requests',
   function($scope, $stateParams, $http, $location, Authentication, Users, Requests) {
+    if (!Authentication.user) {
+      $state.go('404-page-not-found');
+    }
+
     $scope.authentication = Authentication;
 
     $scope.getInfo = function() {

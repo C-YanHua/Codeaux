@@ -1,0 +1,46 @@
+<section class="row" data-ng-controller="MyFriendsController">
+  <div class="page-header">
+    <h1>My Friends</h1>
+  </div>
+
+
+    <div class="table-responsive">
+      <table class="table table-hover" style="table-layout:fixed">
+        <col width="5px" />
+        <col width="65px" />
+        <col width="20px" />
+        <tr>
+          <th>#</th>
+          <th>Friends</th>
+          <th>Actions</th>
+        </tr>
+        <tr data-ng-repeat="eachFriend in myFriends">
+          <td>
+            <p>{{$index + 1}}</p>
+          </td>
+          <td style="overflow:hidden">
+            <img data-ng-src="{{eachFriend.imageUrl}}" class="pull-left"
+                 style="border-radius:50%; height:40px; width:40px"/>
+            <h3 class="list-group-item-heading">{{eachFriend.username}}</h3>
+            <p>{{eachFriend.name}}</p>
+          </td>
+          <td>
+            <div data-ng-if="statuses[$index] == 'friend'">
+              <button type="button" class="btn btn-warning" ng-click="unfriend($index)">
+                Remove Friend
+              </button>
+            </div>
+            <div data-ng-if="statuses[$index] == 'error'">
+              <p>{{err}}</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <center><strong>-- End of Friends --</strong></center>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+</section>

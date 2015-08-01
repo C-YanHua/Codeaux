@@ -33,6 +33,10 @@ angular.module('users').config(['$stateProvider',
       url: '/requests',
       templateUrl: '/modules/users/views/friends/friend-requests.client.view.html'
     }).
+    state('friends.myfriends', {
+      url: '/myfriends',
+      templateUrl: '/modules/users/views/friends/my-friends.client.view.html'
+    }).
 
     // User settings state routing.
     state('settings', {
