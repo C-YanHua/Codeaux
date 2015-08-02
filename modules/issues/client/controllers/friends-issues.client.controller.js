@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '$stateParams',
-                                          'Authentication', '$state', '$http',
-  function($scope, Issues, $stateParams, Authentication, $state, $http) {
+angular.module('issues').controller('FriendsIssuesController', ['$scope', '$stateParams', '$location',
+                                                             'Authentication', 'Issues', '$state', '$http',
+  function($scope, $stateParams, $location, Authentication, Issues, $state, $http) {
     if (!Authentication.user) {
       $state.go('404-page-not-found');
     }
@@ -16,7 +16,7 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
     $scope.issueType = 'Public';
 
     $scope.find = function() {
-      $http.get('api/issues/my-issues').success(function(issues) {
+      $http.get('api/issues/my-friends-issues').success(function(issues) {
         for (var i = 0; i < issues.length; i++) {
           var eachIssue = issues[i];
           if (eachIssue.isPrivate === 0) {
@@ -40,17 +40,5 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
       }
     });
 
-    // Remove existing Issue.
-    $scope.remove = function(index) {
-      if ($scope.issueType === 'Public') {
-        publicIssues[index].$remove(function() {
-          publicIssues.splice(index, 1);
-        });
-      } else if ($scope.issueType === 'Private') {
-        privateIssues[index].$remove(function() {
-          privateIssues.splice(index, 1);
-        });
-      }
-    };
   }
 ]);

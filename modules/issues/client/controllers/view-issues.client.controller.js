@@ -1,15 +1,41 @@
 'use strict';
 
 angular.module('issues').controller('ViewIssuesController', ['$scope', '$stateParams', '$location',
-                                                             'Authentication', 'Issues', '$sce',
-  function($scope, $stateParams, $location, Authentication, Issues, $sce) {
+                                                             'Authentication', 'Issues', '$sce', '$state',
+  function($scope, $stateParams, $location, Authentication, Issues, $sce, $state) {
+    if (!Authentication.user) {
+      $state.go('404-page-not-found');
+    }
+
     $scope.authentication = Authentication;
 
     // Find existing Issue.
     $scope.findOne = function() {
-      $scope.issue = Issues.get({issueId: $stateParams.issueId}, function() {
+      Issues.get({issueId: $stateParams.issueId}, function(issue) {
+        $scope.issue = issue;
+
         if ($scope.authentication.user) {
-          $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
+          if ($scope.issue.owner._id === $scope.authentication.user._id) {
+            $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
+          } else if ($scope.issue.isPrivate === 1) {
+            for (var i=0; i<$scope.issue.readWrite.length; i++) {
+              if ($scope.issue.readWrite[i] === $scope.authentication.user._id) {
+                $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
+                return;
+              }
+            }
+
+            for (var j=0; j<$scope.issue.readOnly.length; j++) {
+              if ($scope.issue.readOnly[j] === $scope.authentication.user._id) {
+                $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.readOnlyPadId);
+                return;
+              }
+            }
+
+            $state.go('404-page-not-found');
+          } else {
+            $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
+          }
         } else {
           $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.readOnlyPadId);
         }

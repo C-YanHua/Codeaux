@@ -26,5 +26,10 @@ angular.module('issues').run(['Menus',
       title: 'My Issues',
       state: 'my-issues'
     });
+
+    Menus.addSubMenuItem('navigationbar', 'issues', {
+      title: 'Friends Issues',
+      state: 'my-friends-issues'
+    });
   }
 ]);

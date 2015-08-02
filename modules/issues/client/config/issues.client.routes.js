@@ -32,9 +32,9 @@ angular.module('issues').config(['$stateProvider',
       url: '/myissues',
       templateUrl: '/modules/issues/views/my-issues.client.view.html'
     }).
-    state('issues.permissions', {
-      url: '/:issueId/permissions',
-      templateUrl: '/modules/issues/views/issue-permissions.client.view.html'
+    state('my-friends-issues', {
+      url: '/friendsissues',
+      templateUrl: '/modules/issues/views/friends-issues.client.view.html'
     });
   }
 ]);

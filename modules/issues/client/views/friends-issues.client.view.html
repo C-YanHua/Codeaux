@@ -1,6 +1,6 @@
-<section data-ng-controller="MyIssuesController" data-ng-init="find()">
+<section data-ng-controller="FriendsIssuesController" data-ng-init="find()">
   <div class="page-header">
-    <h1>My Issues &nbsp
+    <h1>Friends Issues &nbsp
       <span style="color:#FF7400">
         <select data-ng-model="issueType">
           <option value="Public">Public</option>
@@ -18,13 +18,11 @@
 
   <div class="table-responsive">
     <table class="table table-hover" style="table-layout:fixed">
-      <col width="5px" />
-      <col width="65px" />
-      <col width="20px" />
+      <col width="15px" />
+      <col width="75px" />
       <tr>
         <th>#</th>
         <th>Title & Description</th>
-        <th>Edit / Delete</th>
       </tr>
       <tr data-ng-repeat="issue in currentIssues">
         <td>
@@ -36,17 +34,9 @@
           </a>
           <p>{{issue.description}}</p>
         </td>
-        <td>
-          <a class="btn btn-primary" data-ui-sref="issues.edit({issueId: issue._id})">
-            <i class="glyphicon glyphicon-edit"></i>
-          </a>
-          <a class="btn btn-primary" data-ng-click="remove($index);">
-            <i class="glyphicon glyphicon-trash"></i>
-          </a>
-        </td>
       </tr>
       <tr>
-        <td colspan="3">
+        <td colspan="2">
           <center><strong>-- End of {{issueType}} Issues --</strong></center>
         </td>
       </tr>
