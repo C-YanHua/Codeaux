@@ -51,20 +51,6 @@ exports.updateProfile = function(req, res) {
 };
 
 /*
- * Add new friend into user friend's list.
- */
-/*
-exports.addFriend = function(req, res) {
-  var query = req.body._id;
-
-  var profile = _.pick(req.body, 'friends');
-  profile.updated = Date.now();
-
-  updateUser(req, res, query, profile);
-};
-*/
-
-/*
  * Update profile picture.
  */
 exports.changeProfilePicture = function(req, res) {
