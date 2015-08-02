@@ -12,17 +12,19 @@
 
   <div class="panel panel-default">
     <div class="panel-body">
-      <h3>{{issueType}} Issues</h3>
+      <h3>Friends' {{issueType}} Issues</h3>
     </div>
   </div>
 
   <div class="table-responsive">
     <table class="table table-hover" style="table-layout:fixed">
-      <col width="15px" />
-      <col width="75px" />
+      <col width="5px" />
+      <col width="60px" />
+      <col width="25px" />
       <tr>
         <th>#</th>
         <th>Title & Description</th>
+        <th>Owner of Issue</th>
       </tr>
       <tr data-ng-repeat="issue in currentIssues">
         <td>
@@ -34,10 +36,16 @@
           </a>
           <p>{{issue.description}}</p>
         </td>
+        <td style="overflow:hidden">
+          <img data-ng-src="{{issue.owner.imageUrl}}" class="pull-left"
+               style="border-radius:50%; height:40px; width:40px"/>
+          <h3 class="list-group-item-heading">{{issue.owner.username}}</h3>
+          <p>{{issue.owner.name}}</p>
+        </td>
       </tr>
       <tr>
-        <td colspan="2">
-          <center><strong>-- End of {{issueType}} Issues --</strong></center>
+        <td colspan="3">
+          <center><strong>-- End of Friends' {{issueType}} Issues --</strong></center>
         </td>
       </tr>
     </table>

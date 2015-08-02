@@ -3,10 +3,6 @@
 angular.module('issues').controller('ViewIssuesController', ['$scope', '$stateParams', '$location',
                                                              'Authentication', 'Issues', '$sce', '$state',
   function($scope, $stateParams, $location, Authentication, Issues, $sce, $state) {
-    if (!Authentication.user) {
-      $state.go('404-page-not-found');
-    }
-
     $scope.authentication = Authentication;
 
     // Find existing Issue.

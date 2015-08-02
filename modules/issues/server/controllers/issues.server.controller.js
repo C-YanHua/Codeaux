@@ -193,7 +193,7 @@ exports.listUserIssues = function(req, res) {
  */
 exports.listUserFriendsIssues = function(req, res) {
   var query = {owner: {$in: (req.profile) ? req.profile.friends : req.user.friends}};
-  findIssues(query, '-created', 'username name', function(issues) {
+  findIssues(query, '-created', 'username name imageUrl', function(issues) {
     sendIssues(res, issues);
   });
 };
