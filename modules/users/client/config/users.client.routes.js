@@ -40,11 +40,11 @@ angular.module('users').config(['$stateProvider',
     }).
     state('settings.profile', {
       url: '/profile',
-      templateUrl: '/modules/users/views/settings/edit-profile.client.view.html'
+      templateUrl: '/modules/users/views/settings/manage-profile.client.view.html'
     }).
-    state('settings.password', {
-      url: '/password',
-      templateUrl: '/modules/users/views/settings/change-password.client.view.html'
+    state('settings.credentials', {
+      url: '/credentials',
+      templateUrl: '/modules/users/views/settings/manage-credentials.client.view.html'
     }).
     state('settings.accounts', {
       url: '/accounts',
