@@ -12,8 +12,11 @@ module.exports = function(app) {
     .get(issues.listPublicIssues)
     .post(issues.create);
 
-  app.route('/api/:username/issues').all(issuesPolicy.isAllowed)
+  app.route('/api/issues/my-issues').all(issuesPolicy.isAllowed)
     .get(issues.listUserAndFriendsIssues);
+
+  app.route('/api/:username/issues').all(issuesPolicy.isAllowed)
+    .get(issues.listUserIssues);
 
   // Single article routes.
   app.route('/api/issues/:issueId').all(issuesPolicy.isAllowed)

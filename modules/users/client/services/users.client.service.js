@@ -16,3 +16,14 @@ angular.module('users').factory('UserProfile', ['$resource',
     return $resource('api/:username', {username: '@username'});
   }
 ]);
+
+angular.module('users').factory('UserIssues', ['$resource',
+  function($resource) {
+    return $resource('api/:username/issues', {username: '@username'}, {
+      get: {
+        method: 'GET',
+        isArray: true
+      }
+    });
+  }
+]);

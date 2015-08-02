@@ -29,7 +29,7 @@ exports.invokeRolesPolicies = function() {
       permissions: ['get', 'post']
     }, {
       resources: '/api/issues/:issueId',
-      permissions: ['get']
+      permissions: ['get', 'post', 'put']
     }, {
       resources: '/api/:username/issues',
       permissions: ['get']

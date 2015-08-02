@@ -32,7 +32,7 @@ var sendIssues = function(res, issues) {
   } else {
     res.status(400).send(errorHandler.getErrorResponse(2));
   }
-}
+};
 
 /*
  * Create an issue.
@@ -179,7 +179,7 @@ exports.listPrivateIssues = function(req, res) {
 };
 
 /*
- * List issues by user Id.
+ * List user issues.
  */
 exports.listUserIssues = function(req, res) {
   var query = {owner: req.profile._id};
