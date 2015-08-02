@@ -11,7 +11,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
       var issue = new Issues ({
         title: this.title,
         description: this.description,
-        isPrivateIssue: this.isPrivateIssue
+        isPrivate: this.isPrivate
       });
 
       // Redirect after save.

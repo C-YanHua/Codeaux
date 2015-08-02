@@ -37,11 +37,12 @@
           <p>{{issue.description}}</p>
         </td>
         <td>
-          <div data-ng-if="issuesToShow == 'Public Issues'">
+          <div data-ng-if="issuesToShow === 'Public Issues'">
             <p>Available To All</p>
           </div>
-          <div data-ng-if="issuesToShow == 'Private Issues'">
-            <button type="button" class="btn btn-primary" data-ui-sref="issues.permissions({issueId: issue._id})">View / Edit Permissions
+          <div data-ng-if="issuesToShow === 'Private Issues'">
+            <button type="button" class="btn btn-primary" data-ui-sref="issues.permissions({issueId: issue._id})">
+              View / Edit Permissions
             </button>
           </div>
         </td>

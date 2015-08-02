@@ -23,14 +23,9 @@ angular.module('issues').controller('ListIssuesController', ['$scope', '$filter'
 
       $scope.search = function() {
         $scope.filteredIssues = $filter('filter')(issues, function(issue) {
-
           var match = [issue.title, issue.description];
 
-          if (matcher(match, $scope.query)) {
-            return true;
-          }
-
-          return false;
+          return matcher(match, $scope.query);
         });
       };
     };

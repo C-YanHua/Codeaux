@@ -13,9 +13,9 @@ angular.module('issues').controller('MyIssuesController', ['$scope', 'Issues', '
       Issues.query({owner:$scope.authentication.user._id}, function(issues) {
         for (var i = 0; i < issues.length; i++) {
           var eachIssue = issues[i];
-          if (eachIssue.isPrivateIssue === 0) {
+          if (eachIssue.isPrivate === 0) {
             publicIssues.push(eachIssue);
-          } else if (eachIssue.isPrivateIssue === 1) {
+          } else if (eachIssue.isPrivate === 1) {
             privateIssues.push(eachIssue);
           }
         }

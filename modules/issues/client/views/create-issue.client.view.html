@@ -16,20 +16,19 @@
         <div class="form-group">
           <label class="control-label" for="description">Description</label>
           <div class="controls">
-            <textarea rows="5" data-ng-model="description" id="description" class="form-control" placeholder="Description" required>
+            <textarea rows="5" data-ng-model="description" id="description" class="form-control"
+                      placeholder="Description" required>
             </textarea>
           </div>
         </div>
 
         <div class="form-group">
-            <div class="controls">
-              <label class="control-label checkbox-inline" for="isPrivateIssue">
-                <input type="checkbox" data-ng-model="isPrivateIssue" id="isPrivateIssue"
-                     ng-true-value="1" ng-false-value="0">
-                <strong>Private</strong>
-              </label>
-            </div>
-          </label>
+          <div class="controls">
+            <label class="control-label checkbox-inline" for="isPrivate">
+              <input type="checkbox" data-ng-model="isPrivate" id="isPrivate" ng-true-value="1" ng-false-value="0">
+              <strong>Private</strong>
+            </label>
+          </div>
         </div>
 
         <div class="form-group">
