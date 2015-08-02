@@ -21,6 +21,12 @@ exports.invokeRolesPolicies = function() {
     }, {
       resources: '/api/:username/issues',
       permissions: '*'
+    }, {
+      resources: '/api/issues/my-issues',
+      permissions: '*'
+    }, {
+      resources: '/api/issues/my-friends-issues',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -32,6 +38,12 @@ exports.invokeRolesPolicies = function() {
       permissions: ['get', 'post', 'put']
     }, {
       resources: '/api/:username/issues',
+      permissions: ['get']
+    }, {
+      resources: '/api/issues/my-issues',
+      permissions: ['get']
+    }, {
+      resources: '/api/issues/my-friends-issues',
       permissions: ['get']
     }]
   }, {

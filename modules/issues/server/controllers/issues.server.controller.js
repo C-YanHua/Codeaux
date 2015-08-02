@@ -182,7 +182,7 @@ exports.listPrivateIssues = function(req, res) {
  * List user issues.
  */
 exports.listUserIssues = function(req, res) {
-  var query = {owner: req.profile._id};
+  var query = {owner: (req.profile) ? req.profile._id : req.user._id};
   findIssues(query, '-created', 'username name', function(issues) {
     sendIssues(res, issues);
   });
@@ -192,7 +192,7 @@ exports.listUserIssues = function(req, res) {
  * List all issues belonging to the user's friends.
  */
 exports.listUserFriendsIssues = function(req, res) {
-  var query = {owner: {$in: req.profile.friends}};
+  var query = {owner: {$in: (req.profile) ? req.profile.friends : req.user.friends}};
   findIssues(query, '-created', 'username name', function(issues) {
     sendIssues(res, issues);
   });
@@ -203,10 +203,10 @@ exports.listUserFriendsIssues = function(req, res) {
  */
 exports.listUserAndFriendsIssues = function(req, res) {
   var issues = null;
-  var query = {owner: req.profile._id};
+  var query = {owner: (req.profile) ? req.profile._id : req.user._id};
 
   findIssues(query, '-created', 'username name', function(ownerIssues) {
-    query = {owner: {$in: req.profile.friends}};
+    query = {owner: {$in: (req.profile) ? req.profile.friends : req.user.friends}};
 
     findIssues(query, '-created', 'username name', function(friendsIssues) {
       issues = _.union(ownerIssues, friendsIssues);
