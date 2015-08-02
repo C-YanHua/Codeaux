@@ -7,7 +7,6 @@ angular.module('issues').config(['$stateProvider',
   function($stateProvider) {
     $stateProvider.
 
-    // Issues state routing.
     state('issues', {
       abstract: true,
       url: '/issues',

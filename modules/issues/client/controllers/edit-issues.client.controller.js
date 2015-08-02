@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('issues').controller('EditIssuesController', ['$scope', '$stateParams', '$location',
+angular.module('issues').controller('EditIssuesController', ['$scope', '$stateParams', '$state',
                                                        'Authentication', 'Issues',
-  function($scope, $stateParams, $location, Authentication, Issues) {
+  function($scope, $stateParams, $state, Authentication, Issues) {
     $scope.authentication = Authentication;
 
     // Find existing Issue.
@@ -15,7 +15,7 @@ angular.module('issues').controller('EditIssuesController', ['$scope', '$statePa
       var issue = $scope.issue;
 
       issue.$update(function() {
-        $location.path('issues/' + issue._id);
+        $state.go('issues.list');
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;
       });
