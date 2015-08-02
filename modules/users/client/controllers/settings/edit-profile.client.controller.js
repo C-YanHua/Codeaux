@@ -38,7 +38,7 @@ angular.module('users').controller('EditProfileController', ['$scope', '$http', 
     // Called after the user has successfully uploaded a new picture.
     $scope.uploader.onSuccessItem = function(fileItem, response, status, headers) {
       // Show success message.
-      $scope.success = true;
+      $scope.successUpload = true;
 
       // Populate user object.
       $scope.user = Authentication.user = response;
@@ -53,13 +53,13 @@ angular.module('users').controller('EditProfileController', ['$scope', '$http', 
       $scope.cancelUpload();
 
       // Show error message.
-      $scope.error = response.message;
+      $scope.errorUpload = response.message;
     };
 
     // Change user profile picture.
     $scope.uploadProfilePicture = function() {
       // Clear messages.
-      $scope.success = $scope.error = null;
+      $scope.successUpload = $scope.errorUpload = null;
 
       // Start upload.
       $scope.uploader.uploadAll();

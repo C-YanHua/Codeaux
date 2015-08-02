@@ -37,11 +37,19 @@
 
 .divider {
   height: 1px;
-  width:100%;
-  display:block;
+  width: 100%;
+  display: block;
   margin: 9px 0;
   overflow: hidden;
   background-color: #e5e5e5;
+}
+
+.divider-vertical {
+    height: 300px;
+    border-left: 1px solid #e5e5e5;
+    float: left;
+    opacity: 0.5;
+    margin: 0 25px;
 }
 
 /*
