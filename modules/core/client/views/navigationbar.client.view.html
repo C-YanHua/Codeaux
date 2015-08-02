@@ -62,24 +62,31 @@
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu" role="menu">
+          <li>
+            <a>
+              Signed in as
+              <Strong>{{authentication.user.username}}</Strong>
+            </a>
+          </li>
+          <li class="divider"></li>
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.profile">
-              <i class="fa fa-pencil fa-fw"></i> Edit Profile
+            <a data-ui-sref="profile({username: authentication.user.username})">
+              <i class="fa fa-user fa-fw"></i> My profile
             </a>
           </li>
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.picture">
-              <i class="fa fa-picture-o fa-fw"></i> Change Profile Picture
-            </a>
-          </li>
-          <li data-ui-sref-active="active" data-ng-show="authentication.user.provider === 'local'">
-            <a data-ui-sref="settings.password">
-              <i class="fa fa-user-secret fa-fw"></i> Change Password
+            <a data-ui-sref="friends.myfriends">
+              <i class="fa fa-users fa-fw"></i> My friends
             </a>
           </li>
           <li data-ui-sref-active="active">
-            <a data-ui-sref="settings.accounts">
-              <i class="fa fa-cog fa-fw"></i> Manage Social Accounts
+            <a data-ui-sref="my-issues">
+              <i class="fa fa-file-code-o fa-fw"></i> My issues
+            </a>
+          </li>
+          <li data-ui-sref-active="active">
+            <a data-ui-sref="my-friends-issues">
+              <i class="fa fa-file-archive-o fa-fw"></i> My friends issues
             </a>
           </li>
           <li class="divider"></li>

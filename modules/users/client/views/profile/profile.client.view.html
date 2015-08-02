@@ -1,56 +1,111 @@
-<section data-ng-controller="ProfileController" data-ng-init="findOne()">
+<section data-ng-controller="ProfileController" data-ng-init="findUserProfile();findUserIssues();">
   <div class="row" style="margin: 20px 0;" >
     <div class="col-sm-12 col-md-3">
       <img data-ng-src="{{profile.imageUrl}}" alt="{{profile.name}}" class="img-rounded"
            style="height: 200px; width: 200px;">
+      <ul class="nav nav-pills" style="margin: 0 15px 0;">
+        <li role="presentation">
+          <a data-ui-sref="friends.myfriends">
+            <h2 class="text-center">{{profile.friends.length}}</h2>
+            Friends
+          </a>
+        </li>
+        <li role="presentation">
+          <a>
+            <h2 class="text-center">0</h2>
+            Followers
+          </a>
+        </li>
+      </ul>
+
     </div>
 
     <div class="col-sm-12 col-md-5">
       <h3 style="margin: 0;">
-        {{profile.username}}<br/>
-        <small>{{profile.name}}name</small>
+        {{profile.username}}
+        <div class="pull-right" ng-if="isOwner">
+          <button type="button" class="btn btn-default" data-ui-sref="settings.profile">
+            <i class="fa fa-pencil-square-o"></i>Edit Profile
+          </button>
+        </div>
+        <div>
+          <br ng-if="!profile.name">
+          <small ng-if="profile.name">{{profile.name}}</small>
+        </div>
       </h3>
       <div class="divider"></div>
-      <div>
-        <span class="glyphicon glyphicon-link"></span>
+      <div ng-if="profile.email" style="margin: 5px 0;">
+        <span class="glyphicon glyphicon-envelope"></span>
+        &nbsp;&nbsp;
         <span>{{profile.email}}</span>
       </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <strong>Friend's List</strong>
-        </div>
-        <div class="panel-body">
-          Panel content
-        </div>
+      <div ng-if="profile.location" style="margin: 5px 0;">
+        <span class="glyphicon glyphicon-map-marker"></span>
+        &nbsp;&nbsp;
+        <span>{{profile.location}}</span>
+      </div>
+      <div ng-if="profile.url" style="margin: 5px 0;">
+        <span class="glyphicon glyphicon-link"></span>
+        &nbsp;&nbsp;
+        <span>{{profile.location}}</span>
+      </div>
+      <div>
+        <span class="glyphicon glyphicon-time" style="margin: 5px 0;"></span>
+        &nbsp;&nbsp;
+        <span>Joined on {{profile.created | date: 'dd MMMM y'}}</span>
       </div>
     </div>
   </div>
 
   <div class="row">
     <tabset class="col-sm-12 col-md-12">
-      <tab data-ui-sref="profile.friends">
-        <tab-heading>
-          <a data-ui-sref-active="active">All Issues</a>
-        </tab-heading>
+      <tab heading="All Issues">
+        <div class="row panel panel-default" style="margin: 20px 0;">
+          <div class="panel-body">
+            <div class="list-group" style="overflow:hidden">
+              <a data-ng-repeat="issue in issues" data-ui-sref="issues.view({issueId: issue._id})" class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  {{issue.title}}
+                </h4>
+                <p>Author: {{issue.owner.username}}</p>
+                <p>Description: {{issue.description}}</p>
+              </a>
+            </div>
+          </div>
+        </div>
       </tab>
-      <tab data-ui-sref="profile.issues">
-        <tab-heading>
-          <a data-ui-sref-active="active">My Issues</a>
-        </tab-heading>
+      <tab heading="Public Issues">
+        <div class="row panel panel-default" style="margin: 20px 0;">
+          <div class="panel-body">
+            <div class="list-group" style="overflow:hidden">
+              <a data-ng-repeat="issue in publicIssues" data-ui-sref="issues.view({issueId: issue._id})"
+                 class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  {{issue.title}}
+                </h4>
+                <p>Author: {{issue.owner.username}}</p>
+                <p>Description: {{issue.description}}</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </tab>
+      <tab heading="Private Issues" ng-if="isFriendOrOwner" >
+        <div class="row panel panel-default" style="margin: 20px 0;">
+          <div class="panel-body">
+            <div class="list-group" style="overflow:hidden">
+              <a data-ng-repeat="issue in privateIssues" data-ui-sref="issues.view({issueId: issue._id})"
+                 class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  {{issue.title}}
+                </h4>
+                <p>Author: {{issue.owner.username}}</p>
+                <p>Description: {{issue.description}}</p>
+              </a>
+            </div>
+          </div>
+        </div>
       </tab>
     </tabset>
-  </div>
-
-  <div class="row" style="margin: 20px 0;">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div data-ui-view>
-          Basic panel example
-        </div>
-      </div>
-    </div>
   </div>
 </section>
