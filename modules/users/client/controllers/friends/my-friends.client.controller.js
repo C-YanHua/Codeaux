@@ -11,11 +11,10 @@ angular.module('users').controller('MyFriendsController', ['$scope', '$statePara
     $scope.statuses = [];
     $http.get('api/users/searchFriends').success(function(friends) {
       $scope.myFriends = friends;
-      for (var i=0; i<$scope.myFriends.length; i++) {
+      for (var i = 0; i < $scope.myFriends.length; i++) {
         $scope.statuses.push('friend');
       }
-    }).error(function(response) {
-      console.log('Error with http request for friends');
+    }).error(function() {
       $scope.myFriends = [];
     });
 

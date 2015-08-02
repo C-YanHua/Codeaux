@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('users').controller('FindFriendsController', ['$scope', '$stateParams', '$http', '$location',
+angular.module('users').controller('FindFriendsController', ['$scope', '$stateParams', '$http', '$state',
                                                           'Authentication', 'Users', 'Requests',
-  function($scope, $stateParams, $http, $location, Authentication, Users, Requests) {
+  function($scope, $stateParams, $http, $state, Authentication, Users, Requests) {
     if (!Authentication.user) {
       $state.go('404-page-not-found');
     }
@@ -22,24 +22,24 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
       if ($scope.query) {
         Users.query({username: $scope.query}, function(foundPeople) {
 
-          for (var i=0; i<foundPeople.length; i++) {
+          for (var i = 0; i < foundPeople.length; i++) {
             if (foundPeople[i].username !== $scope.authentication.user.username) {
               $scope.foundUsers.push(foundPeople[i]);
             }
 
-            for (var j=0; j<$scope.requestsSent.length; j++) {
+            for (var j = 0; j < $scope.requestsSent.length; j++) {
               if ($scope.requestsSent[j].receiver._id === foundPeople[i]._id) {
                 $scope.statuses.push('awaitingReply');
                 break;
               }
             }
-            for (var k=0; k<$scope.requestsReceived.length; k++) {
+            for (var k = 0; k < $scope.requestsReceived.length; k++) {
               if ($scope.requestsReceived[k].requester._id === foundPeople[i]._id) {
                 $scope.statuses.push('toReply');
                 break;
               }
             }
-            for (var l=0; l<$scope.myFriends.length; l++) {
+            for (var l = 0; l < $scope.myFriends.length; l++) {
               if ($scope.myFriends[l] === foundPeople[i]._id) {
                 $scope.statuses.push('friend');
                 break;
@@ -60,7 +60,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
         receiver: newFriend
       });
 
-      friendRequest.$save(function(response) {
+      friendRequest.$save(function() {
         $scope.statuses[index] = 'awaitingReply';
         $scope.requestsSent = Requests.query({requesterID: $scope.authentication.user._id});
       }, function(errorRes) {
@@ -71,7 +71,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
 
     $scope.acceptRequest = function(index) {
       var selectedRequest = [];
-      for (var k=0; k<$scope.requestsReceived.length; k++) {
+      for (var k = 0; k < $scope.requestsReceived.length; k++) {
         if ($scope.requestsReceived[k].requester._id === $scope.foundUsers[index]._id) {
           selectedRequest = $scope.requestsReceived[k];
           break;
@@ -99,7 +99,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
 
     $scope.rejectRequest = function(index) {
       var selectedRequest = [];
-      for (var k=0; k<$scope.requestsReceived.length; k++) {
+      for (var k = 0; k < $scope.requestsReceived.length; k++) {
         if ($scope.requestsReceived[k].requester._id === $scope.foundUsers[index]._id) {
           selectedRequest = $scope.requestsReceived[k];
           break;
@@ -132,7 +132,7 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
 
     $scope.cancelRequest = function(index) {
       var selectedRequest = [];
-      for (var k=0; k<$scope.requestsSent.length; k++) {
+      for (var k = 0; k < $scope.requestsSent.length; k++) {
         if ($scope.requestsSent[k].receiver._id === $scope.foundUsers[index]._id) {
           selectedRequest = $scope.requestsSent[k];
           break;

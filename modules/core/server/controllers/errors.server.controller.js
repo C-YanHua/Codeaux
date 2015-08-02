@@ -38,7 +38,7 @@ var ERROR_MESSAGES = {
     SUB_MESSAGE_RELATIVE: false
   },
   USER_SIGNIN_ERROR: {
-    CODE:503,
+    CODE: 503,
     MESSAGE: 'Invalid username or password.',
     SUB_MESSAGE: '',
     SUB_MESSAGE_RELATIVE: false

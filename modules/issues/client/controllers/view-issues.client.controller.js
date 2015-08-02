@@ -14,14 +14,14 @@ angular.module('issues').controller('ViewIssuesController', ['$scope', '$statePa
           if ($scope.issue.owner._id === $scope.authentication.user._id) {
             $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
           } else if ($scope.issue.isPrivate === 1) {
-            for (var i=0; i<$scope.issue.readWrite.length; i++) {
+            for (var i = 0; i < $scope.issue.readWrite.length; i++) {
               if ($scope.issue.readWrite[i] === $scope.authentication.user._id) {
                 $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.padId);
                 return;
               }
             }
 
-            for (var j=0; j<$scope.issue.readOnly.length; j++) {
+            for (var j = 0; j < $scope.issue.readOnly.length; j++) {
               if ($scope.issue.readOnly[j] === $scope.authentication.user._id) {
                 $scope.etherpadSrc = $sce.trustAsResourceUrl($scope.issue.readOnlyPadId);
                 return;

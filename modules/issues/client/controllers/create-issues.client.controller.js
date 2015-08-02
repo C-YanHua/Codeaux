@@ -14,12 +14,10 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
     $scope.getInfo = function() {
       $http.get('api/users/searchFriends').success(function(friends) {
         $scope.myFriends = friends;
-        for (var i=0; i<$scope.myFriends.length; i++) {
+        for (var i = 0; i < $scope.myFriends.length; i++) {
           $scope.permissions.push('None');
         }
-      }).error(function(response) {
-        console.log('Error with http request for friends');
-        console.log(response);
+      }).error(function() {
         $scope.myFriends = [];
       });
     };
@@ -27,7 +25,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
     // Create new Issue.
     $scope.create = function() {
       // Create new Issue object.
-      var issue = new Issues ({
+      var issue = new Issues({
         title: this.title,
         description: this.description,
         isPrivate: this.isPrivate
@@ -36,7 +34,7 @@ angular.module('issues').controller('CreateIssuesController', ['$scope', '$state
       issue.readWrite = [];
       issue.readOnly = [];
 
-      for(var i=0; i<$scope.permissions.length; i++) {
+      for (var i = 0; i < $scope.permissions.length; i++) {
         if ($scope.permissions[i] === 'ReadWrite') {
           issue.readWrite.push($scope.myFriends[i]._id);
         } else if ($scope.permissions[i] === 'ReadOnly') {

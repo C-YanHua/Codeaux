@@ -20,7 +20,7 @@ var FriendRequestSchema = new Schema({
     ref: 'User'
   },
 
-  status : {
+  status: {
     type: String,
     enum: ['pending', 'accepted', 'rejected', 'cancelled'],
     trim: true,

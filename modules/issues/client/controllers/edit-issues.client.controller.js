@@ -19,27 +19,26 @@ angular.module('issues').controller('EditIssuesController', ['$scope', '$statePa
         $http.get('api/users/searchFriends').success(function(friends) {
           $scope.myFriends = friends;
 
-          for (var i=0; i<$scope.myFriends.length; i++) {
-            for (var k=0; k<$scope.issue.readWrite.length; k++) {
+          for (var i = 0; i < $scope.myFriends.length; i++) {
+            for (var k = 0; k < $scope.issue.readWrite.length; k++) {
               if ($scope.myFriends[i]._id === $scope.issue.readWrite[k]) {
                 $scope.permissions.push('ReadWrite');
                 break;
               }
             }
 
-            for (var j=0; j<$scope.issue.readOnly.length; j++) {
+            for (var j = 0; j < $scope.issue.readOnly.length; j++) {
               if ($scope.myFriends[i]._id === $scope.issue.readOnly[j]) {
                 $scope.permissions.push('ReadOnly');
                 break;
               }
             }
 
-            if ($scope.permissions.length < (i+1)) {
+            if ($scope.permissions.length < (i + 1)) {
               $scope.permissions.push('None');
             }
           }
-        }).error(function(response) {
-          console.log('Error with http request for friends');
+        }).error(function() {
           $scope.myFriends = [];
         });
       });
@@ -52,7 +51,7 @@ angular.module('issues').controller('EditIssuesController', ['$scope', '$statePa
       issue.readWrite = [];
       issue.readOnly = [];
 
-      for(var i=0; i<$scope.permissions.length; i++) {
+      for (var i = 0; i < $scope.permissions.length; i++) {
         if ($scope.permissions[i] === 'ReadWrite') {
           issue.readWrite.push($scope.myFriends[i]._id);
         } else if ($scope.permissions[i] === 'ReadOnly') {
@@ -61,7 +60,6 @@ angular.module('issues').controller('EditIssuesController', ['$scope', '$statePa
       }
 
       issue.$update(function() {
-        //$state.go('issues.list');
         $location.path('issues/' + issue._id);
       }, function(errorResponse) {
         $scope.error = errorResponse.data.message;

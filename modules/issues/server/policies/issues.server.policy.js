@@ -4,6 +4,7 @@
 var acl = require('acl');
 
 // Using the memory backend.
+// jscs:disable requireCapitalizedConstructors
 acl = new acl(new acl.memoryBackend());
 
 /*

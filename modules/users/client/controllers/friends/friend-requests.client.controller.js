@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('users').controller('FriendRequestsController', ['$scope', '$stateParams', '$http', '$location',
+angular.module('users').controller('FriendRequestsController', ['$scope', '$stateParams', '$http', '$state',
                                                                 'Authentication', 'Requests',
-  function($scope, $stateParams, $http, $location, Authentication, Requests) {
+  function($scope, $stateParams, $http, $state, Authentication, Requests) {
     if (!Authentication.user) {
       $state.go('404-page-not-found');
     }
@@ -22,7 +22,7 @@ angular.module('users').controller('FriendRequestsController', ['$scope', '$stat
 
       Requests.query({requesterID: $scope.authentication.user._id}, function(requestsSent) {
         $scope.sentRequests = requestsSent;
-        for (var j=0; j<$scope.sentRequests.length; j++) {
+        for (var j = 0; j < $scope.sentRequests.length; j++) {
           $scope.sentStatuses.push('sent');
         }
       });

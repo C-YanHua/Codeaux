@@ -25,7 +25,7 @@ exports.addFriend = function(req, res) {
   var newFriendRequest = req.body;
 
   if (req.user) {
-    var query = {'_id':req.user._id};
+    var query = {'_id': req.user._id};
     var fieldsToUpdate = _.pick(req.user, 'friends');
     fieldsToUpdate.friends.push(newFriendRequest.requester);
 
@@ -39,7 +39,7 @@ exports.addFriend = function(req, res) {
         // Find friend and friend's friends array will add current user
         User.findById(newFriendRequest.requester, function(err, friend) {
           if (!err && friend) {
-            var friendQuery = {'_id':friend._id};
+            var friendQuery = {'_id': friend._id};
             var friendFieldsToUpdate = _.pick(friend, 'friends');
             friendFieldsToUpdate.friends.push(newFriendRequest.receiver);
 
@@ -71,7 +71,7 @@ exports.removeFriend = function(req, res) {
   var friend = req.body;
 
   if (req.user) {
-    var query = {'_id':req.user._id};
+    var query = {'_id': req.user._id};
     var fieldsToUpdate = _.pick(req.user, 'friends');
     var friendIndex = fieldsToUpdate.friends.indexOf(friend._id);
     fieldsToUpdate.friends.splice(friendIndex, 1);
@@ -83,7 +83,7 @@ exports.removeFriend = function(req, res) {
         res.status(400).send(errorHandler.getErrorResponse(501));
       } else {
 
-        var friendQuery = {'_id':friend._id};
+        var friendQuery = {'_id': friend._id};
         var friendFieldsToUpdate = _.pick(friend, 'friends');
         var userIndex = friendFieldsToUpdate.friends.indexOf(user._id);
         friendFieldsToUpdate.friends.splice(userIndex, 1);

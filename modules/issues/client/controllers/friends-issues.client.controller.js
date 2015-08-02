@@ -33,7 +33,7 @@ angular.module('issues').controller('FriendsIssuesController', ['$scope', '$stat
     };
 
     $scope.$watch('issueType', function() {
-      if ($scope.issueType == 'Private') {
+      if ($scope.issueType === 'Private') {
         $scope.currentIssues = privateIssues;
       } else {
         $scope.currentIssues = publicIssues;
