@@ -14,19 +14,17 @@ var User = mongoose.model('User');
  * Returns error message for properties that are empty.
  */
 var updateUser = function(req, res, query, profile) {
-  if (req.user) {
-    User.findOneAndUpdate(query, profile, {new: true}, function(err, user) {
-      if (err) {
-        res.status(400).send(errorHandler.getErrorResponse(2));
-      } else if (!user) {
-        res.status(400).send(errorHandler.getErrorResponse(501));
-      } else {
-        res.json(user);
-      }
-    });
-  } else {
-    res.status(401).send(errorHandler.getErrorResponse(502));
-  }
+  console.log(profile);
+  User.findOneAndUpdate(query, profile, {new: true}, function(err, user) {
+    if (err) {
+      res.status(400).send(errorHandler.getErrorResponse(2));
+    } else if (!user) {
+      res.status(400).send(errorHandler.getErrorResponse(501));
+    } else {
+      console.log(user);
+      res.json(user);
+    }
+  });
 };
 
 /*
@@ -40,14 +38,18 @@ exports.read = function(req, res) {
  * Update user profile.
  */
 exports.updateProfile = function(req, res) {
-  var query = req.body._id;
-  // Only these properties will be updated.
-  var properties = ['link', 'location', 'name'];
+  if (req.user) {
+    var query = {_id: req.user._id};
+    // Only these properties will be updated.
+    var properties = ['link', 'location', 'name'];
 
-  var profile = _.pick(req.body, properties);
-  profile.updated = Date.now();
+    var profile = _.pick(req.body, properties);
+    profile.updated = Date.now();
 
-  updateUser(req, res, query, profile);
+    updateUser(req, res, query, profile);
+  } else {
+    res.status(401).send(errorHandler.getErrorResponse(502));
+  }
 };
 
 /*
