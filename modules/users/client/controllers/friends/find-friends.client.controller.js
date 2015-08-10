@@ -152,8 +152,6 @@ angular.module('users').controller('FindFriendsController', ['$scope', '$statePa
           $scope.err = errorResponse;
         });
       }
-
     };
-
   }
 ]);

@@ -1,0 +1,69 @@
+<section class="row" data-ng-controller="FriendsController" data-ng-init="findUserProfile()">
+  <div class="page-header">
+    <h1>Friends</h1>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover" style="table-layout:fixed">
+      <col width="5px" />
+      <col width="65px" />
+      <col width="20px" />
+      <tr>
+        <th>#</th>
+        <th>Friends</th>
+        <th>Actions</th>
+      </tr>
+      <tr data-ng-repeat="eachFriend in theFriends">
+        <td>
+          <p>{{$index + 1}}</p>
+        </td>
+        <td style="overflow:hidden">
+          <a data-ui-sref="profile({username: eachFriend.username})">
+            <img data-ng-src="{{eachFriend.imageUrl}}" class="pull-left"
+                 style="border-radius:50%; height:40px; width:40px"/>
+            <h3 class="list-group-item-heading">{{eachFriend.username}}</h3>
+            <p>{{eachFriend.name}}</p>
+          </a>
+        </td>
+        <td>
+          <div data-ng-if="statuses[$index] === 'friend'">
+            <button type="button" class="btn btn-warning" ng-click="unfriend($index)">
+              Remove Friend
+            </button>
+          </div>
+          <div data-ng-if="statuses[$index] == 'error'">
+            <p>{{err}}</p>
+          </div>
+
+          <div data-ng-if="statuses[$index] == 'stranger'">
+            <button type="button" class="btn btn-primary" ng-click="sendRequest(eachUser, $index)">Send Friend Request
+            </button>
+          </div>
+
+          <div data-ng-if="statuses[$index] == 'awaitingReply'">
+            <button type="button" class="btn btn-default" ng-click="cancelRequest($index)">Cancel Friend Request
+            </button>
+          </div>
+
+          <div data-ng-if="statuses[$index] == 'toReply'">
+            <button type="button" class="btn btn-success" ng-click="acceptRequest($index)">Accept Friend
+            </button>
+            <button type="button" class="btn btn-danger" ng-click="rejectRequest($index)">Reject Friend
+            </button>
+          </div>
+
+          <div data-ng-if="statuses[$index] == 'error'">
+            <p>{{err}}</p>
+          </div>
+
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <center><strong>-- End of Friends --</strong></center>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</section>
