@@ -108,14 +108,21 @@ exports.removeFriend = function(req, res) {
 };
 
 exports.searchFriends = function(req, res) {
-  User.findById(req.user._id)
+  console.log(req.query);
+  console.log(req.user);
+  var query = (_.isEmpty(req.query) || _.isNull(req.query)) ? req.user : req.query;
+  console.log(query);
+
+  User.findById(query._id)
   .sort('-created')
   .populate('friends', 'username name imageUrl friends')
   .exec(function(err, user) {
 
     if (err) {
+      console.log('reach');
       res.status(400).send(errorHandler.getErrorResponse(2));
     } else if (!user) {
+      console.log('reach1');
       res.status(400).send(errorHandler.getErrorResponse(501));
     } else {
       res.jsonp(user.friends);

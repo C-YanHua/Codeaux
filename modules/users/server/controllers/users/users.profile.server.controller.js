@@ -14,14 +14,12 @@ var User = mongoose.model('User');
  * Returns error message for properties that are empty.
  */
 var updateUser = function(req, res, query, profile) {
-  console.log(profile);
   User.findOneAndUpdate(query, profile, {new: true}, function(err, user) {
     if (err) {
       res.status(400).send(errorHandler.getErrorResponse(2));
     } else if (!user) {
       res.status(400).send(errorHandler.getErrorResponse(501));
     } else {
-      console.log(user);
       res.json(user);
     }
   });

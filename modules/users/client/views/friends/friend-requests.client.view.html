@@ -19,10 +19,12 @@
           <p>{{$index + 1}}</p>
         </td>
         <td style="overflow:hidden">
-          <img data-ng-src="{{eachSentRequest.receiver.imageUrl}}" class="pull-left"
-               style="border-radius:50%; height:40px; width:40px"/>
-          <h3 class="list-group-item-heading">{{eachSentRequest.receiver.username}}</h3>
-          <p>{{eachSentRequest.receiver.name}}</p>
+          <a data-ui-sref="profile({username: eachSentRequest.receiver.username})">
+            <img data-ng-src="{{eachSentRequest.receiver.imageUrl}}" class="pull-left"
+                 style="border-radius:50%; height:40px; width:40px"/>
+            <h3 class="list-group-item-heading">{{eachSentRequest.receiver.username}}</h3>
+            <p>{{eachSentRequest.receiver.name}}</p>
+          </a>
         </td>
         <td>
           <div data-ng-if="sentStatuses[$index] == 'sent'">

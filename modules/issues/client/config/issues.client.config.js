@@ -12,24 +12,14 @@ angular.module('issues').run(['Menus',
 
     // Add dropdown for list issues.
     Menus.addSubMenuItem('navigationbar', 'issues', {
-      title: 'List Issues',
+      title: 'View public issues',
       state: 'issues.list'
     });
 
     // Add dropdown for create issues.
     Menus.addSubMenuItem('navigationbar', 'issues', {
-      title: 'New Issue',
+      title: 'Create new issue',
       state: 'issues.create'
-    });
-
-    Menus.addSubMenuItem('navigationbar', 'issues', {
-      title: 'My Issues',
-      state: 'my-issues'
-    });
-
-    Menus.addSubMenuItem('navigationbar', 'issues', {
-      title: 'Friends Issues',
-      state: 'my-friends-issues'
     });
   }
 ]);
